@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, DM_Serif_Display } from "next/font/google";
+import localFont from "next/font/local";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { StickyMobileCta } from "@/components/sticky-mobile-cta";
@@ -11,17 +11,23 @@ import {
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
+const aptos = localFont({
+  variable: "--font-aptos",
   display: "swap",
+  src: [
+    { path: "../fonts/Aptos-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../fonts/Aptos-Italic.ttf", weight: "400", style: "italic" },
+    { path: "../fonts/Aptos-Bold.ttf", weight: "700", style: "normal" },
+  ],
 });
 
-const dmSerif = DM_Serif_Display({
-  variable: "--font-dm-serif",
-  subsets: ["latin"],
-  weight: "400",
+const aptosDisplay = localFont({
+  variable: "--font-aptos-display",
   display: "swap",
+  src: [
+    { path: "../fonts/AptosDisplay-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../fonts/AptosDisplay-Bold.ttf", weight: "700", style: "normal" },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -67,7 +73,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${dmSerif.variable} h-full antialiased`}
+      className={`${aptos.variable} ${aptosDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-paper text-brand-ink">
         <JsonLd data={organizationSchema()} />
