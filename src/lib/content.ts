@@ -35,13 +35,16 @@ export const ArticleFrontmatter = z.object({
   slug: z.string().min(1),
   title: z.string().min(1),
   description: z.string().min(1),
+  category: z.string().min(1),
   publishedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   updatedAt: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
-  author: z.string().default("Karl Bryant"),
+  author: z.string().default("Karl D. Bryant"),
+  readingTimeMinutes: z.number().int().positive(),
   keywords: z.array(z.string()).default([]),
+  featured: z.boolean().default(false),
   draft: z.boolean().default(false),
 });
 export type ArticleFrontmatter = z.infer<typeof ArticleFrontmatter>;

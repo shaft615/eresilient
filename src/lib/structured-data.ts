@@ -1,4 +1,5 @@
 import type {
+  Article,
   Organization,
   Person,
   ProfessionalService,
@@ -6,7 +7,7 @@ import type {
   WithContext,
 } from "schema-dts";
 import { SITE } from "./site";
-import type { ServiceContent } from "./content";
+import type { ArticleFrontmatter, ServiceContent } from "./content";
 
 export function organizationSchema(): WithContext<Organization> {
   return {
@@ -69,6 +70,34 @@ export function serviceSchema(s: ServiceContent): WithContext<Service> {
       name: SITE.legalName,
       url: SITE.url,
     },
+  };
+}
+
+export function articleSchema(a: ArticleFrontmatter): WithContext<Article> {
+  const url = `${SITE.url}/insights/${a.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: a.title,
+    description: a.description,
+    url,
+    datePublished: a.publishedAt,
+    dateModified: a.updatedAt ?? a.publishedAt,
+    author: {
+      "@type": "Person",
+      name: a.author,
+      url: `${SITE.url}/about/karl`,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.legalName,
+      url: SITE.url,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    keywords: a.keywords.join(", "),
   };
 }
 

@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withMDX = createMDX({});
+const withMDX = createMDX({
+  options: {
+    // String form is required for Turbopack (Next 16 default).
+    remarkPlugins: [["remark-gfm", {}]],
+  },
+});
 
 export default withMDX(nextConfig);
