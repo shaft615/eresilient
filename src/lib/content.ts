@@ -46,14 +46,17 @@ export const ArticleFrontmatter = z.object({
 });
 export type ArticleFrontmatter = z.infer<typeof ArticleFrontmatter>;
 
-export const PackageFrontmatter = z.object({
+export const PackageContent = z.object({
   slug: z.string().min(1),
   title: z.string().min(1),
   tagline: z.string().min(1),
   startingAt: z.string().min(1),
+  duration: z.string().min(1),
   order: z.number().int().nonnegative(),
+  highlight: z.boolean().default(false),
   bestFor: z.string().min(1),
   includes: z.array(z.string()).min(1),
+  excludes: z.array(z.string()).default([]),
   ctaLabel: z.string().default("Discuss this engagement"),
 });
-export type PackageFrontmatter = z.infer<typeof PackageFrontmatter>;
+export type PackageContent = z.infer<typeof PackageContent>;
