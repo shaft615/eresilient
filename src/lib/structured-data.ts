@@ -1,5 +1,12 @@
-import type { Organization, Person, ProfessionalService, WithContext } from "schema-dts";
+import type {
+  Organization,
+  Person,
+  ProfessionalService,
+  Service,
+  WithContext,
+} from "schema-dts";
 import { SITE } from "./site";
+import type { ServiceContent } from "./content";
 
 export function organizationSchema(): WithContext<Organization> {
   return {
@@ -45,6 +52,23 @@ export function professionalServiceSchema(): WithContext<ProfessionalService> {
       addressCountry: SITE.contact.address.country,
     },
     areaServed: "United States",
+  };
+}
+
+export function serviceSchema(s: ServiceContent): WithContext<Service> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: s.title,
+    description: s.summary,
+    url: `${SITE.url}/services/${s.slug}`,
+    serviceType: s.title,
+    areaServed: "United States",
+    provider: {
+      "@type": "Organization",
+      name: SITE.legalName,
+      url: SITE.url,
+    },
   };
 }
 
