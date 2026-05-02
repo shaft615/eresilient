@@ -1,0 +1,111 @@
+export const metadata = {
+  slug: "business-continuity-planning-for-small-business",
+  title:
+    "Business Continuity Planning for Small Business: A 2026 Practitioner's Guide",
+  description:
+    "What business continuity planning actually looks like for SMBs in 2026 — what to include, what to skip, where templates fail, and when to bring in outside help. Practitioner-grade guidance from 25+ years of Fortune 100 BCM.",
+  category: "Business Continuity",
+  publishedAt: "2026-05-02",
+  author: "Karl D. Bryant",
+  readingTimeMinutes: 9,
+  keywords: [
+    "business continuity planning for small business",
+    "BCP for SMB",
+    "small business BCP",
+    "SMB business continuity",
+    "ISO 22301 small business",
+  ],
+  featured: true,
+};
+
+Most small and mid-sized businesses (SMBs) discover their continuity plan didn't work the day they need it. A binder on a shelf, copied from a template years ago, with named roles held by people who left the company — that is the most common state of business continuity planning at companies under 500 employees.
+
+This guide walks through what business continuity planning for small business actually looks like in 2026 — what your program needs to include, what you can skip, where templates fail, and how to know when DIY is enough vs. when to bring in outside help.
+
+## What "business continuity" actually means (and what it isn't)
+
+Business continuity (BC) is the discipline of keeping your critical operations running during and after a disruption. It is **not** the same as:
+
+- **Disaster recovery (DR)** — the IT-specific subset focused on recovering systems, data, and infrastructure
+- **Crisis management (CM)** — the leadership-level layer that handles the first 30–60 minutes of an event and decides what to activate
+- **Emergency response (ER)** — the on-the-ground layer that handles fire, medical, evacuation, and shelter-in-place
+
+BC is the connective tissue. It assumes leadership has decided this is real (CM did its job), the building is safe (ER did its job), and IT is recovering systems (DR did its job) — and now your people need to keep delivering for customers using whatever combination of alternate sites, manual processes, or degraded systems is available.
+
+For an SMB with 50 employees, those four disciplines often collapse into the same handful of people wearing all the hats. That's fine — but the **plans** need to remain distinct. Combining them into a single document is the single most common mistake we see in SMB BCM.
+
+## The five things every SMB BCP must include
+
+Skip any of these and your plan will fail under pressure. Include all five, even at minimum viable depth, and you have something defensible.
+
+### 1. A risk profile
+
+A short, dated document that names the realistic threats to your operations. For most SMBs this is 8–15 line items: severe weather (specific to your geography), prolonged power loss, ransomware, key-vendor failure, key-person loss, building loss, water damage, civil unrest, regulatory action.
+
+**What it isn't:** an ISO 31000 risk register with quantitative scoring across 200 threats. SMBs don't need that depth and producing it consumes time you don't have.
+
+### 2. A Business Impact Analysis (BIA)
+
+Per critical function: what is the cost of downtime, what is the maximum tolerable disruption, and what are the dependencies (people, technology, suppliers, facilities). Even a one-page BIA per department beats no BIA at all.
+
+This is the foundation of every other planning decision. A continuity plan without a BIA is a guess about what to recover first.
+
+### 3. Strategy choices
+
+For each critical function, what's the recovery strategy? Examples: run from home for the marketing team, switch to manual order processing for fulfillment, alternate site for production. The strategy gets selected, not invented at the moment of disruption.
+
+The strategy section is where most SMB plans go wrong — they document _what_ to recover but not _how_. "Recover order processing" is not a strategy. "Switch to the paper-based fallback documented in Appendix C, with the order desk team operating from the upstairs conference room" is.
+
+### 4. Documented plans with named roles
+
+Activation criteria (when does this plan kick in?), escalation paths (who calls whom?), role assignments (primary and backup for every role), recovery procedures (step by step). The plans should be readable by someone executing them under stress — not optimized for an auditor's checklist.
+
+Two practical tests: (a) Could a competent employee who has never seen the plan execute it on day one of an event? (b) Are the names current as of this month, not 18 months ago?
+
+### 5. A test record
+
+You haven't validated a plan until you've exercised it. A 2-hour tabletop exercise once a year is the floor. Functional and full-scale exercises are better but resource-intensive. The point is to find the gaps — the assumptions that were wrong, the contact info that was stale, the procedures that didn't account for reality — _before_ a real event finds them for you.
+
+A plan that has never been tested is hypothesis-grade. It might work. You don't know.
+
+## Common SMB pitfalls (and how to avoid them)
+
+The pattern of failure in SMB BCM is consistent. Watch for these:
+
+**The template trap.** Downloaded templates assume a generic large-company structure. They reference roles you don't have, dependencies you don't share, and threats irrelevant to your operations. Templates are a useful starting point only if you have someone with the BCM literacy to gut and rebuild them. Without that, the template's structure becomes a structural mistake.
+
+**The single-document problem.** "BCP" gets used as a catch-all that bundles continuity, crisis, emergency response, and DR into one binder. This fails because the audience for each is different (executives, frontline, IT, ops) and the activation triggers are different. Splitting into four short documents that reference each other beats one 80-page combined doc every time.
+
+**The annual-review fiction.** Plans that get "reviewed annually" by a single person making cosmetic edits drift further from operational reality each cycle. Real maintenance means an exercise that surfaces gaps, leadership changes that update role assignments, and vendor changes that update dependency lists. Without those triggers, the calendar review is theater.
+
+**The wrong scope.** Some SMB plans cover too little (just the email server) or too much (every business process at every facility). Right-scoping comes from the BIA: cover the functions whose disruption would materially harm the business, with the depth proportional to the cost of failure.
+
+## How big should your program be?
+
+Sizing depends on your operational complexity, regulatory environment, and customer profile — not just headcount. Rough heuristics:
+
+- **10–50 employees, single site, low regulation:** A single integrated plan covering BC + CM + ER, plus separate DR for IT. Annual tabletop exercise. ~40 pages of documentation total. One owner spending 8–12 hours per quarter on maintenance.
+- **50–200 employees, multi-site or regulated:** Separate plans for BC, CM, ER, with named team rosters and integrated tabletop exercises. ~120 pages total. A part-time BCM coordinator (could be ops, security, or compliance head wearing the BCM hat).
+- **200–500 employees, complex operations or enterprise customer base:** Full ISO 22301-aligned program with documented BIA per function, supply chain risk integration, and a multi-year exercise schedule. ~300+ pages. A dedicated BCM resource (full-time or significant fraction).
+
+Use these as starting points, not rules. A 30-person fintech with SOC 2 and customer due-diligence requirements often runs a heavier program than a 200-person manufacturer with stable operations.
+
+## Build vs. buy: when to bring in outside help
+
+Some SMBs build their BCM program internally. Others bring in a consultant. The right choice depends on:
+
+**Build internally if:** You have someone on staff with BCM training (CBCP, MBCP, MBCI) and at least 25% of their time freed to lead the program. You're early enough in maturity that the methodology decisions don't need to optimize for an audit. You have institutional patience for a 12–18 month build at internal pace.
+
+**Bring in a consultant if:** You don't have certified BCM expertise on staff. You're under time pressure (customer due-diligence, audit, insurance underwriting, regulatory inquiry). You want the program built around proven methodology rather than reinvented. You need outside perspective on what to skip.
+
+A good consultant doesn't sell you a 40-week engagement when 10 weeks would do. They scope to your real exposure, leave you with a self-maintainable program, and build internal capability so you don't need them in perpetuity. If a proposal includes "ongoing monthly retainer" without a clear value-per-hour case, ask harder questions.
+
+## What to do next
+
+If your SMB is at the "we should probably do something about BCP" stage, three honest next steps:
+
+1. **Take a structured self-assessment.** Even a 30-minute scoring exercise across the 8 ISO 22301 domains will tell you which gaps are urgent. Our [BCP Readiness Scorecard](/resources/bcp-readiness-scorecard) is free.
+2. **Read the BIA companion piece.** [How to conduct a Business Impact Analysis](/insights/how-to-conduct-a-business-impact-analysis) walks through the foundational step that makes everything else work.
+3. **Talk to a practitioner.** [Schedule a free 30-minute consultation](/contact). No sales pitch — a working call to triage your specific exposure.
+
+Continuity planning compounds. The program you start this quarter becomes the program that protects revenue, retains customers, and keeps you operating through the disruption you can't yet predict. Start small, but start.

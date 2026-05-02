@@ -1,0 +1,165 @@
+export const metadata = {
+  slug: "iso-22301-compliance-checklist",
+  title:
+    "ISO 22301 Compliance Checklist: A Practical Guide for SMBs",
+  description:
+    "A clause-by-clause ISO 22301 readiness checklist for small and mid-sized businesses. What the standard requires, what to skip, and how to get from current state to certification-ready (or self-attestation) without consulting overhead.",
+  category: "Standards & Compliance",
+  publishedAt: "2026-05-02",
+  author: "Karl D. Bryant",
+  readingTimeMinutes: 12,
+  keywords: [
+    "ISO 22301 compliance checklist",
+    "ISO 22301 readiness",
+    "ISO 22301 small business",
+    "ISO 22301 certification",
+    "BCM compliance",
+    "business continuity standard",
+  ],
+  featured: true,
+};
+
+ISO 22301 is the international standard for business continuity management systems (BCMS). It's the framework that buyers, auditors, regulators, and insurance carriers increasingly expect SMBs to be aligned to — even when full certification isn't required.
+
+This guide walks through what ISO 22301 actually requires, clause by clause, and gives you a working compliance checklist you can use to assess your current state. It's written for SMB practitioners who don't have months to spend deciphering an ISO standard.
+
+## What ISO 22301 is (and what it isn't)
+
+ISO 22301:2019 specifies the requirements for a management system to plan, establish, implement, operate, monitor, review, maintain, and continually improve a documented business continuity management system. In plain language: it's the structural framework for running a credible BCM program.
+
+What it **isn't**:
+
+- A specific BCP template
+- A cybersecurity or DR standard
+- A guarantee against disruption
+- Mandatory for most SMBs (with some industry exceptions)
+
+ISO 22301 is process-focused. It tells you how to organize and govern a BCMS — not what specific risks to plan for or what technology to use.
+
+## Why SMBs care (or don't)
+
+The honest take: most SMBs don't need full ISO 22301 certification. They _do_ benefit from being **aligned** to it. The difference matters.
+
+**Full certification** requires:
+- A documented BCMS spanning all 10 clauses
+- An accredited third-party audit (typically $15K–$40K annually for SMBs)
+- 6–12 months of operational evidence before initial audit
+- Annual surveillance audits and a 3-year recertification cycle
+
+**Alignment** means you've structured your program to ISO 22301 requirements and could pass an audit if you needed to — without paying for the audit. Most SMBs land here. It's defensible to enterprise customers, insurers, and most regulators.
+
+When does full certification actually pay off?
+
+- You're selling into industries that explicitly require it (some financial services, healthcare, government contracting)
+- Your largest customers ask for it as a condition of contract
+- You're competing against certified peers and want the differentiator
+- Your executive team or board has decided the credential is strategically worth the cost
+
+If none of the above apply, alignment is the smarter play.
+
+## The 10 clauses of ISO 22301
+
+The standard has 10 numbered clauses. Clauses 1–3 are introductory. Clauses 4–10 are where the requirements live:
+
+| Clause | Title | What it covers |
+|---|---|---|
+| 4 | Context of the organization | Scope, stakeholders, BCMS boundaries |
+| 5 | Leadership | Top management commitment, policy, roles |
+| 6 | Planning | Risks, opportunities, BCMS objectives |
+| 7 | Support | Resources, competence, awareness, communication, documentation |
+| 8 | Operation | The actual continuity work — BIA, risk, strategy, plans, exercises |
+| 9 | Performance evaluation | Monitoring, internal audit, management review |
+| 10 | Improvement | Nonconformity, corrective action, continual improvement |
+
+Below is a clause-by-clause readiness checklist. Use it to score your current state — for each item, you can: ❌ not present, ⚠ partial, ✓ in place.
+
+## Clause 4 — Context of the organization
+
+- [ ] **4.1** Internal and external issues affecting the BCMS are documented (annual refresh)
+- [ ] **4.2** Interested parties (customers, regulators, employees, suppliers, shareholders) and their requirements are documented
+- [ ] **4.3** BCMS scope is defined in writing — products, services, locations, exclusions justified
+- [ ] **4.4** BCMS itself is established and maintained per the standard
+
+This clause is often skipped or done poorly. The scope document especially — many SMBs claim "company-wide" without articulating what that means or what's excluded. Be specific.
+
+## Clause 5 — Leadership
+
+- [ ] **5.1** Top management demonstrates leadership and commitment (signed policy, evidence of involvement)
+- [ ] **5.2** Business Continuity Policy is documented, signed, dated, and communicated
+- [ ] **5.3** Roles, responsibilities, and authorities for the BCMS are documented (org chart, RACI, or job descriptions)
+
+The policy is a 1–3 page document. It doesn't need to be elaborate. It needs to exist, be current, and be signed by your CEO or equivalent.
+
+## Clause 6 — Planning
+
+- [ ] **6.1** Risks and opportunities affecting the BCMS are identified and addressed
+- [ ] **6.2** BCMS objectives are documented, measurable, and reviewed
+- [ ] **6.3** Changes to the BCMS are planned (rather than reactive)
+
+BCMS objectives often confuse practitioners. They're not BCP recovery objectives (RTOs). They're things like "Achieve 95% completion rate on annual BCP exercises" or "Reduce mean-time-to-activate by 25% over 12 months." Program-level KPIs.
+
+## Clause 7 — Support
+
+- [ ] **7.1** Resources (budget, personnel, tools) are allocated to the BCMS
+- [ ] **7.2** Competence requirements for BCMS roles are defined, and people in those roles are competent (training records or certifications)
+- [ ] **7.3** Awareness of the BCMS exists across the organization (not just the BC team)
+- [ ] **7.4** Internal and external communications during a disruption are planned
+- [ ] **7.5** BCMS documentation is controlled (versioning, access, distribution, retention)
+
+Documentation control trips up SMBs. ISO doesn't require document management software, but it does require that you can demonstrate the right version is in the right place at the right time. A version-controlled folder with a clear distribution process is enough.
+
+## Clause 8 — Operation (the heaviest clause)
+
+This is where the actual BCM work lives. Most of your evidence will be here.
+
+- [ ] **8.1** Operational planning and control — processes are documented and executed
+- [ ] **8.2.1** Business Impact Analysis is conducted per ISO/TS 22317 methodology
+- [ ] **8.2.2** Risk assessment is conducted (separate from BIA)
+- [ ] **8.3** BC strategies and solutions are selected based on BIA outputs
+- [ ] **8.4** BC plans and procedures are documented
+- [ ] **8.4.1** Incident response structure is in place (who decides what, when)
+- [ ] **8.4.2** Warning and communication procedures are documented
+- [ ] **8.4.3** Business continuity plans cover critical activities
+- [ ] **8.4.4** Recovery procedures restore activities within RTO
+- [ ] **8.5** Exercising and testing program is established and executed (annual minimum)
+- [ ] **8.6** Evaluation of BC documentation and capabilities is performed after exercises and incidents
+
+Clause 8 is roughly 60% of the total ISO 22301 effort. If you do nothing else, do clause 8 well.
+
+## Clause 9 — Performance evaluation
+
+- [ ] **9.1** Monitoring, measurement, analysis, and evaluation of BCMS performance occurs
+- [ ] **9.2** Internal audits of the BCMS are conducted at planned intervals
+- [ ] **9.3** Management review of the BCMS happens at least annually with documented inputs and outputs
+
+The management review is one of the highest-leverage practices in the standard. Even if you do nothing else from clause 9, run a structured annual review with your executive team using ISO 22301 §9.3's prescribed inputs (status of actions, changes in context, performance data, audit results, opportunities).
+
+## Clause 10 — Improvement
+
+- [ ] **10.1** Nonconformities are identified, evaluated, and corrected
+- [ ] **10.2** Continual improvement of the BCMS is demonstrated
+
+Continual improvement isn't just a slogan. It requires evidence: corrective actions tracked to closure, exercises that drive plan updates, audit findings that produce changes.
+
+## Path to certification (if you're going that way)
+
+A typical SMB certification path:
+
+1. **Months 1–3 — Gap assessment** against the checklist above. Identify the highest-leverage gaps to close.
+2. **Months 3–9 — Implementation.** Document, train, exercise. Build operational evidence in the form of completed exercises, training records, AARs, and management reviews.
+3. **Month 9 — Internal audit.** Conduct your own clause-by-clause audit. Address findings.
+4. **Month 10 — Stage 1 audit (documentation review).** Third-party auditor reviews your BCMS documentation. Findings → corrective actions.
+5. **Month 12 — Stage 2 audit (operational audit).** Third-party auditor verifies your BCMS in operation. Certification issued.
+6. **Year 2+ — Surveillance audits annually, full recertification every 3 years.**
+
+If you're going the alignment route (no certification), you can compress the timeline significantly. A focused SMB program can get to ISO-aligned in 4–6 months without external audit.
+
+## What to do next
+
+Three honest next steps:
+
+1. **Score yourself** against the [BCP Readiness Scorecard](/resources/bcp-readiness-scorecard) — its 8 domains map closely to the ISO 22301 clauses. You'll get a maturity reading in 20 minutes.
+2. **Read the BIA companion piece** — [How to Conduct a Business Impact Analysis](/insights/how-to-conduct-a-business-impact-analysis) covers the highest-effort piece of clause 8.
+3. **Get a practitioner walkthrough** — [book a call](/contact) if you want help scoping your alignment or certification path. We do this work for SMBs regularly and can size the gap quickly.
+
+ISO 22301 alignment is achievable for any SMB willing to do the work. Certification is a strategic decision with real costs and real returns. Either way, the standard is a useful map of what a credible BCMS looks like — even if you never go to audit.

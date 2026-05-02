@@ -1,0 +1,153 @@
+export const metadata = {
+  slug: "how-to-conduct-a-business-impact-analysis",
+  title:
+    "How to Conduct a Business Impact Analysis (BIA): A Step-by-Step Guide",
+  description:
+    "A practical, six-step Business Impact Analysis methodology aligned to ISO/TS 22317. Inputs, RTO/RPO/MTPD definitions, common BIA mistakes, and what good BIA outputs actually look like for SMBs.",
+  category: "BIA & Risk",
+  publishedAt: "2026-05-02",
+  author: "Karl D. Bryant",
+  readingTimeMinutes: 11,
+  keywords: [
+    "how to conduct a business impact analysis",
+    "BIA process",
+    "business impact analysis steps",
+    "RTO RPO MTPD",
+    "BIA methodology",
+    "ISO 22317",
+  ],
+  featured: true,
+};
+
+A Business Impact Analysis (BIA) is the foundation of every credible business continuity program. It tells you which functions matter most, how long you can survive without them, and what they depend on. Get the BIA right and the rest of your continuity work has a defensible basis. Get it wrong — or skip it — and your plans are guesses.
+
+This guide walks through how to conduct a Business Impact Analysis using the methodology aligned to ISO/TS 22317 (the international standard's BIA companion document). It's written for SMB practitioners, but the process scales up cleanly.
+
+## What a BIA actually tells you
+
+A BIA produces three things:
+
+1. **Prioritization** — which business activities are the most time-critical
+2. **Recovery requirements** — how fast each one needs to come back, and to what state
+3. **Dependencies** — what each critical activity needs in terms of people, technology, suppliers, facilities, and data
+
+Note what's _not_ in that list: threats. The BIA is impact-focused, not threat-focused. It asks "if this activity stops, what happens?" — not "what could cause it to stop?" The threat side is your risk assessment, which is a separate (and complementary) exercise.
+
+This distinction trips up most first-time practitioners. They try to combine BIA and risk assessment into one survey, the survey balloons to 80 questions, response rates collapse, and the output is mush. Keep them separate.
+
+## BIA vs. risk assessment — the difference
+
+| | Business Impact Analysis | Risk Assessment |
+|---|---|---|
+| **Question** | If this stops, what happens? | What could cause this to stop? |
+| **Output** | Prioritized activities, RTO, RPO, dependencies | Risk register with likelihood × impact scoring |
+| **Standard** | ISO/TS 22317 | ISO 31000 / ISO/IEC 27005 |
+| **Used for** | Recovery strategy selection | Risk treatment decisions |
+
+Both feed into your continuity strategy. Both are required by ISO 22301. They're not interchangeable.
+
+## What you need before starting
+
+Five inputs before you can run a useful BIA:
+
+1. **A defined scope** — which business units, products, services, geographies. SMBs often start with the whole company; larger organizations scope by division.
+2. **An impact framework** — how will you measure impact? Common axes: revenue loss per hour, regulatory exposure, customer trust, employee safety, contractual penalty. Quantify where you can; rate qualitatively where you can't.
+3. **Time horizon scale** — what time buckets matter? A typical scale: 0–4 hours, 4–24 hours, 1–3 days, 3–7 days, 7–14 days, 14+ days. Impact escalation by horizon is what separates critical from non-critical activities.
+4. **Process inventory** — a working list of business activities. Your org chart isn't enough; you need activity-level detail. Pull from job descriptions, SOPs, or run a 30-minute mapping session per department.
+5. **Executive sponsorship** — without a named senior sponsor, BIA results get challenged in subsequent strategy decisions. Get the sign-off on methodology before fielding the survey.
+
+## The six-step BIA process
+
+### Step 1: Identify and document business activities
+
+Walk through each in-scope function and inventory the discrete activities it performs. Aim for 5–15 activities per department for an SMB. "Customer support" is a function; "respond to inbound support tickets" and "process refund requests" are activities.
+
+The level of granularity matters. Too coarse and the BIA is unactionable. Too fine and you're documenting tasks instead of activities. A useful test: each activity should be something a process owner can speak to with confidence.
+
+### Step 2: Determine impact over time
+
+For each activity, quantify the impact of disruption at each time horizon. A simple matrix:
+
+| Horizon | Revenue impact | Regulatory | Customer | Operational |
+|---|---|---|---|---|
+| 0–4 hrs | $X | None | Minor | Manageable |
+| 4–24 hrs | $X | None | Significant | Workarounds |
+| 1–3 days | $X | Reportable | Severe | Major |
+| 3–7 days | $X | Material | Critical | Failure |
+
+The shape of escalation matters more than the absolute numbers. Some activities have a sharp cliff (orders processing for an e-commerce business goes from "annoying" to "catastrophic" in 24 hours). Others degrade gradually (most internal admin functions can absorb several days of disruption).
+
+### Step 3: Establish RTO, RPO, and MTPD
+
+These three parameters are the deliverables that drive every downstream recovery decision. Their definitions:
+
+- **RTO (Recovery Time Objective)** — how quickly the activity must be restored after a disruption. "We need order processing back within 4 hours of an outage."
+- **RPO (Recovery Point Objective)** — how much data loss is acceptable. "We can lose at most 1 hour of order data." RPO is primarily an IT/data concept; not every activity has a meaningful RPO.
+- **MTPD (Maximum Tolerable Period of Disruption)** — the absolute outer limit. After MTPD, the impact crosses from manageable to existential. RTO must be set _below_ MTPD with margin for safety.
+
+The relationship: **RTO < MTPD**. RTO is what you commit to. MTPD is what you can survive. The gap is your safety buffer.
+
+A common SMB error is setting RTO = MTPD. That gives you zero recovery margin. Set RTO at 50–75% of MTPD as a working rule.
+
+### Step 4: Map dependencies
+
+For each critical activity, document what it depends on:
+
+- **People** — named roles, headcount minimums, skill requirements
+- **Technology** — applications, infrastructure, network, data sources
+- **Facilities** — physical locations, equipment, utilities
+- **Suppliers** — direct vendors, tier-2 dependencies, single-source risks
+- **Information** — data, records, knowledge that must be available
+
+Dependency mapping is where BIAs surface their most useful insights. Activities you assumed were independent often share an underlying dependency (the same vendor, the same database, the same one person). Single points of failure (SPOFs) emerge here.
+
+### Step 5: Validate with process owners
+
+The biggest BIA failure mode is data quality. Process owners often estimate RTOs that are far tighter than business reality, either to seem important or to hedge against unknowns. Validate every BIA output with at least one second perspective — typically the process owner's manager or a peer function — before locking the numbers.
+
+The validation conversation usually moves RTOs out by 25–50%. That's healthy. A BIA full of 1-hour RTOs across the board is not credible and will get challenged when strategy selection makes the cost visible.
+
+### Step 6: Aggregate and report
+
+The final deliverable is typically:
+
+- An executive summary with the top 5–10 most time-critical activities
+- A full activity register with RTO/RPO/MTPD per activity
+- Dependency maps highlighting SPOFs and shared dependencies
+- A prioritized list of recovery strategy decisions the BIA enables
+
+Get sign-off from the executive sponsor before moving to strategy selection. The BIA is a foundational document; subsequent decisions get litigated against it.
+
+## Common BIA mistakes
+
+Patterns we see repeatedly in SMB BIA work:
+
+**Surveying everyone, validating no one.** A 60-question survey emailed to 80 people produces low response rates and unvalidated data. Better: structured 45-minute interviews with 6–10 process owners, plus a focused survey for verification.
+
+**Confusing wishful thinking with RTO.** "We need it back immediately" is not an RTO. RTO comes from the impact analysis: at what point does cost cross threshold? That's your MTPD. Set RTO inside it.
+
+**Skipping dependencies.** A BIA without explicit dependency mapping produces RTOs that can't actually be met. Recovery time is constrained by dependency recovery time. If the database team's RTO is 8 hours and your activity depends on the database, your activity's effective RTO is also at least 8 hours.
+
+**Letting the BIA expire.** A BIA done two years ago and never updated is no longer current. Material organizational change (M&A, new product line, leadership change, vendor consolidation) requires BIA refresh. Annual review at minimum.
+
+## BIA tools and templates
+
+For SMBs, BIA tooling needs to be proportional. Options:
+
+- **Spreadsheet-based** — adequate for a single-pass BIA. Excel or Google Sheets with a structured template. Cheap, fast, hard to maintain at scale.
+- **Purpose-built BCM platforms** — Fusion, MetricStream, Riskonnect, ServiceNow GRC. Heavyweight; appropriate for 500+ employee organizations or regulated environments.
+- **Lightweight SMB-specific tools** — increasingly common. Often integrate with existing GRC or risk tooling.
+
+The platform doesn't make the BIA good. Methodology does. Most SMBs do their first BIA in a spreadsheet and move to a platform only when maintenance overhead justifies it.
+
+## What to do next
+
+The BIA is the prerequisite for almost every other BCM decision. If you're building a continuity program, this is step one — not step three.
+
+Three concrete next moves:
+
+1. **Score your current BCM maturity** — including BIA readiness — with the [BCP Readiness Scorecard](/resources/bcp-readiness-scorecard). Free, ~20 minutes.
+2. **Read the SMB BCP overview piece** — [Business Continuity Planning for Small Business](/insights/business-continuity-planning-for-small-business) — for how the BIA fits into the broader program.
+3. **Bring in expertise** — [schedule a working call](/contact) if you'd like a practitioner walkthrough of how to scope your first BIA.
+
+A BIA done well is a 4–8 week effort for an SMB. It pays back across every continuity decision you make for the next 24 months.
