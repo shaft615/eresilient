@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { StickyMobileCta } from "@/components/sticky-mobile-cta";
@@ -10,6 +11,9 @@ import {
 } from "@/lib/structured-data";
 import { SITE } from "@/lib/site";
 import "./globals.css";
+
+const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
+const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
 
 const aptos = localFont({
   variable: "--font-aptos",
@@ -65,6 +69,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/mark.svg",
   },
+  verification: GSC_VERIFICATION
+    ? { google: GSC_VERIFICATION }
+    : undefined,
 };
 
 export default function RootLayout({
@@ -82,6 +89,9 @@ export default function RootLayout({
         <main className="flex-1 pb-24 md:pb-0">{children}</main>
         <SiteFooter />
         <StickyMobileCta />
+        {GA4_ID && process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics gaId={GA4_ID} />
+        )}
       </body>
     </html>
   );
