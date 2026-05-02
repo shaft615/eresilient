@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/insights",
     "/contact",
     "/resources/bcp-readiness-scorecard",
+    "/scorecard",
     "/legal/privacy",
     "/legal/terms",
   ];
