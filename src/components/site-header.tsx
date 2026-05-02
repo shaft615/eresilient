@@ -9,8 +9,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-brand-taupe-mid/60 bg-brand-paper/85 backdrop-blur supports-[backdrop-filter]:bg-brand-paper/70">
       <Container width="wide">
         <div className="flex h-16 items-center justify-between gap-6">
-          <Link href="/" className="shrink-0">
-            <Wordmark />
+          <Link href="/" className="shrink-0" aria-label={`${SITE.name} home`}>
+            <Wordmark priority className="h-10 w-auto" />
           </Link>
 
           <nav aria-label="Primary" className="hidden md:block">

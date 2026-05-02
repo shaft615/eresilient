@@ -1,24 +1,25 @@
+import Image from "next/image";
 import { SITE } from "@/lib/site";
 
 export function Wordmark({
   variant = "default",
-  className = "",
+  className = "h-9 w-auto",
+  priority = false,
 }: {
   variant?: "default" | "on-dark";
   className?: string;
+  priority?: boolean;
 }) {
-  const orange = "#FB5C01";
-  const burgundy = variant === "on-dark" ? "#FDFCFB" : "#9D3057";
+  const src =
+    variant === "on-dark" ? "/wordmark-on-dark.svg" : "/wordmark.svg";
   return (
-    <span
-      className={`inline-flex items-baseline gap-0.5 font-display text-2xl font-bold tracking-tight ${className}`}
-      aria-label={SITE.name}
-    >
-      <span style={{ color: orange }}>e</span>
-      <span style={{ color: orange }} className="text-xl font-normal" aria-hidden="true">
-        |
-      </span>
-      <span style={{ color: burgundy }}>Resilient</span>
-    </span>
+    <Image
+      src={src}
+      alt={SITE.name}
+      width={1170}
+      height={280}
+      className={className}
+      priority={priority}
+    />
   );
 }
