@@ -17,7 +17,7 @@ export function Wordmark({
       src={src}
       alt={SITE.name}
       width={1170}
-      height={280}
+      height={255}
       className={className}
       priority={priority}
     />

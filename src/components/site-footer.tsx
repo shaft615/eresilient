@@ -10,7 +10,10 @@ export function SiteFooter() {
       <Container width="wide" className="py-16">
         <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div>
-            <Wordmark variant="on-dark" className="h-12 w-auto" />
+            <Wordmark variant="on-dark" className="h-16 w-auto" />
+            <p className="mt-3 font-display text-sm uppercase tracking-[0.2em] text-brand-orange">
+              Be Resilient. e|Resilient.
+            </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-taupe/80">
               {SITE.description}
             </p>
