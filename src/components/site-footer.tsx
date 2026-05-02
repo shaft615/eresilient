@@ -92,7 +92,7 @@ export function SiteFooter() {
 
         <div className="mt-12 flex flex-col gap-2 border-t border-brand-taupe/15 pt-6 text-xs text-brand-taupe/60 md:flex-row md:items-center md:justify-between">
           <p>© {year} {SITE.legalName}. All rights reserved.</p>
-          <p>SBA Recommended · ISO 22301 Aligned · CBCP Certified</p>
+          <p>SBA Recommended · ISO 22301 Aligned · MBCP · MBCI · CBCLA · PMP</p>
         </div>
       </Container>
     </footer>
