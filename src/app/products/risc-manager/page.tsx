@@ -17,7 +17,7 @@ const pillars = [
     icon: "📊",
     title: "Product Recovery Posture",
     summary:
-      "For every product in your portfolio, riscManager captures whether you Can recover, Could recover with effort, or Cannot recover — with RTO and MTPD documented and defensible.",
+      "For every product in your portfolio, riscManager™ captures whether you Can recover, Could recover with effort, or Cannot recover — with RTO and MTPD documented and defensible.",
     bullets: [
       "Recovery category (Can / Could / Cannot) per SKU",
       "RTO and MTPD captured at the product level, not just the function",
@@ -41,7 +41,7 @@ const pillars = [
     icon: "🚨",
     title: "Sole-Source Risk Watch",
     summary:
-      "Single-source dependencies are the most-cited cause of supply chain failure and the least-tracked. riscManager surfaces them on the dashboard and forces a mitigation plan against each.",
+      "Single-source dependencies are the most-cited cause of supply chain failure and the least-tracked. riscManager™ surfaces them on the dashboard and forces a mitigation plan against each.",
     bullets: [
       "Flag any supplier as sole-source with one click",
       "Inline mitigation strategy field per sole-source dependency",
@@ -97,7 +97,7 @@ export default function RiscManagerPage() {
             href="/services/supply-chain-risk"
             className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange hover:underline"
           >
-            <span aria-hidden>←</span> Supply Chain Risk Service
+            <span aria-hidden>←</span> Supply Chain Risk Management
           </Link>
 
           <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-3 py-1.5">
@@ -149,11 +149,14 @@ export default function RiscManagerPage() {
           <div className="mt-6 space-y-4 text-base leading-relaxed text-brand-ink-mid">
             <p>
               When a critical supplier fails, every company finds out one of
-              three things: they <strong>Can</strong> recover (a backup exists),
-              they <strong>Could</strong> recover with effort (an alternate
-              exists somewhere but isn&apos;t pre-staged), or they{" "}
-              <strong>Cannot</strong> recover at all. Almost nobody knows the
-              answer in advance.
+              three things: they{" "}
+              <strong>Can</strong>
+              {" "}recover (a backup exists), they{" "}
+              <strong>Could</strong>
+              {" "}recover with effort (an alternate exists somewhere but
+              isn&apos;t pre-staged), or they{" "}
+              <strong>Cannot</strong>
+              {" "}recover at all. Almost nobody knows the answer in advance.
             </p>
             <p>
               The information needed to know is usually scattered — in a
@@ -260,7 +263,7 @@ export default function RiscManagerPage() {
             Defensible outputs, not just a database.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            riscManager isn&apos;t a passive store of facts — it&apos;s the
+            riscManager™ isn&apos;t a passive store of facts — it&apos;s the
             engine that converts your supply chain into a Risk Intelligent
             operation. Every entry is structured to produce documents and
             decisions that hold up under review.
@@ -391,7 +394,7 @@ export default function RiscManagerPage() {
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             <CtaButton href="/services/supply-chain-risk" variant="ghost">
-              Supply Chain Risk Service
+              Supply Chain Risk Management
             </CtaButton>
             <CtaButton href={SITE.calendly} external>
               Book a consultation
