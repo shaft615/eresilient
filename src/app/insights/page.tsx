@@ -35,7 +35,7 @@ export default async function InsightsIndexPage() {
             Insights
           </p>
           <h1 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
-            Practitioner-grade writing on BCM, for SMB leaders.
+            Field-tested BCM guidance for SMB leaders.
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-brand-taupe">
             Long-form pieces drawn from 25+ years of Fortune 100 BCM practice —
