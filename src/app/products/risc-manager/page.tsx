@@ -6,9 +6,9 @@ import { RiscManagerWaitlistForm } from "@/components/risc-manager-waitlist-form
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "riscManager.com™ — Supply Chain Risk Operating Layer",
+  title: "riscManager.com™ — Risk Intelligent Supply Chain Platform",
   description:
-    "Inventory every product by recovery readiness, map supply chains down to raw-material sources, and manage sole-source risk in one purpose-built SaaS workspace. Currently in development; bundled with e|Resilient Program and Enterprise engagements.",
+    "RISC stands for Risk Intelligent Supply Chain. riscManager.com™ is the SaaS workspace that gets you there — inventory every product by recovery readiness, map supply chains down to raw-material sources, and manage sole-source risk in one purpose-built platform. Currently in development; bundled with e|Resilient Program and Enterprise engagements.",
   alternates: { canonical: `${SITE.url}/products/risc-manager` },
 };
 
@@ -113,11 +113,17 @@ export default function RiscManagerPage() {
             <sup className="ml-1 text-2xl text-brand-taupe/70">™</sup>
           </h1>
 
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-brand-taupe">
-            The supply chain risk operating layer for SMBs. Inventory every
-            product by recovery readiness, map the supply chain down to
-            raw-material sources, and manage sole-source dependencies — in one
-            purpose-built workspace.
+          <p className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-brand-orange">
+            <span className="text-brand-paper">RISC</span> ·{" "}
+            <span className="text-brand-taupe">Risk Intelligent Supply Chain</span>
+          </p>
+
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-brand-taupe">
+            The operating layer for a Risk Intelligent Supply Chain.
+            riscManager.com™ turns the chaos of suppliers, raw materials, and
+            sole-source dependencies into a continuously-managed register of
+            recovery readiness — built for SMBs that need enterprise-grade
+            rigor without the enterprise overhead.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -158,7 +164,10 @@ export default function RiscManagerPage() {
             </p>
             <p className="font-semibold text-brand-ink">
               riscManager.com™ is the workspace that makes the answer
-              continuously visible — before the test.
+              continuously visible — before the test. That&apos;s what we
+              mean by a <em>Risk Intelligent</em> Supply Chain: one that
+              knows its own recovery posture in advance, at every link in
+              the chain.
             </p>
           </div>
         </Container>
@@ -172,8 +181,13 @@ export default function RiscManagerPage() {
               What It Does
             </p>
             <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
-              Three operating pillars.
+              The three pillars of a Risk Intelligent Supply Chain.
             </h2>
+            <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
+              Each pillar maps to a section of the workspace. Together they
+              produce the visibility that turns a reactive supply chain into
+              an intelligent one.
+            </p>
           </div>
 
           <ul className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -246,9 +260,10 @@ export default function RiscManagerPage() {
             Defensible outputs, not just a database.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            riscManager isn&apos;t a passive store of facts. Every entry is
-            structured to produce documents and decisions that hold up under
-            review.
+            riscManager isn&apos;t a passive store of facts — it&apos;s the
+            engine that converts your supply chain into a Risk Intelligent
+            operation. Every entry is structured to produce documents and
+            decisions that hold up under review.
           </p>
 
           <ul className="mt-8 space-y-3">
