@@ -30,7 +30,7 @@ const principles = [
 ];
 
 const teamDepth = [
-  "In-house and consulting leadership at major risk consultancies — including Senior Vice President / Senior Managing Consultant roles at Marsh Risk Consulting and Director of Business Continuity at Aon Corporation",
+  "In-house and consulting leadership at major risk consultancies — including Senior Vice President / Senior Managing Consultant roles and Director-level business continuity practice leadership",
   "Hands-on engagement with Fortune 100 manufacturers, retailers, financial institutions, and healthcare organizations across more than two decades",
   "Real-event experience including pandemic preparedness program leadership and Hurricane Katrina / Rita recovery operations",
   "Custom BCM platform development, including production-capacity databases for supply chain risk integration",
