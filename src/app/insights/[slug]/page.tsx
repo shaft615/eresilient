@@ -39,7 +39,7 @@ export async function generateMetadata({
       url,
       publishedTime: metadata.publishedAt,
       modifiedTime: metadata.updatedAt ?? metadata.publishedAt,
-      authors: [`${SITE.url}/about/karl`],
+      authors: [`${SITE.url}/about`],
     },
   };
 }
@@ -117,7 +117,7 @@ export default async function ArticlePage({
           </h2>
           <p className="mt-3 text-base text-brand-ink-mid">
             Take the BCP Readiness Scorecard for an instant maturity reading,
-            or book a free 30-minute call with Karl.
+            or book a free 30-minute call with our team.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             <CtaButton href="/resources/bcp-readiness-scorecard">

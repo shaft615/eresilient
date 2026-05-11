@@ -59,7 +59,7 @@ export default function PrivacyPage() {
       <ul>
         <li>Deliver requested resources, including the BCP Readiness Scorecard and any other materials you request</li>
         <li>Respond to inquiries and support our consultative engagement process</li>
-        <li>Send occasional, practitioner-grade BCM updates from Karl D. Bryant — you can unsubscribe at any time using the link in any email</li>
+        <li>Send occasional, practitioner-grade BCM updates from {SITE.legalName} — you can unsubscribe at any time using the link in any email</li>
         <li>Maintain, secure, and improve the Site and our services</li>
         <li>Comply with legal obligations and enforce our terms</li>
       </ul>

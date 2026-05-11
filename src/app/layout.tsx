@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   },
   description: SITE.description,
   applicationName: SITE.legalName,
-  authors: [{ name: SITE.founder.name }],
+  authors: [{ name: SITE.legalName, url: SITE.url }],
   openGraph: {
     type: "website",
     siteName: SITE.legalName,

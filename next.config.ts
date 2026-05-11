@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/about-us", destination: "/about", permanent: true },
       { source: "/contact-us", destination: "/contact", permanent: true },
+      // /about/karl was an early founder bio page; site is now firm-presented.
+      { source: "/about/karl", destination: "/about", permanent: true },
     ];
   },
 };

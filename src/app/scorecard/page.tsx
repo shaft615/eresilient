@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE.url}/scorecard` },
   // Public route, but the natural funnel sends visitors here from the
   // email-gated landing page at /resources/bcp-readiness-scorecard.
-  // Keep it indexable so Karl can share the link directly when useful.
+  // Keep it indexable so the link can be shared directly when useful.
 };
 
 export default function ScorecardPage() {

@@ -7,12 +7,12 @@ export const SITE = {
     "ISO 22301-aligned business continuity consulting for small and mid-sized businesses. Build the plan that keeps your operations running when disruption hits.",
   tagline:
     "When disruption hits, your business keeps running — we build the plan that makes it possible.",
-  founder: {
-    name: "Karl D. Bryant",
-    shortName: "Karl Bryant",
-    role: "Managing Principal",
+  // Team-level credentials shown in headers/credibility bars
+  team: {
+    experience:
+      "Over 30 years of practical and consulting experience in Business Continuity and Supply Chain Risk Management",
     credentials: [
-      "25+ years Fortune 100 BCM",
+      "30+ years Fortune 100 BCM",
       "MBCP · MBCI · CBCLA · PMP",
       "ISO 22301 Aligned",
       "SBA Recommended",
@@ -25,15 +25,16 @@ export const SITE = {
     ],
   },
   contact: {
-    phone: "(312) 576-5202",
-    phoneHref: "tel:+13125765202",
-    email: "karl.bryant@eresilient.com",
-    emailHref: "mailto:karl.bryant@eresilient.com",
+    phone: "(833) PLAN-365",
+    phoneDigits: "(833) 752-6365",
+    phoneHref: "tel:+18337526365",
+    email: "info@eresilient.com",
+    emailHref: "mailto:info@eresilient.com",
     address: {
-      street: "4800 S Chicago Beach Dr, Suite 1901N",
+      street: "1 East Erie St, Suite 525-4252",
       city: "Chicago",
       region: "IL",
-      postal: "60615",
+      postal: "60611",
       country: "US",
     },
   },

@@ -2,8 +2,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
-import { JsonLd } from "@/components/json-ld";
-import { founderSchema } from "@/lib/structured-data";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -71,8 +69,6 @@ const howItWorks = [
 export default function HomePage() {
   return (
     <>
-      <JsonLd data={founderSchema()} />
-
       {/* 1. Hero */}
       <section className="relative overflow-hidden bg-brand-maroon text-brand-paper">
         <div
@@ -113,7 +109,7 @@ export default function HomePage() {
       <section className="border-b border-brand-taupe-mid/60 bg-brand-paper">
         <Container width="wide" className="py-7">
           <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs font-semibold uppercase tracking-[0.14em] text-brand-ink-light">
-            {SITE.founder.credentials.map((c) => (
+            {SITE.team.credentials.map((c) => (
               <li key={c} className="whitespace-nowrap">
                 {c}
               </li>
@@ -225,7 +221,7 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* 6. Social proof — industries + founder card */}
+      {/* 6. Social proof — industries + team */}
       <section className="py-20 sm:py-24">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start">
@@ -257,16 +253,19 @@ export default function HomePage() {
 
             <aside className="rounded-2xl border border-brand-taupe-mid bg-brand-taupe-light/60 p-7">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
-                Your Consultant
+                Our Team
               </p>
               <h3 className="mt-2 font-display text-2xl text-brand-maroon">
-                {SITE.founder.name}
+                Practitioners, not generalists
               </h3>
-              <p className="text-sm font-semibold text-brand-ink-light">
-                {SITE.founder.role}
+              <p className="mt-4 text-sm leading-relaxed text-brand-ink-mid">
+                {SITE.team.experience}, including in-house and consulting
+                leadership at major risk consultancies and Fortune 100 BCM
+                functions. We bring that depth to SMBs that need
+                enterprise-grade rigor without enterprise-scale overhead.
               </p>
               <ul className="mt-5 space-y-2 text-sm text-brand-ink-mid">
-                {SITE.founder.certifications.map((c) => (
+                {SITE.team.certifications.map((c) => (
                   <li key={c.abbr}>
                     <span className="font-semibold text-brand-ink">
                       {c.abbr}
@@ -275,16 +274,11 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 text-sm leading-relaxed text-brand-ink-mid">
-                Twenty-five years building business continuity programs for
-                Fortune 100 clients at Marsh and Aon. Karl takes every
-                consultation call personally.
-              </p>
               <Link
-                href="/about/karl"
+                href="/about"
                 className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-orange hover:underline"
               >
-                Read full bio <span aria-hidden>→</span>
+                More about the firm <span aria-hidden>→</span>
               </Link>
             </aside>
           </div>
@@ -298,8 +292,8 @@ export default function HomePage() {
             Ready to find out where your continuity program stands?
           </h2>
           <p className="mt-4 text-base text-brand-taupe">
-            Book a free 30-minute consultation with Karl. No sales pitch — a
-            working call to map your gaps and recommend the right next step.
+            Book a free 30-minute consultation. No sales pitch — a working call
+            to map your gaps and recommend the right next step.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <CtaButton href={SITE.calendly} external>

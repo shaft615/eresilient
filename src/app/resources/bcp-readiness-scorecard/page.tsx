@@ -95,9 +95,9 @@ export default function ScorecardLandingPage() {
               </p>
               <p className="mt-2 text-base text-brand-ink-mid">
                 <span className="font-semibold text-brand-ink">
-                  {SITE.founder.name}
-                </span>
-                , {SITE.founder.role} ·{" "}
+                  The {SITE.name} team
+                </span>{" "}
+                ·{" "}
                 <span className="text-sm text-brand-ink-light">
                   MBCP · MBCI · CBCLA · PMP
                 </span>

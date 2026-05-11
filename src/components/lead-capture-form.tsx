@@ -65,7 +65,7 @@ export function LeadCaptureForm({
           type="text"
           required
           autoComplete="name"
-          placeholder="Karl Bryant"
+          placeholder="Jane Doe"
           disabled={status === "submitting"}
           className={`mt-2 ${fieldClass}`}
         />
@@ -142,8 +142,9 @@ export function LeadCaptureForm({
       </button>
 
       <p className="text-xs leading-relaxed text-brand-ink-light">
-        We&apos;ll email you the link and add you to occasional, practitioner-grade
-        BCM updates from Karl. No marketing automation — unsubscribe any time.
+        We&apos;ll email you the link and add you to occasional,
+        practitioner-grade BCM updates from e|Resilient. No marketing
+        automation — unsubscribe any time.
       </p>
     </form>
   );

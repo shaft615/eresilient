@@ -6,7 +6,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Capability Statement",
   description:
-    "e|Resilient Capability Statement — business continuity, crisis management, supply chain risk, and emergency response consulting for SMBs and federal contracting. Master Business Continuity Professional with 25+ years of Fortune 100 practice. DUNS, CAGE, NAICS on file.",
+    "e|Resilient Capability Statement — business continuity, crisis management, supply chain risk, and emergency response consulting for SMBs and federal contracting. Over 30 years of Fortune 100 BCM and supply chain risk practice. DUNS, CAGE, NAICS on file.",
   alternates: { canonical: `${SITE.url}/capabilities` },
 };
 
@@ -19,7 +19,7 @@ const coreCompetencies = [
 ];
 
 const pastPerformance = [
-  "25+ years leading business continuity planning for Fortune 100 companies",
+  "Over 30 years of practical and consulting experience in Business Continuity and Supply Chain Risk Management, including engagement leadership at Fortune 100 firms",
   "Ability to translate process detail into language business owners and their teams understand",
   "High-touch guidance through the continuity planning process, leveraging technology to guide clients end-to-end",
 ];
@@ -102,11 +102,11 @@ export default function CapabilitiesPage() {
               <div className="mt-12 rounded-xl border border-brand-taupe-mid bg-brand-taupe-light/60 p-6">
                 <p className="text-base leading-relaxed text-brand-ink-mid">
                   The team at {SITE.name} has mastered the skill of business
-                  continuity planning. Our time working with Fortune 100
-                  companies for over 25 years has provided us with the
-                  expertise to help our clients plan for a range of potential
-                  occurrences and the most efficient and effective way to
-                  tackle the unexpected.
+                  continuity planning. Over 30 years of practical and
+                  consulting experience working with Fortune 100 companies has
+                  provided us with the expertise to help our clients plan for a
+                  range of potential occurrences and the most efficient and
+                  effective way to tackle the unexpected.
                 </p>
                 <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
                   We know the importance of keeping your operations running
@@ -124,13 +124,10 @@ export default function CapabilitiesPage() {
                   Differentiators
                 </p>
                 <h3 className="mt-2 font-display text-lg text-brand-maroon">
-                  Karl D. Bryant
+                  Certifications held by the team
                 </h3>
-                <p className="text-sm font-semibold text-brand-ink-light">
-                  {SITE.founder.role}
-                </p>
                 <ul className="mt-4 space-y-3 text-sm text-brand-ink-mid">
-                  {SITE.founder.certifications.map((c) => (
+                  {SITE.team.certifications.map((c) => (
                     <li key={c.abbr}>
                       <span className="font-semibold text-brand-ink">
                         {c.abbr}
@@ -139,9 +136,12 @@ export default function CapabilitiesPage() {
                     </li>
                   ))}
                 </ul>
+                <p className="mt-5 text-xs uppercase tracking-[0.12em] text-brand-orange">
+                  Contact
+                </p>
                 <a
                   href={SITE.contact.emailHref}
-                  className="mt-5 block text-sm font-semibold text-brand-orange hover:underline"
+                  className="mt-2 block text-sm font-semibold text-brand-orange hover:underline"
                 >
                   {SITE.contact.email}
                 </a>
@@ -220,8 +220,8 @@ export default function CapabilitiesPage() {
             Ready to discuss your continuity needs?
           </h2>
           <p className="mt-3 text-base text-brand-ink-mid">
-            Karl takes every initial conversation personally. Free 30-minute
-            consultation.
+            We take every initial conversation personally. Free 30-minute
+            consultation with a practitioner.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             <CtaButton href={SITE.calendly} external>

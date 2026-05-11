@@ -1,7 +1,6 @@
 import type {
   Article,
   Organization,
-  Person,
   ProfessionalService,
   Service,
   WithContext,
@@ -26,11 +25,6 @@ export function organizationSchema(): WithContext<Organization> {
       addressRegion: SITE.contact.address.region,
       postalCode: SITE.contact.address.postal,
       addressCountry: SITE.contact.address.country,
-    },
-    founder: {
-      "@type": "Person",
-      name: SITE.founder.name,
-      jobTitle: SITE.founder.role,
     },
   };
 }
@@ -84,9 +78,9 @@ export function articleSchema(a: ArticleFrontmatter): WithContext<Article> {
     datePublished: a.publishedAt,
     dateModified: a.updatedAt ?? a.publishedAt,
     author: {
-      "@type": "Person",
-      name: a.author,
-      url: `${SITE.url}/about/karl`,
+      "@type": "Organization",
+      name: SITE.legalName,
+      url: SITE.url,
     },
     publisher: {
       "@type": "Organization",
@@ -98,26 +92,5 @@ export function articleSchema(a: ArticleFrontmatter): WithContext<Article> {
       "@id": url,
     },
     keywords: a.keywords.join(", "),
-  };
-}
-
-export function founderSchema(): WithContext<Person> {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: SITE.founder.name,
-    jobTitle: SITE.founder.role,
-    worksFor: {
-      "@type": "Organization",
-      name: SITE.legalName,
-      url: SITE.url,
-    },
-    knowsAbout: [
-      "Business Continuity Management",
-      "ISO 22301",
-      "Business Impact Analysis",
-      "Crisis Management",
-      "Supply Chain Resilience",
-    ],
   };
 }

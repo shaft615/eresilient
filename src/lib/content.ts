@@ -41,7 +41,7 @@ export const ArticleFrontmatter = z.object({
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
-  author: z.string().default("Karl D. Bryant"),
+  author: z.string().default("e|Resilient"),
   readingTimeMinutes: z.number().int().positive(),
   keywords: z.array(z.string()).default([]),
   featured: z.boolean().default(false),

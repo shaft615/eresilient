@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
+import { ContactForm } from "@/components/contact-form";
 import { CtaButton } from "@/components/cta-button";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact — Schedule Your BCM Consultation",
   description:
-    "Reach Karl Bryant directly to schedule a free 30-minute business continuity consultation, or use our inline calendar to book a time that works for you.",
+    "Reach e|Resilient by phone, email, or contact form. Book a free 30-minute BCM consultation with our team or send a quick note — we respond within one business day.",
   alternates: { canonical: `${SITE.url}/contact` },
 };
 
@@ -24,9 +25,10 @@ export default function ContactPage() {
             Let&apos;s talk about your continuity program.
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-brand-taupe">
-            Pick a time below for a free 30-minute consultation, or reach Karl
-            directly by phone or email. Every initial call is taken personally —
-            no SDRs, no qualification gauntlet.
+            Pick a time below for a free 30-minute consultation, send us a
+            note, or reach out directly by phone or email. Every initial
+            conversation is taken by a practitioner — no SDRs, no
+            qualification gauntlet.
           </p>
         </Container>
       </section>
@@ -45,7 +47,7 @@ export default function ContactPage() {
               <div className="mt-6 overflow-hidden rounded-xl border border-brand-taupe-mid bg-brand-paper">
                 <iframe
                   src={calendlyEmbedUrl}
-                  title="Schedule a consultation with Karl Bryant"
+                  title="Schedule a consultation with e|Resilient"
                   className="h-[760px] w-full"
                   loading="lazy"
                 />
@@ -68,14 +70,11 @@ export default function ContactPage() {
             <aside className="space-y-6 lg:sticky lg:top-24">
               <div className="rounded-2xl border border-brand-maroon bg-brand-maroon p-7 text-brand-paper">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
-                  Reach Karl Directly
+                  Reach us directly
                 </p>
                 <h2 className="mt-2 font-display text-2xl">
-                  {SITE.founder.name}
+                  {SITE.legalName}
                 </h2>
-                <p className="text-sm text-brand-taupe">
-                  {SITE.founder.role}
-                </p>
 
                 <dl className="mt-6 space-y-4 text-sm">
                   <div>
@@ -89,6 +88,9 @@ export default function ContactPage() {
                       >
                         {SITE.contact.phone}
                       </a>
+                      <span className="ml-2 text-xs text-brand-taupe/80">
+                        ({SITE.contact.phoneDigits})
+                      </span>
                     </dd>
                   </div>
                   <div>
@@ -147,18 +149,51 @@ export default function ContactPage() {
         </Container>
       </section>
 
-      <section className="bg-brand-taupe-light/60 py-16">
+      {/* Contact form section */}
+      <section className="bg-brand-taupe-light/60 py-16 sm:py-20">
+        <Container width="wide">
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
+                Send a note
+              </p>
+              <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
+                Or write to us in your own words.
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
+                Not ready to book a call? Tell us what&apos;s on your mind —
+                where you are in your continuity program, what an active
+                situation looks like, or what kind of help would be useful.
+                We&apos;ll route it to the right practitioner.
+              </p>
+              <p className="mt-4 text-sm text-brand-ink-light">
+                We don&apos;t share your information. The form is for getting
+                in touch — not building a marketing list.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-brand-taupe-mid bg-brand-paper p-7">
+              <ContactForm />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="bg-brand-maroon py-16 text-brand-paper">
         <Container width="narrow" className="text-center">
-          <h2 className="font-display text-2xl text-brand-maroon">
+          <h2 className="font-display text-2xl sm:text-3xl">
             Prefer to read first?
           </h2>
-          <p className="mt-3 text-sm text-brand-ink-mid">
+          <p className="mt-3 text-sm text-brand-taupe">
             Download the BCP Readiness Scorecard — a quick self-assessment of
             your current program maturity, with the gaps that typically matter
             most for SMBs.
           </p>
           <div className="mt-6">
-            <CtaButton href="/resources/bcp-readiness-scorecard">
+            <CtaButton
+              href="/resources/bcp-readiness-scorecard"
+              variant="ghost-on-dark"
+            >
               Download the Scorecard
             </CtaButton>
           </div>
