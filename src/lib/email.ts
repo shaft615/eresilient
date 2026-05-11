@@ -81,6 +81,43 @@ export async function sendScorecardWelcome(opts: {
 }
 
 /**
+ * Welcome email for the riscManager.com™ early-access waitlist.
+ * Confirms the signup and sets expectations on what they'll hear and when.
+ */
+export async function sendRiscManagerWaitlistWelcome(opts: {
+  to: string;
+  name: string;
+}): Promise<{ ok: boolean; skipped?: "no-resend"; error?: string }> {
+  const resend = client();
+  if (!resend) {
+    console.warn("[email] RESEND_API_KEY not set; skipping waitlist welcome", {
+      to: opts.to,
+    });
+    return { ok: true, skipped: "no-resend" };
+  }
+  const unsubUrl = makeUnsubscribeUrl(opts.to);
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: opts.to,
+      replyTo: SITE.contact.email,
+      subject: "You're on the riscManager.com™ early-access list",
+      html: riscManagerWaitlistHtml({ name: opts.name, unsubUrl }),
+      text: riscManagerWaitlistText({ name: opts.name, unsubUrl }),
+    });
+    if (error) {
+      console.error("[email] resend returned error", error);
+      return { ok: false, error: String(error.message ?? error) };
+    }
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[email] sendRiscManagerWaitlistWelcome failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+/**
  * Day-3 nurture (Email 2). Practitioner-grade BCM insight pointing the
  * subscriber at the BIA cornerstone article — the highest-value piece
  * for someone who just took the readiness scorecard.
@@ -271,6 +308,64 @@ ${url}
 
 When you finish, hit Print / Save PDF for a portable copy. If you want to walk through the results together — or skip ahead to scoping a continuity engagement — book a free 30-minute call:
 ${SITE.calendly}
+${signatureText(unsubUrl)}`;
+}
+
+function riscManagerWaitlistHtml({
+  name,
+  unsubUrl,
+}: {
+  name: string;
+  unsubUrl: string;
+}) {
+  const firstName = name.split(/\s+/)[0] ?? name;
+  return `<!DOCTYPE html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
+      <tr><td>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">e|Resilient · riscManager.com&trade;</p>
+        <h1 style="font-size:24px;line-height:1.2;color:#2D000F;margin:0 0 16px;">You&rsquo;re on the list, ${escapeHtml(firstName)}.</h1>
+        <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          Thanks for requesting early access to riscManager.com&trade; &mdash; our purpose-built SaaS for product-level recovery posture and supplier risk mapping.
+        </p>
+        <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          We&rsquo;re finishing the build now and will reach out personally as workspace slots open up. In the meantime, two things you can do:
+        </p>
+        <ul style="font-size:15px;line-height:1.7;color:#4A2E24;margin:0 0 16px;padding-left:20px;">
+          <li><strong>Take the BCP Readiness Scorecard</strong> &mdash; gives us context on your continuity program before we talk: <a href="${SITE.url}/resources/bcp-readiness-scorecard" style="color:#FB5C01;font-weight:bold;">${SITE.url}/resources/bcp-readiness-scorecard</a></li>
+          <li><strong>Book a 30-minute call now</strong> if you&rsquo;d like to discuss your supply chain situation directly: <a href="${SITE.calendly}" style="color:#FB5C01;font-weight:bold;">${SITE.calendly}</a></li>
+        </ul>
+        <p style="font-size:14px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          Reply to this email if you have questions about scope or how riscManager fits with your existing tools &mdash; we read every response.
+        </p>${signatureHtml(unsubUrl)}
+      </td></tr>
+    </table>
+  </body>
+</html>`;
+}
+
+function riscManagerWaitlistText({
+  name,
+  unsubUrl,
+}: {
+  name: string;
+  unsubUrl: string;
+}) {
+  const firstName = name.split(/\s+/)[0] ?? name;
+  return `You're on the list, ${firstName}.
+
+Thanks for requesting early access to riscManager.com™ — our purpose-built SaaS for product-level recovery posture and supplier risk mapping.
+
+We're finishing the build now and will reach out personally as workspace slots open up. In the meantime, two things you can do:
+
+- Take the BCP Readiness Scorecard — gives us context on your continuity program before we talk:
+  ${SITE.url}/resources/bcp-readiness-scorecard
+
+- Book a 30-minute call now if you'd like to discuss your supply chain situation directly:
+  ${SITE.calendly}
+
+Reply to this email if you have questions about scope or how riscManager fits with your existing tools — we read every response.
 ${signatureText(unsubUrl)}`;
 }
 

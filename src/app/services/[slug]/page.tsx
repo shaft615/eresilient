@@ -149,6 +149,39 @@ export default async function ServicePage({
         </Container>
       </section>
 
+      {/* Featured product (e.g. riscManager.com™ on supply-chain-risk) */}
+      {service.featuredProduct && (
+        <section className="bg-brand-taupe-light/60 py-20">
+          <Container width="wide">
+            <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-center">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
+                  Powered by
+                </p>
+                <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
+                  {service.featuredProduct.name}
+                </h2>
+                <p className="mt-3 font-display text-lg text-brand-ink-mid">
+                  {service.featuredProduct.tagline}
+                </p>
+              </div>
+              <div className="rounded-2xl border border-brand-taupe-mid bg-brand-paper p-7">
+                <p className="text-base leading-relaxed text-brand-ink-mid">
+                  {service.featuredProduct.summary}
+                </p>
+                <div className="mt-6">
+                  <CtaButton
+                    href={`/products/${service.featuredProduct.slug}`}
+                  >
+                    {service.featuredProduct.ctaLabel} <span aria-hidden>→</span>
+                  </CtaButton>
+                </div>
+              </div>
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Process */}
       <section className="bg-brand-maroon py-20 text-brand-paper">
         <Container width="wide">

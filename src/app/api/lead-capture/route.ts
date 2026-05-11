@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { LeadCaptureInput } from "@/lib/lead-capture";
 import { upsertSubscriber } from "@/lib/db";
-import { sendScorecardWelcome } from "@/lib/email";
+import {
+  sendRiscManagerWaitlistWelcome,
+  sendScorecardWelcome,
+} from "@/lib/email";
 import { SITE } from "@/lib/site";
+
+const RISC_MANAGER_SOURCE = "risc-manager-waitlist";
 
 export async function POST(req: Request) {
   let payload: unknown;
@@ -44,12 +49,18 @@ export async function POST(req: Request) {
     );
   }
 
-  // Fire and don't block on email send — user gets to scorecard immediately
+  // Pick the right welcome email based on which form the visitor came from.
+  // Both fire-and-forget; failures are logged inside the email helpers.
+  if (source === RISC_MANAGER_SOURCE) {
+    void sendRiscManagerWaitlistWelcome({ to: email, name });
+    // Waitlist form renders an inline success state and doesn't redirect.
+    return NextResponse.json({ ok: true });
+  }
+
   void sendScorecardWelcome({
     to: email,
     name,
     scorecardUrl: `${SITE.url}/scorecard`,
   });
-
   return NextResponse.json({ ok: true, redirectTo: "/scorecard?welcome=1" });
 }

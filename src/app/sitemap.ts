@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/scorecard",
     "/legal/privacy",
     "/legal/terms",
+    "/products/risc-manager",
   ];
 
   const servicePaths = services.map((s) => `/services/${s.slug}`);

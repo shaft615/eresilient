@@ -68,4 +68,12 @@ export const supplyChainRisk: ServiceContent = {
   ],
   ctaLabel: "Schedule a supply-chain risk call",
   order: 4,
+  featuredProduct: {
+    name: "riscManager.com™",
+    slug: "risc-manager",
+    tagline: "The operating layer behind the methodology.",
+    summary:
+      "Our purpose-built SaaS platform for inventorying products by recovery readiness, mapping supply chains down to raw-material sources, and managing sole-source mitigation. Bundled with Program and Enterprise engagements; standalone licensing on request.",
+    ctaLabel: "Learn more about riscManager.com™",
+  },
 };

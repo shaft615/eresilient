@@ -28,6 +28,18 @@ export const ServiceContent = z.object({
     .min(1),
   ctaLabel: z.string().default("Schedule a discovery call"),
   order: z.number().int().nonnegative(),
+  // Optional: a productized tool or platform that ships with this service.
+  // Renders as a featured "Powered by …" card on the service detail page,
+  // linking to the product's showcase page at /products/<slug>.
+  featuredProduct: z
+    .object({
+      name: z.string().min(1),
+      slug: z.string().min(1),
+      tagline: z.string().min(1),
+      summary: z.string().min(1),
+      ctaLabel: z.string().default("Learn more"),
+    })
+    .optional(),
 });
 export type ServiceContent = z.infer<typeof ServiceContent>;
 
