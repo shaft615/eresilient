@@ -37,7 +37,8 @@ export function ContactForm() {
         return;
       }
       setStatus("success");
-      e.currentTarget.reset();
+      // No reset needed — the form unmounts when status === "success",
+      // and re-mounts empty when the user clicks "Send another message".
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Network error.");
