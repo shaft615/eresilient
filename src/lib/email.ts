@@ -1,6 +1,7 @@
 import { Resend } from "resend";
 import { SITE } from "./site";
 import type { ContactFormInput } from "./contact-form";
+import { makeUnsubscribeUrl } from "./unsubscribe";
 
 let cached: Resend | null = null;
 
@@ -13,22 +14,35 @@ function client(): Resend | null {
 const FROM =
   process.env.RESEND_FROM_EMAIL ?? `${SITE.legalName} <${SITE.contact.email}>`;
 
-const SIGNATURE_HTML = `
+function signatureHtml(unsubscribeUrl?: string): string {
+  return `
         <hr style="border:none;border-top:1px solid #E5E0D8;margin:32px 0;">
         <p style="font-size:12px;line-height:1.6;color:#7A5C52;margin:0;">
           The ${SITE.name} Team<br>
           ${SITE.legalName}<br>
-          ${SITE.contact.phone} · ${SITE.contact.email}
-        </p>`;
+          ${SITE.contact.phone} · <a href="mailto:${SITE.contact.email}" style="color:#7A5C52;">${SITE.contact.email}</a>
+        </p>${
+          unsubscribeUrl
+            ? `<p style="font-size:11px;color:#A89088;margin:16px 0 0;">You&rsquo;re receiving this because you requested a resource from ${SITE.url.replace(/^https?:\/\//, "")}. <a href="${unsubscribeUrl}" style="color:#A89088;text-decoration:underline;">Unsubscribe</a> any time.</p>`
+            : ""
+        }`;
+}
 
-const SIGNATURE_TEXT = `
+function signatureText(unsubscribeUrl?: string): string {
+  const base = `
 The ${SITE.name} Team
 ${SITE.legalName}
 ${SITE.contact.phone} · ${SITE.contact.email}
 `;
+  if (!unsubscribeUrl) return base;
+  return `${base}
+You're receiving this because you requested a resource from ${SITE.url.replace(/^https?:\/\//, "")}.
+Unsubscribe: ${unsubscribeUrl}
+`;
+}
 
 /**
- * Send the BCP Readiness Scorecard welcome email.
+ * Send the BCP Readiness Scorecard welcome email (Day 0 / Email 1).
  * Gracefully no-ops if RESEND_API_KEY is unset.
  */
 export async function sendScorecardWelcome(opts: {
@@ -44,14 +58,15 @@ export async function sendScorecardWelcome(opts: {
     return { ok: true, skipped: "no-resend" };
   }
 
+  const unsubUrl = makeUnsubscribeUrl(opts.to);
   try {
     const { error } = await resend.emails.send({
       from: FROM,
       to: opts.to,
       replyTo: SITE.contact.email,
       subject: "Your BCP Readiness Scorecard is ready",
-      html: scorecardWelcomeHtml({ name: opts.name, url: opts.scorecardUrl }),
-      text: scorecardWelcomeText({ name: opts.name, url: opts.scorecardUrl }),
+      html: scorecardWelcomeHtml({ name: opts.name, url: opts.scorecardUrl, unsubUrl }),
+      text: scorecardWelcomeText({ name: opts.name, url: opts.scorecardUrl, unsubUrl }),
     });
     if (error) {
       console.error("[email] resend returned error", error);
@@ -61,6 +76,81 @@ export async function sendScorecardWelcome(opts: {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("[email] sendScorecardWelcome failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+/**
+ * Day-3 nurture (Email 2). Practitioner-grade BCM insight pointing the
+ * subscriber at the BIA cornerstone article — the highest-value piece
+ * for someone who just took the readiness scorecard.
+ */
+export async function sendNurtureInsight(opts: {
+  to: string;
+  name: string;
+}): Promise<{ ok: boolean; skipped?: "no-resend"; error?: string }> {
+  const resend = client();
+  if (!resend) {
+    console.warn("[email] RESEND_API_KEY not set; skipping nurture insight", {
+      to: opts.to,
+    });
+    return { ok: true, skipped: "no-resend" };
+  }
+  const unsubUrl = makeUnsubscribeUrl(opts.to);
+  const url = `${SITE.url}/insights/how-to-conduct-a-business-impact-analysis`;
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: opts.to,
+      replyTo: SITE.contact.email,
+      subject: "The single highest-leverage BCM exercise (and how to run it)",
+      html: nurtureInsightHtml({ name: opts.name, url, unsubUrl }),
+      text: nurtureInsightText({ name: opts.name, url, unsubUrl }),
+    });
+    if (error) {
+      console.error("[email] resend returned error", error);
+      return { ok: false, error: String(error.message ?? error) };
+    }
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[email] sendNurtureInsight failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+/**
+ * Day-7 nurture (Email 3). Soft, named CTA to book a working consultation.
+ */
+export async function sendNurtureConsultation(opts: {
+  to: string;
+  name: string;
+}): Promise<{ ok: boolean; skipped?: "no-resend"; error?: string }> {
+  const resend = client();
+  if (!resend) {
+    console.warn("[email] RESEND_API_KEY not set; skipping nurture CTA", {
+      to: opts.to,
+    });
+    return { ok: true, skipped: "no-resend" };
+  }
+  const unsubUrl = makeUnsubscribeUrl(opts.to);
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: opts.to,
+      replyTo: SITE.contact.email,
+      subject: "Quick question on your continuity program?",
+      html: nurtureConsultationHtml({ name: opts.name, unsubUrl }),
+      text: nurtureConsultationText({ name: opts.name, unsubUrl }),
+    });
+    if (error) {
+      console.error("[email] resend returned error", error);
+      return { ok: false, error: String(error.message ?? error) };
+    }
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[email] sendNurtureConsultation failed", message);
     return { ok: false, error: message };
   }
 }
@@ -127,7 +217,15 @@ function prettyTopic(t: ContactFormInput["topic"]): string {
   }
 }
 
-function scorecardWelcomeHtml({ name, url }: { name: string; url: string }) {
+function scorecardWelcomeHtml({
+  name,
+  url,
+  unsubUrl,
+}: {
+  name: string;
+  url: string;
+  unsubUrl: string;
+}) {
   const firstName = name.split(/\s+/)[0] ?? name;
   return `<!DOCTYPE html>
 <html lang="en">
@@ -147,14 +245,22 @@ function scorecardWelcomeHtml({ name, url }: { name: string; url: string }) {
         </p>
         <p style="margin:0 0 24px;">
           <a href="${SITE.calendly}" style="color:#FB5C01;font-weight:bold;text-decoration:underline;">${SITE.calendly}</a>
-        </p>${SIGNATURE_HTML}
+        </p>${signatureHtml(unsubUrl)}
       </td></tr>
     </table>
   </body>
 </html>`;
 }
 
-function scorecardWelcomeText({ name, url }: { name: string; url: string }) {
+function scorecardWelcomeText({
+  name,
+  url,
+  unsubUrl,
+}: {
+  name: string;
+  url: string;
+  unsubUrl: string;
+}) {
   const firstName = name.split(/\s+/)[0] ?? name;
   return `Your BCP Readiness Scorecard is ready, ${firstName}.
 
@@ -165,7 +271,123 @@ ${url}
 
 When you finish, hit Print / Save PDF for a portable copy. If you want to walk through the results together — or skip ahead to scoping a continuity engagement — book a free 30-minute call:
 ${SITE.calendly}
-${SIGNATURE_TEXT}`;
+${signatureText(unsubUrl)}`;
+}
+
+function nurtureInsightHtml({
+  name,
+  url,
+  unsubUrl,
+}: {
+  name: string;
+  url: string;
+  unsubUrl: string;
+}) {
+  const firstName = name.split(/\s+/)[0] ?? name;
+  return `<!DOCTYPE html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
+      <tr><td>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">e|Resilient · Insight</p>
+        <h1 style="font-size:22px;line-height:1.25;color:#2D000F;margin:0 0 16px;">${escapeHtml(firstName)}, the highest-leverage BCM exercise you can run this quarter.</h1>
+        <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          A quick follow-up to the readiness scorecard.
+        </p>
+        <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          If we had to recommend one BCM exercise to teams that scored below &ldquo;Established,&rdquo; it would be a properly scoped Business Impact Analysis. The BIA is the foundation underneath every continuity decision — without it, plans are guesses about what to recover first. With it, RTO, RPO, and dependency maps become defensible numbers you can show a board, an auditor, or your largest customer.
+        </p>
+        <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          We just published a step-by-step BIA methodology aligned to ISO/TS 22317 — what to do, where it usually goes wrong, and what good outputs actually look like. Roughly an 11-minute read:
+        </p>
+        <p style="margin:24px 0;">
+          <a href="${url}" style="display:inline-block;background:#FB5C01;color:#FDFCFB;text-decoration:none;padding:14px 28px;border-radius:6px;font-weight:bold;">Read the BIA guide →</a>
+        </p>
+        <p style="font-size:14px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          If anything in there sparks a question about your specific situation, just hit reply — we read every response.
+        </p>${signatureHtml(unsubUrl)}
+      </td></tr>
+    </table>
+  </body>
+</html>`;
+}
+
+function nurtureInsightText({
+  name,
+  url,
+  unsubUrl,
+}: {
+  name: string;
+  url: string;
+  unsubUrl: string;
+}) {
+  const firstName = name.split(/\s+/)[0] ?? name;
+  return `${firstName}, the highest-leverage BCM exercise you can run this quarter.
+
+A quick follow-up to the readiness scorecard.
+
+If we had to recommend one BCM exercise to teams that scored below "Established," it would be a properly scoped Business Impact Analysis. The BIA is the foundation underneath every continuity decision — without it, plans are guesses about what to recover first. With it, RTO, RPO, and dependency maps become defensible numbers you can show a board, an auditor, or your largest customer.
+
+We just published a step-by-step BIA methodology aligned to ISO/TS 22317 — what to do, where it usually goes wrong, and what good outputs actually look like. Roughly an 11-minute read:
+
+${url}
+
+If anything in there sparks a question about your specific situation, just hit reply — we read every response.
+${signatureText(unsubUrl)}`;
+}
+
+function nurtureConsultationHtml({
+  name,
+  unsubUrl,
+}: {
+  name: string;
+  unsubUrl: string;
+}) {
+  const firstName = name.split(/\s+/)[0] ?? name;
+  return `<!DOCTYPE html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
+      <tr><td>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">e|Resilient</p>
+        <h1 style="font-size:22px;line-height:1.25;color:#2D000F;margin:0 0 16px;">${escapeHtml(firstName)}, want to talk it through?</h1>
+        <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          You took the BCP Readiness Scorecard about a week ago. If you&rsquo;re still working through what the results mean for your specific situation — or you&rsquo;re looking at a gap that has a deadline attached to it — a 30-minute call with one of our practitioners will get you a clear next step.
+        </p>
+        <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          The call is free. No sales pitch. We bring 30+ years of Fortune 100 BCM practice to the conversation and tell you honestly whether you need our help, internal lift, or just one specific intervention.
+        </p>
+        <p style="margin:24px 0;">
+          <a href="${SITE.calendly}" style="display:inline-block;background:#FB5C01;color:#FDFCFB;text-decoration:none;padding:14px 28px;border-radius:6px;font-weight:bold;">Book a 30-minute call →</a>
+        </p>
+        <p style="font-size:14px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
+          If now isn&rsquo;t the right time, no problem — we&rsquo;ll keep sending the occasional practitioner-grade piece. And if you&rsquo;d rather not, the unsubscribe link below works in one click.
+        </p>${signatureHtml(unsubUrl)}
+      </td></tr>
+    </table>
+  </body>
+</html>`;
+}
+
+function nurtureConsultationText({
+  name,
+  unsubUrl,
+}: {
+  name: string;
+  unsubUrl: string;
+}) {
+  const firstName = name.split(/\s+/)[0] ?? name;
+  return `${firstName}, want to talk it through?
+
+You took the BCP Readiness Scorecard about a week ago. If you're still working through what the results mean for your specific situation — or you're looking at a gap that has a deadline attached to it — a 30-minute call with one of our practitioners will get you a clear next step.
+
+The call is free. No sales pitch. We bring 30+ years of Fortune 100 BCM practice to the conversation and tell you honestly whether you need our help, internal lift, or just one specific intervention.
+
+Book a 30-minute call:
+${SITE.calendly}
+
+If now isn't the right time, no problem — we'll keep sending the occasional practitioner-grade piece. And if you'd rather not, the unsubscribe link below works in one click.
+${signatureText(unsubUrl)}`;
 }
 
 function internalNotificationHtml(input: ContactFormInput): string {
@@ -227,7 +449,7 @@ function contactConfirmationHtml(input: ContactFormInput): string {
         </p>
         <p style="margin:0 0 24px;">
           <a href="${SITE.calendly}" style="display:inline-block;background:#FB5C01;color:#FDFCFB;text-decoration:none;padding:14px 28px;border-radius:6px;font-weight:bold;">Book a consultation →</a>
-        </p>${SIGNATURE_HTML}
+        </p>${signatureHtml()}
       </td></tr>
     </table>
   </body>
@@ -247,7 +469,7 @@ Your message reached us at ${SITE.contact.email}. ${
 
 If you'd like to skip ahead and grab a 30-minute working call:
 ${SITE.calendly}
-${SIGNATURE_TEXT}`;
+${signatureText()}`;
 }
 
 function escapeHtml(s: string): string {
