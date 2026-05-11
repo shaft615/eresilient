@@ -1,8 +1,19 @@
+// Canonical URL falls through NEXT_PUBLIC_SITE_URL → VERCEL_PROJECT_PRODUCTION_URL
+// → hardcoded canonical. The env-var override lets us point email links at the
+// Vercel deploy URL during pre-cutover testing; once DNS cuts over to Vercel
+// we can clear the override (or set it to the canonical) and emails will use
+// https://eresilient.com automatically.
+const RAW_SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "https://eresilient.com");
+
 export const SITE = {
   name: "e|Resilient",
   legalName: "e|Resilient LLC",
   slogan: "Be Resilient. e|Resilient.",
-  url: "https://eresilient.com",
+  url: RAW_SITE_URL,
   description:
     "ISO 22301-aligned business continuity consulting for small and mid-sized businesses. Build the plan that keeps your operations running when disruption hits.",
   tagline:
