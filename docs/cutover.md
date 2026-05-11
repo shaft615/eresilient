@@ -100,7 +100,7 @@ Run it twice. Save both 64-character hex strings — one is `CRON_SECRET`, the o
 
 ### 0.9 — (Optional) Mint a de-identified Calendly URL
 
-The current Calendly link is `calendly.com/karl-bryant-eresilient/30min` — anyone clicking "Schedule" sees `karl-bryant-eresilient` in the URL bar. If you want full de-identification:
+_(Done — Calendly URL is now `calendly.com/eresilient/30min`.)_ The previous flow for renaming a Calendly URL is left here for reference if it ever needs to happen again:
 
 1. Log into Calendly → **Account** → **Branding & URL** → change your username to something like `eresilient` or `eresilient-team`
 2. Calendly may not allow `eresilient` (already taken) — try `eresilient-consulting` or `eresilient-bcm`

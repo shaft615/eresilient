@@ -38,11 +38,11 @@ export const SITE = {
       country: "US",
     },
   },
-  calendly: "https://calendly.com/karl-bryant-eresilient/30min",
+  calendly: "https://calendly.com/eresilient/30min",
   primaryCta: {
     label: "Schedule your free consultation",
     short: "Book consultation",
-    href: "https://calendly.com/karl-bryant-eresilient/30min",
+    href: "https://calendly.com/eresilient/30min",
   },
   // Federal contracting registration (federal/government adjacency)
   federal: {
