@@ -66,7 +66,7 @@ const howItWorks = [
   },
   {
     title: "Built for the e|Resilient methodology",
-    body: "Every field maps to a question Karl's team has been asking SMB supply chain leaders for two decades. The data model isn't generic — it's purpose-built for Business Impact Analysis at the product level.",
+    body: "Every field maps to a question our practitioners have been asking SMB supply chain leaders for two decades. The data model isn't generic — it's purpose-built for Business Impact Analysis at the product level.",
   },
 ];
 
