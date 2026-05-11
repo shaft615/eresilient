@@ -4,7 +4,7 @@ export const program: PackageContent = {
   slug: "program",
   title: "Program",
   tagline:
-    "Full BCM program build covering all five service lines — your end-to-end resilience platform.",
+    "Full BCM program build covering all six service lines — your end-to-end resilience platform.",
   startingAt: "$25,000",
   duration: "12–16 weeks",
   order: 2,
@@ -19,7 +19,7 @@ export const program: PackageContent = {
     "Emergency Response Plan with bespoke flip-charts and role assignments",
     "Initial Supply Chain Risk mapping with supplier risk register",
     "One full tabletop exercise with facilitated AAR and corrective action register",
-    "Executive education for CMT members",
+    "Executive education for CMT members and role-based training for BCP coordinators and ER team leads",
     "Plan deployment to SharePoint, mobile, and paper formats",
     "ISO 22301 alignment documentation suitable for audit / customer due-diligence",
   ],

@@ -41,6 +41,12 @@ const services = [
     summary:
       "Just-in-time activation support during a real incident. Plan deployment, vendor engagement, after-action reviews — pre-negotiated rates, on call.",
   },
+  {
+    title: "Training & Education",
+    slug: "training-and-education",
+    summary:
+      "Role-based BCM, crisis, and emergency-response training. Executive briefings, practitioner workshops, and certification preparation that build durable in-house capability.",
+  },
 ];
 
 const howItWorks = [
@@ -159,7 +165,7 @@ export default function HomePage() {
               What We Do
             </p>
             <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
-              Five service lines, one resilience program.
+              Six service lines, one resilience program.
             </h2>
             <p className="mt-4 text-base text-brand-ink-mid">
               Engagements are typically delivered as a sequenced program but

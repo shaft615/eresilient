@@ -8,7 +8,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Five service lines covering business continuity, crisis management, emergency response, supply chain risk, and real-time activation support — built for SMBs by a Master Business Continuity Professional with 25+ years of Fortune 100 practice.",
+    "Six service lines covering business continuity, crisis management, emergency response, supply chain risk, real-time activation support, and training & education — built for SMBs by a Master Business Continuity Professional with 25+ years of Fortune 100 practice.",
   alternates: { canonical: `${SITE.url}/services` },
 };
 
@@ -21,7 +21,7 @@ export default function ServicesIndexPage() {
             Services
           </p>
           <h1 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
-            Five service lines, one resilience program.
+            Six service lines, one resilience program.
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-brand-taupe">
             Engagements are typically delivered as a sequenced program, but
@@ -67,7 +67,7 @@ export default function ServicesIndexPage() {
           </h2>
           <p className="mt-4 text-base text-brand-ink-mid">
             Most engagements begin with the same conversation: where you are
-            today, what your real exposure looks like, and which of the five
+            today, what your real exposure looks like, and which of the six
             service lines is the right first step.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">

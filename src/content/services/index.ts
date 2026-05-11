@@ -3,6 +3,7 @@ import { crisisManagement } from "./crisis-management";
 import { emergencyResponse } from "./emergency-response";
 import { supplyChainRisk } from "./supply-chain-risk";
 import { realTimeSupport } from "./real-time-support";
+import { trainingAndEducation } from "./training-and-education";
 import type { ServiceContent } from "@/lib/content";
 
 export const services: ServiceContent[] = [
@@ -11,6 +12,7 @@ export const services: ServiceContent[] = [
   emergencyResponse,
   supplyChainRisk,
   realTimeSupport,
+  trainingAndEducation,
 ].sort((a, b) => a.order - b.order);
 
 export const serviceBySlug = new Map(services.map((s) => [s.slug, s]));

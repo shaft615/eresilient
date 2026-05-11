@@ -16,6 +16,7 @@ const coreCompetencies = [
   "Real-Time Incident Management support services",
   "Developing and actively monitoring your intelligent supply chain",
   "Vendor management and vendor selection support for resiliency solutions",
+  "Role-based Training & Education — executive, practitioner, and frontline curriculum with certification preparation",
 ];
 
 const pastPerformance = [
