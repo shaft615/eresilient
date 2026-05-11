@@ -49,7 +49,7 @@ export default function AboutPage() {
             {SITE.slogan}
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-brand-taupe">
-            {SITE.legalName} is a boutique business continuity consultancy.
+            {SITE.legalName}{" "}is a boutique business continuity consultancy.
             We&apos;ve mastered the skill of business continuity planning over
             decades of work with Fortune 100 firms — and we bring that
             expertise to small and mid-sized companies that have outgrown
