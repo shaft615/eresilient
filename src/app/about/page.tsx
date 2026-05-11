@@ -34,7 +34,7 @@ const teamDepth = [
   "Hands-on engagement with Fortune 100 manufacturers, retailers, financial institutions, and healthcare organizations across more than two decades",
   "Real-event experience including pandemic preparedness program leadership and Hurricane Katrina / Rita recovery operations",
   "Custom BCM platform development, including production-capacity databases for supply chain risk integration",
-  "Recognized sales and delivery leadership across multiple years (2009–2017) for Fortune 500 BCM consulting engagements",
+  "Recognized sales and delivery leadership for over 25 years for Fortune 500 BCM consulting engagements",
 ];
 
 export default function AboutPage() {
