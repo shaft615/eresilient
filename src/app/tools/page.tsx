@@ -38,8 +38,9 @@ const tools = [
       "Sole-source risk watch with mandatory mitigation plans",
       "Multi-tenant: each client gets an isolated workspace",
     ],
-    href: "/products/risc-manager",
-    cta: "Explore riscManager",
+    href: SITE.calendly,
+    external: true,
+    cta: "Join the waitlist",
     status: "in-development",
   },
   {
@@ -123,12 +124,23 @@ export default function ToolsIndexPage() {
 
                 <div className="mt-7 flex-1" />
 
-                <Link
-                  href={t.href}
-                  className="inline-flex items-center gap-1 self-start text-sm font-semibold text-brand-orange hover:underline"
-                >
-                  {t.cta} <span aria-hidden>→</span>
-                </Link>
+                {t.external ? (
+                  <a
+                    href={t.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 self-start text-sm font-semibold text-brand-orange hover:underline"
+                  >
+                    {t.cta} <span aria-hidden>→</span>
+                  </a>
+                ) : (
+                  <Link
+                    href={t.href}
+                    className="inline-flex items-center gap-1 self-start text-sm font-semibold text-brand-orange hover:underline"
+                  >
+                    {t.cta} <span aria-hidden>→</span>
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
