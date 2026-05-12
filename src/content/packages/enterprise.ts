@@ -25,6 +25,7 @@ export const enterprise: PackageContent = {
   excludes: [
     "Travel and on-site facilitation outside the contiguous U.S. (quoted separately)",
     "Major scope expansions (M&A integration, new business unit) re-quoted as additional engagements",
+    "Role-based Training & Education curriculum (separate engagement, can be added alongside)",
   ],
   ctaLabel: "Discuss an Enterprise engagement",
 };
