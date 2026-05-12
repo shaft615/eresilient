@@ -15,7 +15,7 @@ export const trainingAndEducation: ServiceContent = {
     headline:
       "A plan only works if the people running it have been trained to run it.",
     description:
-      "Training & Education builds the in-house capability your continuity, crisis, and emergency-response plans assume — from executive awareness through practitioner certification preparation.",
+      "Training & Education is a standalone engagement that builds the in-house capability your continuity, crisis, and emergency-response plans assume — from executive awareness through practitioner certification preparation. Commissioned independently or alongside any other service line.",
   },
   problem:
     "Plans assume competence. They assume the CMT chair knows what a declaration looks like, the BCP coordinator knows how to update the BIA after a reorg, the floor supervisor knows what their role on the response flip-chart actually means. Those assumptions break the first time a real event tests them. Training & Education closes the gap with role-based curriculum — calibrated to your plans, your scenarios, and your team — so capability stays inside the company instead of walking out with the consultant.",

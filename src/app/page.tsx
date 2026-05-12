@@ -45,7 +45,7 @@ const services = [
     title: "Training & Education",
     slug: "training-and-education",
     summary:
-      "Role-based BCM, crisis, and emergency-response training. Executive briefings, practitioner workshops, and certification preparation that build durable in-house capability.",
+      "Standalone, role-based BCM, crisis, and emergency-response training. Executive briefings, practitioner workshops, and certification preparation that build durable in-house capability.",
   },
 ];
 

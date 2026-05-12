@@ -4,7 +4,7 @@ export const program: PackageContent = {
   slug: "program",
   title: "Program",
   tagline:
-    "Full BCM program build covering all six service lines — your end-to-end resilience platform.",
+    "Full BCM program build covering continuity, crisis, emergency response, and supply chain risk — your end-to-end resilience platform.",
   startingAt: "$25,000",
   duration: "12–16 weeks",
   order: 2,
@@ -19,7 +19,7 @@ export const program: PackageContent = {
     "Emergency Response Plan with bespoke flip-charts and role assignments",
     "Initial Supply Chain Risk mapping with supplier risk register",
     "One full tabletop exercise with facilitated AAR and corrective action register",
-    "Executive education for CMT members and role-based training for BCP coordinators and ER team leads",
+    "Executive education for CMT members",
     "Plan deployment to SharePoint, mobile, and paper formats",
     "ISO 22301 alignment documentation suitable for audit / customer due-diligence",
   ],
@@ -27,6 +27,7 @@ export const program: PackageContent = {
     "Ongoing program governance after handoff (available via Enterprise tier)",
     "Real-Time activation support (available via Enterprise tier)",
     "Active supply chain monitoring beyond initial mapping",
+    "Role-based Training & Education curriculum (separate engagement)",
   ],
   ctaLabel: "Discuss a Program engagement",
 };

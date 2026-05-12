@@ -23,6 +23,7 @@ export const foundation: PackageContent = {
     "Emergency Response Plan and drills",
     "Supply chain mapping and monitoring",
     "Tabletop exercise (available as add-on)",
+    "Role-based Training & Education curriculum (separate engagement)",
   ],
   ctaLabel: "Discuss a Foundation engagement",
 };
