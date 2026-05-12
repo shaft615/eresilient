@@ -5,10 +5,10 @@ import { CtaButton } from "@/components/cta-button";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Risk Assessment — ISO 22301 / ISO/TS 22317:2021 aligned",
+  title: "riscScope™ — Enterprise Risk Assessment Platform",
   description:
-    "A practitioner-grade risk assessment workspace aligned to ISO 22301 and ISO/TS 22317:2021. Score 21 enterprise threats across five weighted impact dimensions, model inherent vs residual risk after controls, and produce a defensible threat register. Included with every paid e|Resilient engagement; available stand-alone for companies that want to assess their level of preparedness.",
-  alternates: { canonical: `${SITE.url}/tools/risk-assessment` },
+    "riscScope™ is the enterprise risk assessment workspace in the RISC family from e|Resilient. ISO 22301:2019 and ISO/TS 22317:2021 aligned. Score 22 enterprise threats across five weighted impact dimensions, model inherent vs residual risk after controls, and produce a defensible threat register. Included with every paid e|Resilient engagement; available stand-alone for companies that want to assess their level of preparedness.",
+  alternates: { canonical: `${SITE.url}/tools/risc-scope` },
 };
 
 const pillars = [
@@ -28,7 +28,7 @@ const pillars = [
     icon: "🎯",
     title: "Five impact dimensions",
     summary:
-      "Most risk scoring collapses impact into one number. The Enhanced model rates each threat across five weighted dimensions so the score reflects how the business actually fails — not a flat average.",
+      "Most risk scoring collapses impact into one number. riscScope™ rates each threat across five weighted dimensions so the score reflects how the business actually fails — not a flat average.",
     bullets: [
       "Financial impact (1.5× weight) — direct loss and revenue exposure",
       "Operational impact (1.0×) — degradation, partial shutdown, full shutdown",
@@ -41,7 +41,7 @@ const pillars = [
     icon: "🛡",
     title: "Inherent vs residual risk",
     summary:
-      "The model separates risk-before-controls from risk-after-controls so leadership can see what the program is actually buying. Controls become a measurable lever, not an article of faith.",
+      "riscScope™ separates risk-before-controls from risk-after-controls so leadership can see what the program is actually buying. Controls become a measurable lever, not an article of faith.",
     bullets: [
       "Five-level control effectiveness scale (None → Full), 0–80% risk reduction",
       "Residual OTR rendered alongside inherent OTR for every threat",
@@ -92,7 +92,7 @@ const threatCategories = [
   { name: "Technology", count: 2 },
 ];
 
-export default function RiskAssessmentPage() {
+export default function RiscScopePage() {
   return (
     <>
       {/* Hero */}
@@ -121,21 +121,21 @@ export default function RiskAssessmentPage() {
           </div>
 
           <h1 className="mt-6 font-display text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-            Risk Assessment
+            <span className="text-brand-orange">risc</span>Scope
+            <sup className="ml-1 text-2xl text-brand-taupe/70">™</sup>
           </h1>
 
           <p className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-brand-orange">
-            <span className="text-brand-paper">Quantitative</span> ·{" "}
-            <span className="text-brand-taupe">Defensible · Auditor-ready</span>
+            <span className="text-brand-paper">RISC</span> ·{" "}
+            <span className="text-brand-taupe">Risk Intelligent Supply Chain</span>
           </p>
 
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-brand-taupe">
-            A practitioner-grade workspace for scoring enterprise threats the
-            way the international standard says to score them — five weighted
-            impact dimensions, inherent-vs-residual modeling, control
-            effectiveness as a measurable lever. The output is a threat
-            register your board, your insurer, and your customers&apos; due-
-            diligence teams will all recognize.
+            riscScope™ is the enterprise risk assessment workspace in the
+            RISC family from e|Resilient. Five weighted impact dimensions,
+            inherent-vs-residual modeling, control effectiveness as a
+            measurable lever — and an output your board, your insurer, and
+            your customers&apos; due-diligence teams will all recognize.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -146,6 +146,29 @@ export default function RiskAssessmentPage() {
               How to get access
             </CtaButton>
           </div>
+        </Container>
+      </section>
+
+      {/* RISC family note */}
+      <section className="border-b border-brand-taupe-mid/40 bg-brand-paper py-10">
+        <Container width="narrow">
+          <p className="text-sm leading-relaxed text-brand-ink-mid">
+            <span className="font-semibold text-brand-ink">
+              The RISC family.
+            </span>{" "}
+            The lowercase &ldquo;risc&rdquo; prefix is shared across our
+            tools and originates with{" "}
+            <Link
+              href="/products/risc-manager"
+              className="font-semibold text-brand-orange hover:underline"
+            >
+              riscManager.com™
+            </Link>
+            , our Risk Intelligent Supply Chain platform. riscScope™
+            extends the same disciplined methodology beyond supply chain
+            to enterprise-wide threat assessment — same standard, same
+            rigor, same workspace family.
+          </p>
         </Container>
       </section>
 
@@ -177,9 +200,9 @@ export default function RiskAssessmentPage() {
               practical.
             </p>
             <p className="font-semibold text-brand-ink">
-              Risk Assessment is that workspace. Score the threats the way
-              the standard says to score them, document the controls
-              already in place, and produce a register that holds up under
+              riscScope™ is that workspace. Score the threats the way the
+              standard says to score them, document the controls already
+              in place, and produce a register that holds up under
               scrutiny — without a six-month Big Four engagement to get
               there.
             </p>
@@ -199,8 +222,8 @@ export default function RiskAssessmentPage() {
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
               Most tools collapse risk into a single number on a heatmap.
-              This one separates the inputs the standard cares about so the
-              output can be audited, challenged, and updated as the
+              riscScope™ separates the inputs the standard cares about so
+              the output can be audited, challenged, and updated as the
               business changes.
             </p>
           </div>
@@ -247,9 +270,9 @@ export default function RiskAssessmentPage() {
             22 enterprise threats, pre-loaded.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            You don&apos;t start from a blank threat list. The workspace
-            ships with the 22 enterprise threats e|Resilient practitioners
-            have seen recur across two decades of Fortune 100 work — from
+            You don&apos;t start from a blank threat list. riscScope™ ships
+            with the 22 enterprise threats e|Resilient practitioners have
+            seen recur across two decades of Fortune 100 work — from
             cash-flow crunch to wildfire to communications failure. Each
             one is pre-described so you score, you don&apos;t brainstorm.
           </p>
@@ -315,9 +338,9 @@ export default function RiskAssessmentPage() {
             Outputs that travel.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            Everything the workspace produces is portable and human-
-            readable. Hand the CSV to a data team, the PDF to a board,
-            and the register to your insurer — same source of truth, no
+            Everything riscScope™ produces is portable and human-readable.
+            Hand the CSV to a data team, the PDF to a board, and the
+            register to your insurer — same source of truth, no
             reformat-and-reconcile.
           </p>
 
@@ -353,10 +376,10 @@ export default function RiskAssessmentPage() {
               Two paths in.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
-              Risk Assessment is part of the e|Resilient client workspace.
+              riscScope™ lives inside the e|Resilient client workspace.
               Most clients reach it through a paid engagement; companies
-              that just want to gauge their own preparedness can license it
-              stand-alone.
+              that just want to gauge their own preparedness can license
+              it stand-alone.
             </p>
           </div>
 
@@ -369,9 +392,9 @@ export default function RiskAssessmentPage() {
                 Included in every paid engagement
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
-                Every e|Resilient client engagement includes access to Risk
-                Assessment as part of the client workspace. Your consultant
-                runs the assessment alongside your BIA, Supply Chain
+                Every e|Resilient client engagement includes access to
+                riscScope™ as part of the client workspace. Your consultant
+                runs the assessment alongside your BIA, supply chain
                 mapping, and continuity planning — no separate purchase,
                 no separate platform.
               </p>
@@ -391,13 +414,13 @@ export default function RiskAssessmentPage() {
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
                 If you&apos;re not ready for a full engagement but want to
-                produce a defensible threat register, Risk Assessment is
+                produce a defensible threat register, riscScope™ is
                 available as a stand-alone subscription. You run the
                 assessment yourself; we&apos;re available for methodology
                 questions and an optional practitioner review.
               </p>
               <div className="mt-6">
-                <CtaButton href="/contact?topic=risk-assessment">
+                <CtaButton href="/contact?topic=risc-scope">
                   Request stand-alone access
                 </CtaButton>
               </div>

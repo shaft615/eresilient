@@ -13,18 +13,18 @@ export const metadata: Metadata = {
 
 const tools = [
   {
-    name: "Risk Assessment",
+    name: "riscScope™",
     badge: "ISO 22301 · ISO/TS 22317:2021",
     summary:
-      "Score 22 enterprise threats across five weighted impact dimensions. Model inherent vs residual risk after controls. Produce a defensible threat register the board, the auditor, and the insurer will all recognize.",
+      "The enterprise risk assessment workspace in the RISC family. Score 22 enterprise threats across five weighted impact dimensions, model inherent vs residual risk after controls, and produce a defensible threat register the board, the auditor, and the insurer will all recognize.",
     bullets: [
       "Enhanced 0–100 OTR scoring model with control-effectiveness modifier",
       "22 pre-loaded enterprise threats across 9 categories",
       "Inherent vs residual comparison with MTPD indicator",
       "CSV export + print-ready PDF + year-over-year comparison",
     ],
-    href: "/tools/risk-assessment",
-    cta: "Explore Risk Assessment",
+    href: "/tools/risc-scope",
+    cta: "Explore riscScope™",
     status: "available",
   },
   {
