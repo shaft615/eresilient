@@ -5,48 +5,47 @@ import { CtaButton } from "@/components/cta-button";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "riscScope™ — Enterprise Risk Assessment Platform",
+  title: "riscAnalysis™ — Business Impact Analysis Platform",
   description:
-    "riscScope™ is the enterprise risk assessment workspace in the RISC family from e|Resilient. ISO 22301:2019 and ISO/TS 22317:2021 aligned. Score 22 enterprise threats across five weighted impact dimensions, model inherent vs residual risk after controls, and produce a defensible threat register. Included with every paid e|Resilient engagement; available stand-alone for companies that want to assess their level of preparedness.",
-  alternates: { canonical: `${SITE.url}/tools/risc-scope` },
+    "riscAnalysis™ is the Business Impact Analysis workspace in the RISC family from e|Resilient. ISO 22301:2019 §8.2.2 and ISO/TS 22317:2021 aligned. Inventory critical activities, quantify recovery objectives (RTO, RPO, MBCO, MTPD), map dependencies, and produce a defensible BIA report. Included with every paid e|Resilient engagement; available stand-alone for companies that want to build the BIA foundation themselves.",
+  alternates: { canonical: `${SITE.url}/tools/risc-analysis` },
 };
 
 const pillars = [
   {
-    icon: "📐",
-    title: "ISO-aligned methodology",
-    summary:
-      "Built on ISO 22301:2019 and ISO/TS 22317:2021 — the international standard for business continuity and the technical specification for Business Impact Analysis. Auditors and insurers recognize the framework on sight.",
-    bullets: [
-      "Enhanced model: five weighted impact dimensions and a control-effectiveness modifier",
-      "Standard model: backwards-compatible 3-dimension scoring for legacy baselines",
-      "Inherent vs residual Overall Threat Rating (OTR) on a 0–100 scale",
-      "MTPD indicator captured at the threat level, not just the function",
-    ],
-  },
-  {
     icon: "🎯",
-    title: "Five impact dimensions",
+    title: "Critical activity inventory",
     summary:
-      "Most risk scoring collapses impact into one number. riscScope™ rates each threat across five weighted dimensions so the score reflects how the business actually fails — not a flat average.",
+      "BIA starts with knowing what actually matters. riscAnalysis™ structures the discovery so every revenue-generating, compliance-bound, and customer-facing process gets captured — not just the ones leadership remembers in the workshop.",
     bullets: [
-      "Financial impact (1.5× weight) — direct loss and revenue exposure",
-      "Operational impact (1.0×) — degradation, partial shutdown, full shutdown",
-      "Reputational impact (1.25×) — local, regional, national attention",
-      "Legal / regulatory (1.0×) — non-compliance, investigation, penalties",
-      "Health & safety (1.5×) — first aid, treatment, serious injury, fatality",
+      "Activity catalog organized by department, function, or value stream",
+      "Criticality tier classification (Tier 1 / Tier 2 / Tier 3 / Non-critical)",
+      "Process owners, deputies, and escalation paths captured per activity",
+      "Plain-language process descriptions readable by non-practitioners",
     ],
   },
   {
-    icon: "🛡",
-    title: "Inherent vs residual risk",
+    icon: "⏱",
+    title: "Recovery objectives, quantified",
     summary:
-      "riscScope™ separates risk-before-controls from risk-after-controls so leadership can see what the program is actually buying. Controls become a measurable lever, not an article of faith.",
+      "The four numbers every continuity program needs and most cannot defend: RTO, RPO, MBCO, MTPD. riscAnalysis™ captures them per activity with the impact-over-time analysis that makes them defensible to an auditor.",
     bullets: [
-      "Five-level control effectiveness scale (None → Full), 0–80% risk reduction",
-      "Residual OTR rendered alongside inherent OTR for every threat",
-      "Aggregate metric: average reduction across the threat register",
-      "Risk-band classification: Low / Moderate / High / Critical",
+      "RTO — Recovery Time Objective (how fast must it resume)",
+      "RPO — Recovery Point Objective (how much data loss is acceptable)",
+      "MBCO — Minimum Business Continuity Objective (degraded but acceptable)",
+      "MTPD — Maximum Tolerable Period of Disruption (when does it become existential)",
+    ],
+  },
+  {
+    icon: "🔗",
+    title: "Dependencies mapped",
+    summary:
+      "An activity doesn't fail in isolation — it fails because something upstream failed. riscAnalysis™ captures the dependency chain so recovery planning targets the actual constraints, not just the visible process.",
+    bullets: [
+      "People dependencies — roles, headcount, named successors",
+      "Technology dependencies — applications, infrastructure, data feeds",
+      "Supplier dependencies — vendors, contracts, sole-source flags",
+      "Facility & equipment dependencies — sites, machinery, utilities",
     ],
   },
 ];
@@ -54,45 +53,37 @@ const pillars = [
 const howItWorks = [
   {
     title: "Configure the engagement",
-    body: "Set the client organization, engagement name, assessment date, and lead assessor. Choose the Enhanced model (default — recommended) or Standard for backward compatibility with prior baselines.",
+    body: "Set the client organization, BIA cycle (initial / annual refresh / post-incident review), scope boundaries (whole company / business unit / site), and the lead analyst. Multi-site engagements roll up per-site BIAs into a consolidated view.",
   },
   {
-    title: "Score the threat catalog",
-    body: "Step through 22 pre-loaded enterprise threats across Financial, Physical Hazard, External Environment, People & Workforce, Health & Safety, Security, Natural Disaster, Infrastructure, and Technology categories. Capture likelihood, weighted impacts, MTPD, and control effectiveness inline.",
+    title: "Discover the activities",
+    body: "Walk through each function and capture the critical activities with process owners, descriptions, and supporting evidence. Bulk-import from existing org charts or process inventories via CSV — no greenfield list-building required if the data already exists.",
   },
   {
-    title: "Document controls and mitigations",
-    body: "For each threat, capture management controls already in place, the mitigation strategy deployed, and the monitoring protocol. The qualitative narrative ships alongside the quantitative score — defensible to a board or auditor.",
+    title: "Quantify the recovery objectives",
+    body: "For each activity, capture the four recovery objectives with their underlying rationale and the impact-over-time analysis. The workspace flags inconsistencies (e.g., an RTO shorter than the dependency's RTO) so the numbers stay defensible end-to-end.",
   },
   {
-    title: "Generate the threat register",
-    body: "Results page ranks threats by residual OTR with a chart showing inherent vs residual side-by-side. Export to CSV for analysis, print to PDF for the engagement deliverable, and compare assessments year-over-year to see whether the program is moving.",
+    title: "Map dependencies and gaps",
+    body: "Link each activity to the people, technology, suppliers, and facilities it depends on. The workspace surfaces gaps automatically — activities with no documented backup, dependencies with no recovery strategy, RTOs that conflict with current capability.",
+  },
+  {
+    title: "Generate the BIA report",
+    body: "Output is a complete BIA report ready for ISO 22301 §8.2.2 documentation — prioritized activity register, recovery objectives table, dependency analysis, gap summary, and recommendations. Print to PDF for the engagement deliverable, export to CSV for downstream planning.",
   },
 ];
 
 const outputs = [
-  "A ranked threat register with residual OTR scored 0–100 for every enterprise threat — defensible to a board, auditor, or customer due-diligence team",
-  "Inherent vs residual OTR comparison: see what the existing controls are actually buying, expressed as a single risk-reduction percentage",
-  "Five-dimension impact breakdown per threat (Financial, Operational, Reputational, Legal/Regulatory, Health & Safety) with weighted contribution",
-  "MTPD indicator on every rated threat — the earliest unacceptable disruption timeframe, ready to feed into a continuity plan",
-  "CSV export of the full register including likelihood, impacts, controls, mitigation strategy, and monitoring protocol",
-  "Print-ready PDF deliverable formatted for executive review or ISO 22301 §8.2.3 documentation",
-  "Year-over-year comparison view — overlay multiple assessments side-by-side to measure program maturity",
+  "Prioritized critical activity register with criticality tier, owner, and recovery objectives — defensible to a board, auditor, or customer due-diligence team",
+  "RTO / RPO / MBCO / MTPD captured per activity with impact-over-time analysis underneath each number",
+  "Complete dependency map: people, technology, suppliers, facilities — with sole-source flags surfaced inline",
+  "Gap analysis: activities without documented backups, dependencies without recovery strategies, RTO conflicts across the chain",
+  "BIA report formatted to ISO 22301:2019 §8.2.2 documentation requirements, print-ready PDF",
+  "CSV export of the full activity register and dependency map, ready to feed into continuity planning",
+  "Year-over-year comparison view — overlay multiple BIA cycles to see whether the program is maturing",
 ];
 
-const threatCategories = [
-  { name: "Financial", count: 2 },
-  { name: "Physical Hazard", count: 2 },
-  { name: "External Environment", count: 2 },
-  { name: "People & Workforce", count: 2 },
-  { name: "Health & Safety", count: 1 },
-  { name: "Security", count: 2 },
-  { name: "Natural Disaster", count: 5 },
-  { name: "Infrastructure", count: 4 },
-  { name: "Technology", count: 2 },
-];
-
-export default function RiscScopePage() {
+export default function RiscAnalysisPage() {
   return (
     <>
       {/* Hero */}
@@ -114,14 +105,14 @@ export default function RiscScopePage() {
           </Link>
 
           <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-3 py-1.5">
-            <span aria-hidden className="text-sm">📋</span>
+            <span aria-hidden className="text-sm">📊</span>
             <span className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-orange">
-              ISO 22301:2019 · ISO/TS 22317:2021
+              ISO 22301:2019 §8.2.2 · ISO/TS 22317:2021
             </span>
           </div>
 
           <h1 className="mt-6 font-display text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-            <span className="text-brand-orange">risc</span>Scope
+            <span className="text-brand-orange">risc</span>Analysis
             <sup className="ml-1 text-2xl text-brand-taupe/70">™</sup>
           </h1>
 
@@ -131,11 +122,11 @@ export default function RiscScopePage() {
           </p>
 
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-brand-taupe">
-            riscScope™ is the enterprise risk assessment workspace in the
-            RISC family from e|Resilient. Five weighted impact dimensions,
-            inherent-vs-residual modeling, control effectiveness as a
-            measurable lever — and an output your board, your insurer, and
-            your customers&apos; due-diligence teams will all recognize.
+            riscAnalysis™ is the Business Impact Analysis workspace in the
+            RISC family from e|Resilient. Inventory critical activities,
+            quantify recovery objectives (RTO, RPO, MBCO, MTPD), map the
+            dependency chain — and produce the BIA report that becomes
+            the foundation every other continuity decision rests on.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -164,18 +155,17 @@ export default function RiscScopePage() {
             >
               riscManager.com™
             </Link>
-            , our Risk Intelligent Supply Chain platform. The family also
-            includes{" "}
+            , our Risk Intelligent Supply Chain platform. riscAnalysis™
+            sits at the foundation of the family — the BIA whose
+            recovery objectives drive every other workspace, including{" "}
             <Link
-              href="/tools/risc-analysis"
+              href="/tools/risc-scope"
               className="font-semibold text-brand-orange hover:underline"
             >
-              riscAnalysis™
-            </Link>{" "}
-            (Business Impact Analysis). riscScope™ extends the same
-            disciplined methodology beyond supply chain to enterprise-
-            wide threat assessment — same standard, same rigor, same
-            workspace family.
+              riscScope™
+            </Link>
+            &apos;s threat-level controls and riscManager.com™&apos;s
+            supply chain recovery posture.
           </p>
         </Container>
       </section>
@@ -187,32 +177,34 @@ export default function RiscScopePage() {
             Why It Exists
           </p>
           <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
-            Most companies cannot defend their risk register.
+            Every continuity plan rests on a BIA that doesn&apos;t exist.
           </h2>
           <div className="mt-6 space-y-4 text-base leading-relaxed text-brand-ink-mid">
             <p>
-              Walk into the average SMB and ask for their enterprise risk
-              register and you&apos;ll get one of three answers: a heatmap
-              that someone built once in a workshop, a spreadsheet that
-              hasn&apos;t been updated since the last audit, or a polite
-              shrug. None of those survive a serious question from a board,
-              an insurer, or a regulator.
+              Ask a continuity team what their RTO is for order-to-cash
+              and you&apos;ll usually get a number. Ask them how the
+              number was derived and you&apos;ll usually get silence.
+              The BIA — the analysis that&apos;s supposed to justify
+              every recovery objective in the plan — is the document
+              every audit asks for and almost nobody can produce.
             </p>
             <p>
-              The standard exists for a reason. ISO 22301 §8.2.3 expects
-              identified threats, assessed likelihood and impact,
-              documented controls, and a measurable residual exposure.
-              ISO/TS 22317:2021 specifies how to do the assessment work
-              behind it. The methodology is settled — what&apos;s missing
-              for most SMBs is a workspace that makes following it
-              practical.
+              The reason is simple: doing BIA properly is tedious. It
+              means cataloging every critical activity, capturing four
+              recovery objectives per activity with rationale, mapping
+              dependencies in four directions (people / technology /
+              suppliers / facilities), and keeping it all consistent as
+              the business changes. Without a workspace built for it,
+              the work falls back to spreadsheets that decay within
+              months of the consultant leaving.
             </p>
             <p className="font-semibold text-brand-ink">
-              riscScope™ is that workspace. Score the threats the way the
-              standard says to score them, document the controls already
-              in place, and produce a register that holds up under
-              scrutiny — without a six-month Big Four engagement to get
-              there.
+              riscAnalysis™ is the workspace that makes the BIA
+              continuously maintainable. Capture the analysis the way
+              ISO 22301 §8.2.2 expects to see it, surface the gaps as
+              the business changes, and produce the report that holds
+              up under scrutiny — every refresh cycle, not just at
+              kickoff.
             </p>
           </div>
         </Container>
@@ -226,13 +218,13 @@ export default function RiscScopePage() {
               What It Does
             </p>
             <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
-              The three things that make a risk score defensible.
+              The three jobs every defensible BIA has to do.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
-              Most tools collapse risk into a single number on a heatmap.
-              riscScope™ separates the inputs the standard cares about so
-              the output can be audited, challenged, and updated as the
-              business changes.
+              ISO 22301 §8.2.2 reads as three sentences, but each one
+              hides weeks of analysis. riscAnalysis™ structures the
+              capture so the output meets the standard without the
+              months-long binder build that usually accompanies it.
             </p>
           </div>
 
@@ -268,39 +260,6 @@ export default function RiscScopePage() {
         </Container>
       </section>
 
-      {/* Threat catalog */}
-      <section className="bg-brand-taupe-light/60 py-20 sm:py-24">
-        <Container width="narrow">
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
-            The Threat Catalog
-          </p>
-          <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
-            22 enterprise threats, pre-loaded.
-          </h2>
-          <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            You don&apos;t start from a blank threat list. riscScope™ ships
-            with the 22 enterprise threats e|Resilient practitioners have
-            seen recur across two decades of Fortune 100 work — from
-            cash-flow crunch to wildfire to communications failure. Each
-            one is pre-described so you score, you don&apos;t brainstorm.
-          </p>
-
-          <ul className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {threatCategories.map((c) => (
-              <li
-                key={c.name}
-                className="rounded-md border border-brand-taupe-mid bg-brand-paper px-4 py-3 text-sm"
-              >
-                <div className="font-semibold text-brand-ink">{c.name}</div>
-                <div className="text-xs text-brand-ink-light">
-                  {c.count} {c.count === 1 ? "threat" : "threats"}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
-
       {/* How it works */}
       <section className="bg-brand-maroon py-20 text-brand-paper sm:py-24">
         <Container width="wide">
@@ -309,15 +268,15 @@ export default function RiscScopePage() {
               How It Works
             </p>
             <h2 className="mt-3 font-display text-3xl sm:text-4xl">
-              From kickoff to defensible register.
+              Five steps from kickoff to BIA report.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-taupe">
-              Four steps. Auto-saved at every input. Resume from any
-              device, any time.
+              Auto-saved at every input. Resume from any device. Multi-
+              tenant: each client gets an isolated workspace.
             </p>
           </div>
 
-          <ol className="mt-14 grid gap-6 md:grid-cols-2">
+          <ol className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {howItWorks.map((step, i) => (
               <li
                 key={step.title}
@@ -343,13 +302,14 @@ export default function RiscScopePage() {
             What You Get
           </p>
           <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
-            Outputs that travel.
+            The BIA report — and the live workspace behind it.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            Everything riscScope™ produces is portable and human-readable.
-            Hand the CSV to a data team, the PDF to a board, and the
-            register to your insurer — same source of truth, no
-            reformat-and-reconcile.
+            The BIA report is the deliverable. The workspace is what
+            keeps it accurate between refresh cycles. Both ship from the
+            same source of truth, so the report your auditor sees and
+            the dashboard your continuity team works from never drift
+            apart.
           </p>
 
           <ul className="mt-10 space-y-4">
@@ -384,10 +344,10 @@ export default function RiscScopePage() {
               Two paths in.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
-              riscScope™ lives inside the e|Resilient client workspace.
-              Most clients reach it through a paid engagement; companies
-              that just want to gauge their own preparedness can license
-              it stand-alone.
+              riscAnalysis™ lives inside the e|Resilient client
+              workspace. Most clients reach it through a paid
+              engagement; companies that want to run their own BIA can
+              license it stand-alone.
             </p>
           </div>
 
@@ -401,10 +361,10 @@ export default function RiscScopePage() {
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
                 Every e|Resilient client engagement includes access to
-                riscScope™ as part of the client workspace. Your consultant
-                runs the assessment alongside your BIA, supply chain
-                mapping, and continuity planning — no separate purchase,
-                no separate platform.
+                riscAnalysis™ as part of the client workspace. Your
+                consultant runs the BIA alongside riscScope™, supply
+                chain mapping, and continuity planning — no separate
+                purchase, no separate platform.
               </p>
               <div className="mt-6">
                 <CtaButton href={SITE.calendly} external>
@@ -418,17 +378,18 @@ export default function RiscScopePage() {
                 Path 2 · Stand-alone
               </p>
               <h3 className="mt-2 font-display text-2xl text-brand-maroon">
-                For companies assessing their own preparedness
+                For companies running their own BIA
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
-                If you&apos;re not ready for a full engagement but want to
-                produce a defensible threat register, riscScope™ is
-                available as a stand-alone subscription. You run the
-                assessment yourself; we&apos;re available for methodology
-                questions and an optional practitioner review.
+                If you have an in-house continuity function and want a
+                purpose-built BIA workspace rather than a spreadsheet,
+                riscAnalysis™ is available as a stand-alone
+                subscription. You run the analysis yourself; we&apos;re
+                available for methodology questions and an optional
+                practitioner review.
               </p>
               <div className="mt-6">
-                <CtaButton href="/contact?topic=risc-scope">
+                <CtaButton href="/contact?topic=risc-analysis">
                   Request stand-alone access
                 </CtaButton>
               </div>
@@ -441,12 +402,12 @@ export default function RiscScopePage() {
       <section className="bg-brand-maroon py-20 text-brand-paper sm:py-24">
         <Container width="narrow" className="text-center">
           <h2 className="font-display text-3xl sm:text-4xl">
-            Stop hand-waving the risk register.
+            Stop building plans on top of a BIA that doesn&apos;t exist.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg leading-relaxed text-brand-taupe">
             Schedule a 30-minute consultation. We&apos;ll show you the
-            workspace, walk through the methodology, and figure out which
-            access path fits your situation.
+            workspace, walk through the methodology, and figure out
+            which access path fits your situation.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
             <CtaButton href={SITE.calendly} external>

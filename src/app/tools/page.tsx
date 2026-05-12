@@ -13,6 +13,21 @@ export const metadata: Metadata = {
 
 const tools = [
   {
+    name: "riscAnalysis™",
+    badge: "ISO 22301 §8.2.2 · ISO/TS 22317:2021",
+    summary:
+      "The Business Impact Analysis workspace in the RISC family. Inventory critical activities, quantify recovery objectives (RTO, RPO, MBCO, MTPD), and map dependencies across people, technology, suppliers, and facilities. The BIA every other continuity decision rests on.",
+    bullets: [
+      "Critical activity register with criticality tier and process owner",
+      "Four recovery objectives (RTO, RPO, MBCO, MTPD) captured per activity",
+      "Dependency map across people, technology, suppliers, facilities",
+      "ISO 22301 §8.2.2 compliant BIA report + CSV + year-over-year comparison",
+    ],
+    href: "/tools/risc-analysis",
+    cta: "Explore riscAnalysis™",
+    status: "available",
+  },
+  {
     name: "riscScope™",
     badge: "ISO 22301 · ISO/TS 22317:2021",
     summary:
