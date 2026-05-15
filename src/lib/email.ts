@@ -200,6 +200,106 @@ export async function sendContactFormEmails(
   }
 }
 
+/**
+ * Notify e|Resilient when a client submits the BCP Readiness Scorecard
+ * with the opt-in box checked. Sends to SITE.contact.email with a
+ * signed link that opens the saved submission for review.
+ */
+export async function sendScorecardSubmissionNotice(opts: {
+  orgName: string;
+  assessorName?: string | null;
+  assessDate?: string | null;
+  totalScore: number;
+  totalMax: number;
+  maturityBand?: string | null;
+  viewUrl: string;
+}): Promise<{ ok: boolean; skipped?: "no-resend"; error?: string }> {
+  const resend = client();
+  if (!resend) {
+    console.warn(
+      "[email] RESEND_API_KEY not set; skipping scorecard submission notice",
+      { org: opts.orgName },
+    );
+    return { ok: true, skipped: "no-resend" };
+  }
+  const pct = opts.totalMax > 0
+    ? Math.round((opts.totalScore / opts.totalMax) * 100)
+    : 0;
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: SITE.contact.email,
+      subject: `[${SITE.name}] Scorecard submission — ${opts.orgName} (${pct}%, ${opts.maturityBand ?? "Unrated"})`,
+      html: scorecardSubmissionHtml({ ...opts, pct }),
+      text: scorecardSubmissionText({ ...opts, pct }),
+    });
+    if (error) {
+      console.error("[email] resend returned error", error);
+      return { ok: false, error: String(error.message ?? error) };
+    }
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[email] sendScorecardSubmissionNotice failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+function scorecardSubmissionHtml(opts: {
+  orgName: string;
+  assessorName?: string | null;
+  assessDate?: string | null;
+  totalScore: number;
+  totalMax: number;
+  maturityBand?: string | null;
+  viewUrl: string;
+  pct: number;
+}): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
+      <tr><td>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">New scorecard submission</p>
+        <h1 style="font-size:22px;line-height:1.2;color:#2D000F;margin:0 0 16px;">${escapeHtml(opts.orgName)}</h1>
+        <table style="width:100%;border-collapse:collapse;font-size:14px;color:#4A2E24;margin:0 0 24px;">
+          <tr><td style="padding:6px 0;width:140px;color:#7A5C52;">Score</td><td style="padding:6px 0;"><strong>${opts.totalScore} / ${opts.totalMax}</strong> (${opts.pct}%)</td></tr>
+          <tr><td style="padding:6px 0;color:#7A5C52;">Maturity band</td><td style="padding:6px 0;">${escapeHtml(opts.maturityBand ?? "Unrated")}</td></tr>
+          ${opts.assessorName ? `<tr><td style="padding:6px 0;color:#7A5C52;">Assessor</td><td style="padding:6px 0;">${escapeHtml(opts.assessorName)}</td></tr>` : ""}
+          ${opts.assessDate ? `<tr><td style="padding:6px 0;color:#7A5C52;">Assessment date</td><td style="padding:6px 0;">${escapeHtml(opts.assessDate)}</td></tr>` : ""}
+        </table>
+        <p style="margin:0 0 24px;">
+          <a href="${opts.viewUrl}" style="display:inline-block;background:#FB5C01;color:#FDFCFB;text-decoration:none;padding:14px 28px;border-radius:6px;font-weight:bold;">Open the submission →</a>
+        </p>
+        <p style="font-size:12px;color:#7A5C52;margin:0;">The link is signed; treat it like any internal record. Forward to the team if relevant.</p>
+      </td></tr>
+    </table>
+  </body>
+</html>`;
+}
+
+function scorecardSubmissionText(opts: {
+  orgName: string;
+  assessorName?: string | null;
+  assessDate?: string | null;
+  totalScore: number;
+  totalMax: number;
+  maturityBand?: string | null;
+  viewUrl: string;
+  pct: number;
+}): string {
+  return `New scorecard submission — ${opts.orgName}
+
+Score: ${opts.totalScore} / ${opts.totalMax} (${opts.pct}%)
+Maturity band: ${opts.maturityBand ?? "Unrated"}
+${opts.assessorName ? `Assessor: ${opts.assessorName}\n` : ""}${opts.assessDate ? `Assessment date: ${opts.assessDate}\n` : ""}
+Open the submission:
+${opts.viewUrl}
+
+The link is signed; treat it like any internal record.
+`;
+}
+
 function prettyTopic(t: ContactFormInput["topic"]): string {
   switch (t) {
     case "general":

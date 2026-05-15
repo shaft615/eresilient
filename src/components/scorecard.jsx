@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Cell, Tooltip } from "recharts";
 
 // ── Data ────────────────────────────────────────────────────────────────────────
@@ -230,6 +230,14 @@ export default function BCPAssessment() {
   const [orgName, setOrgName] = useState("");
   const [assessorName, setAssessorName] = useState("");
   const [assessDate, setAssessDate] = useState(new Date().toISOString().split("T")[0]);
+  // Opt-in to share results with e|Resilient (defaults to true). Drives
+  // the POST to /api/scorecard-submit when the user reaches the results
+  // screen — see useEffect below.
+  const [shareWithFirm, setShareWithFirm] = useState(true);
+  // 'idle' | 'submitting' | 'submitted' | 'error' — used by the
+  // results screen badge so the user can see whether their submission
+  // landed (and we don't double-submit on re-renders).
+  const [submitState, setSubmitState] = useState("idle");
   const [animIn, setAnimIn] = useState(true);
   // Attached to the domain card so we can scroll the user back up to
   // the top of the new domain when they navigate. The previous version
@@ -249,6 +257,45 @@ export default function BCPAssessment() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
+
+  // Auto-submit to /api/scorecard-submit the first time the user lands
+  // on the results phase, IF the share-with-firm checkbox is on. Guarded
+  // by submitState so re-renders / "Edit Responses" round-trips don't
+  // double-submit. The user's results are already on screen by the time
+  // this fires — failure is logged but not surfaced loudly.
+  useEffect(() => {
+    if (phase !== "results") return;
+    if (!shareWithFirm) return;
+    if (submitState !== "idle") return;
+    setSubmitState("submitting");
+
+    const totalScore = Object.values(scores).reduce((s, v) => s + v, 0);
+    const totalMax = TOTAL_MAX;
+    const maturityBand = getMaturity(totalScore).label;
+
+    fetch("/api/scorecard-submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orgName,
+        assessorName: assessorName || null,
+        assessDate: assessDate || null,
+        scores,
+        notes,
+        totalScore,
+        totalMax,
+        maturityBand,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        setSubmitState("submitted");
+      })
+      .catch((err) => {
+        console.warn("[scorecard] submit failed", err);
+        setSubmitState("error");
+      });
+  }, [phase, shareWithFirm, submitState, scores, notes, orgName, assessorName, assessDate]);
 
   const domain = DOMAINS[currentDomain];
   const totalScore = Object.values(scores).reduce((s, v) => s + v, 0);
@@ -397,6 +444,29 @@ export default function BCPAssessment() {
             </div>
           </div>
 
+          {/* Share-with-firm opt-in (defaults to checked) */}
+          <div style={{ ...styles.card, marginBottom: 28, background: "#f8fafc" }}>
+            <label style={{ display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                checked={shareWithFirm}
+                onChange={(e) => setShareWithFirm(e.target.checked)}
+                style={{ marginTop: 3, width: 18, height: 18, accentColor: "#FB5C01", cursor: "pointer" }}
+              />
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#1a3a5c" }}>
+                  Share results with e|Resilient for an optional consultation
+                </div>
+                <div style={{ fontSize: 12, color: "#64748b", lineHeight: 1.5, marginTop: 4 }}>
+                  When checked, your completed scorecard is sent to our
+                  practitioners so we can offer a no-obligation review of
+                  the results. Uncheck to keep your assessment fully
+                  private — your responses stay only on your device.
+                </div>
+              </div>
+            </label>
+          </div>
+
           <div style={{ textAlign: "center" }}>
             <button
               onClick={() => { if (!orgName.trim()) { alert("Please enter the organization name to proceed."); return; } setPhase("assessment"); }}
@@ -446,6 +516,7 @@ export default function BCPAssessment() {
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
             }
+            .no-print { display: none !important; }
             .scorecard-charts-grid {
               grid-template-columns: 1fr !important;
               gap: 16px !important;
@@ -480,6 +551,23 @@ export default function BCPAssessment() {
             </div>
             <h1 style={{ fontFamily: "var(--font-aptos-display), serif", fontSize: "clamp(1.8rem, 4vw, 2.6rem)", fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>BCP Readiness Scorecard</h1>
             <p style={{ color: "#94a3b8", fontSize: 14 }}>{orgName}{assessorName ? ` · ${assessorName}` : ""} · {assessDate}</p>
+            {/* Share-with-firm submission status */}
+            {shareWithFirm && submitState === "submitting" && (
+              <p style={{ color: "#94a3b8", fontSize: 12, marginTop: 8, fontStyle: "italic" }} className="no-print">
+                Sharing your results with e|Resilient…
+              </p>
+            )}
+            {shareWithFirm && submitState === "submitted" && (
+              <p style={{ color: "#16a34a", fontSize: 12, marginTop: 8, fontWeight: 600 }} className="no-print">
+                ✓ Results shared with e|Resilient. We&apos;ll be in touch.
+              </p>
+            )}
+            {shareWithFirm && submitState === "error" && (
+              <p style={{ color: "#f87171", fontSize: 12, marginTop: 8 }} className="no-print">
+                Couldn&apos;t share results — please use the contact form
+                if you&apos;d like a follow-up.
+              </p>
+            )}
           </div>
 
           {/* Overall Score Card */}
@@ -639,7 +727,7 @@ export default function BCPAssessment() {
             <button onClick={() => window.print()} style={{ background: "#1a3a5c", color: "#fff", border: "none", borderRadius: 10, padding: "13px 28px", fontSize: 14, fontWeight: 700, fontFamily: "var(--font-aptos), sans-serif", cursor: "pointer" }}>
               🖨️ Print / Save PDF
             </button>
-            <button onClick={() => { setPhase("intro"); setScores({}); setNotes({}); setCurrentDomain(0); setOrgName(""); }} style={{ background: "transparent", color: "#94a3b8", border: "1.5px solid #334155", borderRadius: 10, padding: "13px 28px", fontSize: 14, fontWeight: 700, fontFamily: "var(--font-aptos), sans-serif", cursor: "pointer" }}>
+            <button onClick={() => { setPhase("intro"); setScores({}); setNotes({}); setCurrentDomain(0); setOrgName(""); setSubmitState("idle"); }} style={{ background: "transparent", color: "#94a3b8", border: "1.5px solid #334155", borderRadius: 10, padding: "13px 28px", fontSize: 14, fontWeight: 700, fontFamily: "var(--font-aptos), sans-serif", cursor: "pointer" }}>
               ↩ Start New Assessment
             </button>
             <button onClick={() => { setPhase("assessment"); setCurrentDomain(0); }} style={{ background: "transparent", color: "#FB5C01", border: "1.5px solid #FB5C01", borderRadius: 10, padding: "13px 28px", fontSize: 14, fontWeight: 700, fontFamily: "var(--font-aptos), sans-serif", cursor: "pointer" }}>
