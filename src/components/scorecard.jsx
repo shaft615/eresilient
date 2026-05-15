@@ -231,7 +231,24 @@ export default function BCPAssessment() {
   const [assessorName, setAssessorName] = useState("");
   const [assessDate, setAssessDate] = useState(new Date().toISOString().split("T")[0]);
   const [animIn, setAnimIn] = useState(true);
-  const scrollRef = useRef(null);
+  // Attached to the domain card so we can scroll the user back up to
+  // the top of the new domain when they navigate. The previous version
+  // declared a ref but never wired it to a DOM node, so the scroll
+  // never fired and users landed mid-page on the next domain.
+  const domainCardRef = useRef(null);
+
+  // Smooth-scroll the window so the top of the domain card is at the
+  // top of the viewport (with a small offset for breathing room).
+  function scrollToDomainTop() {
+    if (typeof window === "undefined") return;
+    const node = domainCardRef.current;
+    if (node) {
+      const top = node.getBoundingClientRect().top + window.scrollY - 16;
+      window.scrollTo({ top, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
 
   const domain = DOMAINS[currentDomain];
   const totalScore = Object.values(scores).reduce((s, v) => s + v, 0);
@@ -252,7 +269,9 @@ export default function BCPAssessment() {
     setTimeout(() => {
       setCurrentDomain(prev => Math.max(0, Math.min(DOMAINS.length - 1, prev + dir)));
       setAnimIn(true);
-      if (scrollRef.current) scrollRef.current.scrollTo({ top: 0, behavior: "smooth" });
+      // Wait one paint so the new domain content is in the DOM, then
+      // scroll to the top of the (newly-laid-out) card.
+      setTimeout(scrollToDomainTop, 0);
     }, 150);
   }
 
@@ -403,6 +422,56 @@ export default function BCPAssessment() {
   if (phase === "results") {
     return (
       <div style={styles.wrap}>
+        {/*
+          Print stylesheet — addresses the Recharts charts not appearing
+          on the printed/PDF output.
+
+          Two issues this fixes:
+            1. Recharts' ResponsiveContainer measures the parent via JS
+               at runtime. During the browser's print rendering pass the
+               measurement is often 0 (or wrong), so the SVG renders
+               with no visible content. We force fixed pixel dimensions
+               on the recharts container/wrapper/SVG in print so the
+               chart has real geometry to draw into.
+            2. The on-screen 2-column chart grid is too wide for a
+               printed page. Collapse to a single column in print.
+
+          Also: print-color-adjust:exact preserves the SVG fills (radar
+          area, bar colors) instead of letting the browser strip them.
+        */}
+        <style>{`
+          @media print {
+            html, body {
+              background: #fff !important;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            .scorecard-charts-grid {
+              grid-template-columns: 1fr !important;
+              gap: 16px !important;
+            }
+            .scorecard-chart-card {
+              page-break-inside: avoid;
+              break-inside: avoid;
+              width: 100% !important;
+            }
+            .scorecard-chart-card .recharts-responsive-container {
+              width: 640px !important;
+              height: 320px !important;
+            }
+            .scorecard-chart-card .recharts-wrapper,
+            .scorecard-chart-card .recharts-surface,
+            .scorecard-chart-card svg {
+              width: 640px !important;
+              height: 320px !important;
+            }
+            /* Keep Recharts SVG fills/strokes in the printed output. */
+            .scorecard-chart-card svg * {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+          }
+        `}</style>
         <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 20px 60px" }}>
           {/* Header */}
           <div style={{ textAlign: "center", marginBottom: 32 }}>
@@ -461,9 +530,9 @@ export default function BCPAssessment() {
           </div>
 
           {/* Charts row */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+          <div className="scorecard-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
             {/* Radar */}
-            <div style={{ ...styles.card }}>
+            <div className="scorecard-chart-card" style={{ ...styles.card }}>
               <h2 style={{ fontFamily: "var(--font-aptos-display), serif", fontSize: 16, fontWeight: 700, color: "#1a3a5c", marginTop: 0, marginBottom: 8 }}>Capability Radar</h2>
               <ResponsiveContainer width="100%" height={240}>
                 <RadarChart data={radarData}>
@@ -474,7 +543,7 @@ export default function BCPAssessment() {
               </ResponsiveContainer>
             </div>
             {/* Bar */}
-            <div style={{ ...styles.card }}>
+            <div className="scorecard-chart-card" style={{ ...styles.card }}>
               <h2 style={{ fontFamily: "var(--font-aptos-display), serif", fontSize: 16, fontWeight: 700, color: "#1a3a5c", marginTop: 0, marginBottom: 8 }}>Domain Scores (%)</h2>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={barData} layout="vertical" margin={{ left: 0, right: 20, top: 0, bottom: 0 }}>
@@ -615,12 +684,12 @@ export default function BCPAssessment() {
         {/* Domain nav pills */}
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 20 }}>
           {DOMAINS.map((d, i) => (
-            <DomainPill key={d.id} domain={d} active={i === currentDomain} completed={domainAnswered(d)} onClick={() => { setAnimIn(false); setTimeout(() => { setCurrentDomain(i); setAnimIn(true); }, 150); }} />
+            <DomainPill key={d.id} domain={d} active={i === currentDomain} completed={domainAnswered(d)} onClick={() => { setAnimIn(false); setTimeout(() => { setCurrentDomain(i); setAnimIn(true); setTimeout(scrollToDomainTop, 0); }, 150); }} />
           ))}
         </div>
 
         {/* Domain card */}
-        <div style={{
+        <div ref={domainCardRef} style={{
           ...styles.card,
           opacity: animIn ? 1 : 0,
           transform: animIn ? "translateY(0)" : "translateY(8px)",
@@ -712,7 +781,7 @@ export default function BCPAssessment() {
             const dp = Math.round((ds / dm) * 100);
             const done = domainAnswered(d);
             return (
-              <div key={d.id} onClick={() => { setAnimIn(false); setTimeout(() => { setCurrentDomain(i); setAnimIn(true); }, 150); }}
+              <div key={d.id} onClick={() => { setAnimIn(false); setTimeout(() => { setCurrentDomain(i); setAnimIn(true); setTimeout(scrollToDomainTop, 0); }, 150); }}
                 style={{ background: "rgba(255,255,255,0.06)", border: `1px solid ${i === currentDomain ? "rgba(201,168,76,0.5)" : "rgba(255,255,255,0.08)"}`, borderRadius: 10, padding: "10px 12px", cursor: "pointer", transition: "all 0.2s" }}>
                 <div style={{ fontSize: 10, color: "#64748b", fontWeight: 700, fontFamily: "var(--font-aptos), monospace", marginBottom: 4 }}>{d.id}</div>
                 <div style={{ fontSize: 11, color: done ? "#94a3b8" : "#475569", marginBottom: 6, lineHeight: 1.3 }}>{d.short}</div>
