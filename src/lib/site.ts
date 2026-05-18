@@ -43,7 +43,7 @@ export const SITE = {
     email: "info@eresilient.com",
     emailHref: "mailto:info@eresilient.com",
     address: {
-      street: "1 East Erie St, Suite 525-4252",
+      street: "1 East Erie St., Suite 525",
       city: "Chicago",
       region: "IL",
       postal: "60611",

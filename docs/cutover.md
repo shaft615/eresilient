@@ -361,7 +361,7 @@ Run this against the **production URL** after cutover (and against the **preview
 - [ ] No occurrence of "Karl Bryant" / "Karl D. Bryant" / "Managing Principal" / "(312) 576-5202" / "karl.bryant@eresilient.com" / "4800 S Chicago Beach" anywhere on the site (use Cmd+F on `/`, `/about`, `/contact`, `/capabilities`)
 - [ ] Phone shown is "(833) PLAN-365" with "(833) 752-6365" alongside it
 - [ ] Email shown is "info@eresilient.com"
-- [ ] Address shown is "1 East Erie St, Suite 525-4252, Chicago, IL 60611"
+- [ ] Address shown is "1 East Erie St., Suite 525, Chicago, IL 60611"
 - [ ] Article author bylines all read "e|Resilient"
 
 If any line is ❌, file an issue or message the dev team before declaring cutover complete.
