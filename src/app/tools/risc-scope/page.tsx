@@ -159,7 +159,7 @@ export default function RiscScopePage() {
             The lowercase &ldquo;risc&rdquo; prefix is shared across our
             tools and originates with{" "}
             <Link
-              href="/products/risc-manager"
+              href="/tools"
               className="font-semibold text-brand-orange hover:underline"
             >
               riscManager.com™

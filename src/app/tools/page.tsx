@@ -61,12 +61,13 @@ const tools = [
   {
     name: "BCP Readiness Scorecard",
     badge: "Free · No engagement required",
+    featured: true,
     summary:
-      "A 12-question self-assessment that benchmarks your current continuity program against ISO 22301. Get a score and a written read of where the program sits, delivered to your inbox.",
+      "A 42-question self-assessment that benchmarks your current continuity program against ISO 22301. Get an instant scorecard with a maturity band, radar visualization, and prioritized gap analysis.",
     bullets: [
       "Free to use — no consultation required",
-      "12 questions, takes under 10 minutes",
-      "Scored and emailed within minutes",
+      "42 questions across 8 domains, about 20 minutes",
+      "Instant results with maturity band and gap analysis",
       "Optional follow-up: practitioner walkthrough of your results",
     ],
     href: "/scorecard",
@@ -105,7 +106,13 @@ export default function ToolsIndexPage() {
                 className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-8"
               >
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center rounded-full border border-brand-orange/40 bg-brand-orange/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-orange">
+                  <span
+                    className={
+                      t.featured
+                        ? "inline-flex items-center rounded-full border border-brand-orange bg-brand-orange px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-sm"
+                        : "inline-flex items-center rounded-full border border-brand-orange/40 bg-brand-orange/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-brand-orange"
+                    }
+                  >
                     {t.badge}
                   </span>
                   {t.status === "in-development" && (
@@ -148,6 +155,10 @@ export default function ToolsIndexPage() {
                   >
                     {t.cta} <span aria-hidden>→</span>
                   </a>
+                ) : t.featured ? (
+                  <CtaButton href={t.href} className="self-start">
+                    {t.cta}
+                  </CtaButton>
                 ) : (
                   <Link
                     href={t.href}

@@ -172,6 +172,58 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      <section className="py-20 sm:py-24">
+        <Container width="wide">
+          <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
+                Industries Served
+              </p>
+              <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
+                Regulated, operationally complex sectors are home turf.
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
+                Continuity risk concentrates where operations, suppliers, and
+                regulators intersect. That&apos;s where we&apos;ve spent our
+                careers.
+              </p>
+              <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {SITE.industries.map((i) => (
+                  <li
+                    key={i}
+                    className="rounded-md border border-brand-taupe-mid bg-brand-paper px-4 py-3 text-center text-sm font-semibold text-brand-ink-mid"
+                  >
+                    {i}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <aside className="rounded-2xl border border-brand-taupe-mid bg-brand-taupe-light/60 p-7">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
+                Prior Clients
+              </p>
+              <h3 className="mt-2 font-display text-2xl text-brand-maroon">
+                Fortune 100 / 500 engagements
+              </h3>
+              <p className="mt-4 text-sm leading-relaxed text-brand-ink-mid">
+                Past engagements delivered by our practitioners include:
+              </p>
+              <ul className="mt-5 space-y-2 text-sm text-brand-ink-mid">
+                {SITE.pastClients.map((c) => (
+                  <li key={c} className="flex gap-3">
+                    <span aria-hidden className="mt-0.5 text-brand-orange">
+                      ▸
+                    </span>
+                    <span className="font-semibold text-brand-ink">{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </div>
+        </Container>
+      </section>
+
       <section className="bg-brand-maroon py-20 text-brand-paper sm:py-24">
         <Container width="narrow" className="text-center">
           <h2 className="font-display text-3xl sm:text-4xl">

@@ -15,13 +15,13 @@ const services = [
     title: "Business Continuity Planning",
     slug: "business-continuity-planning",
     summary:
-      "ISO 22301-aligned BCP development. Risk assessment, BIA, strategy selection, and tested plans deployed where your team will actually use them.",
+      "ISO 22301-aligned business continuity plan (BCP) development. Risk assessment, Business Impact Analysis (BIA), strategy selection, and tested plans deployed where your team will actually use them.",
   },
   {
     title: "Crisis Management",
     slug: "crisis-management",
     summary:
-      "Governance, team structure, and trigger protocols. Executive education and integrated crisis/BCM exercises that surface gaps before they cost you.",
+      "Governance, team structure, and trigger protocols. Executive education and integrated crisis / business continuity management (BCM) exercises that surface gaps before they cost you.",
   },
   {
     title: "Emergency Response",
@@ -58,7 +58,7 @@ const howItWorks = [
   {
     n: "02",
     title: "Business Impact Analysis",
-    body: "Department-level BIA quantifies what disruption costs you. RTO, RPO, and MTPD become numbers, not guesses.",
+    body: "Department-level BIA quantifies what disruption costs you. Recovery Time Objective (RTO), Recovery Point Objective (RPO), and Maximum Tolerable Period of Disruption (MTPD) become numbers, not guesses.",
   },
   {
     n: "03",
@@ -68,7 +68,7 @@ const howItWorks = [
   {
     n: "04",
     title: "Test & Maintain",
-    body: "Tabletop exercises, AAR-driven updates, and ongoing program governance — so the plan stays current as your business changes.",
+    body: "Tabletop exercises, after-action review (AAR) driven updates, and ongoing program governance — so the plan stays current as your business changes.",
   },
 ];
 
