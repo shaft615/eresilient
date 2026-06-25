@@ -14,6 +14,7 @@
   --color-brand-taupe: #C4BCAE;
   --color-brand-taupe-mid: #E5E0D8;
   --color-brand-taupe-light: #F0EDE8;
+  --color-brand-cream: #FAF3E9;
   --color-brand-paper: #FDFCFB;
 
   --font-display: var(--font-aptos-display);
@@ -27,7 +28,10 @@
     text-rendering: optimizeLegibility;
   }
   body {
-    background: var(--color-brand-paper);
+    /* Warm cream base instead of cold near-white — every light section
+       inherits a hint of the palette's warmth, and crisp paper cards lift
+       off it. */
+    background: var(--color-brand-cream);
     color: var(--color-brand-ink);
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     font-size: 16px;
@@ -41,39 +45,79 @@
 
 @layer components {
   /*
-   * Warm wash for otherwise flat-white sections. Two low-opacity radial
-   * accents pulled from the secondary palette (amber + pink) sit over paper
-   * so large light sections carry a hint of brand color instead of empty
-   * white — without competing with the maroon/taupe sections around them.
+   * Warm wash — a peach/amber glow over cream for large light sections.
+   * Strong enough to read as a deliberate warm tone (not a flat white block)
+   * while staying light enough to carry dark text and crisp cards.
    */
   .section-warm {
-    background-color: var(--color-brand-paper);
+    background-color: var(--color-brand-cream);
     background-image:
       radial-gradient(
-        58% 78% at 100% 0%,
-        color-mix(in oklab, var(--color-brand-amber) 9%, transparent),
-        transparent 70%
+        80% 95% at 100% 0%,
+        color-mix(in oklab, var(--color-brand-amber) 20%, transparent),
+        transparent 60%
       ),
       radial-gradient(
-        52% 70% at 0% 100%,
-        color-mix(in oklab, var(--color-brand-pink) 8%, transparent),
-        transparent 70%
+        70% 85% at 0% 100%,
+        color-mix(in oklab, var(--color-brand-orange) 12%, transparent),
+        transparent 62%
       );
   }
 
   /*
-   * Card surface — a faint vertical taupe tint plus a soft shadow so white
-   * cards read as raised panels rather than dissolving into a white page.
-   * Drop-in replacement for `bg-brand-paper` on content cards.
+   * Blush wash — a soft pink lifting to burgundy, for rhythm against the
+   * amber/peach `section-warm` and the dark maroon sections. Use it on every
+   * other light section so the page alternates warm tones instead of repeating.
+   */
+  .section-blush {
+    background-color: var(--color-brand-cream);
+    background-image:
+      radial-gradient(
+        78% 92% at 0% 0%,
+        color-mix(in oklab, var(--color-brand-pink) 20%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(
+        72% 88% at 100% 100%,
+        color-mix(in oklab, var(--color-brand-burgundy) 12%, transparent),
+        transparent 64%
+      );
+  }
+
+  /*
+   * Card surface — crisp paper lifting off the warm page, with a warm
+   * maroon-tinted shadow so cards read as raised panels. Drop-in replacement
+   * for `bg-brand-paper` on content cards.
    */
   .surface-card {
+    background-color: var(--color-brand-paper);
     background-image: linear-gradient(
       180deg,
       var(--color-brand-paper) 0%,
-      color-mix(in oklab, var(--color-brand-taupe-light) 55%, var(--color-brand-paper)) 100%
+      color-mix(in oklab, var(--color-brand-cream) 65%, var(--color-brand-paper)) 100%
     );
     box-shadow:
-      0 1px 2px rgba(26, 10, 5, 0.04),
-      0 10px 28px -14px rgba(26, 10, 5, 0.12);
+      0 1px 2px rgba(45, 0, 15, 0.05),
+      0 16px 36px -18px rgba(45, 0, 15, 0.18);
+  }
+
+  /*
+   * Warm top accent for featured cards — a thin orange→amber bar pinned to the
+   * card's top edge. Pair with `surface-card` and a `relative` wrapper.
+   */
+  .card-accent::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 3px;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    background: linear-gradient(
+      90deg,
+      var(--color-brand-orange),
+      var(--color-brand-amber)
+    );
   }
 }

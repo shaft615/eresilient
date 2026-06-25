@@ -112,7 +112,7 @@ export default function HomePage() {
       </section>
 
       {/* 2. Credibility bar */}
-      <section className="border-b border-brand-taupe-mid/60 bg-brand-paper">
+      <section className="border-b border-brand-taupe-mid/60 bg-brand-cream">
         <Container width="wide" className="py-7">
           <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-xs font-semibold uppercase tracking-[0.14em] text-brand-ink-light">
             {SITE.team.credentials.map((c) => (
@@ -228,7 +228,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Social proof — industries + team */}
-      <section className="section-warm py-20 sm:py-24">
+      <section className="section-blush py-20 sm:py-24">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start">
             <div>
