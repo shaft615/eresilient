@@ -143,7 +143,7 @@ export default function RiscResponsePage() {
       </section>
 
       {/* RISC family note */}
-      <section className="border-b border-brand-taupe-mid/40 bg-brand-paper py-10">
+      <section className="border-b border-brand-taupe-mid/40 bg-brand-cream py-10">
         <Container width="narrow">
           <p className="text-sm leading-relaxed text-brand-ink-mid">
             <span className="font-semibold text-brand-ink">
@@ -302,7 +302,7 @@ export default function RiscResponsePage() {
       </section>
 
       {/* Outputs */}
-      <section className="section-warm py-20 sm:py-24">
+      <section className="section-blush py-20 sm:py-24">
         <Container width="narrow">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
             What You Get

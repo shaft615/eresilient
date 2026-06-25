@@ -183,7 +183,7 @@ export default async function ServicePage({
       </section>
 
       {/* Who its for + ISO refs */}
-      <section className="section-warm py-20">
+      <section className="section-blush py-20">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:items-start">
             <div>

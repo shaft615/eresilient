@@ -173,7 +173,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <section className="section-warm py-20 sm:py-24">
+      <section className="section-blush py-20 sm:py-24">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start">
             <div>
