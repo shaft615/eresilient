@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { RiscText } from "@/components/risc-wordmark";
 import { JsonLd } from "@/components/json-ld";
 import { serviceSchema } from "@/lib/structured-data";
 import { getRelatedServices, getService, services } from "@/content/services";
@@ -106,7 +107,7 @@ export default async function ServicePage({
       </section>
 
       {/* Whats included + Deliverables */}
-      <section className="py-20">
+      <section className="section-warm py-20">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-2">
             <div>
@@ -122,7 +123,9 @@ export default async function ServicePage({
                     <span aria-hidden className="mt-1 text-brand-orange">
                       ▸
                     </span>
-                    <span className="leading-relaxed">{item}</span>
+                    <span className="leading-relaxed">
+                      <RiscText>{item}</RiscText>
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -171,7 +174,7 @@ export default async function ServicePage({
                 </div>
                 <h3 className="mt-3 font-display text-lg">{step.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-brand-taupe">
-                  {step.body}
+                  <RiscText onDark>{step.body}</RiscText>
                 </p>
               </li>
             ))}
@@ -180,7 +183,7 @@ export default async function ServicePage({
       </section>
 
       {/* Who its for + ISO refs */}
-      <section className="py-20">
+      <section className="section-warm py-20">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:items-start">
             <div>
@@ -266,7 +269,7 @@ export default async function ServicePage({
                 <li key={r.slug}>
                   <Link
                     href={`/services/${r.slug}`}
-                    className="group block h-full rounded-xl border border-brand-taupe-mid bg-brand-paper p-6 transition-colors hover:border-brand-orange"
+                    className="surface-card group block h-full rounded-xl border border-brand-taupe-mid p-6 transition-colors hover:border-brand-orange"
                   >
                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-orange">
                       {r.category}

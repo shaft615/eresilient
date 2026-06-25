@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalLayout } from "@/components/legal-layout";
+import { BrandName } from "@/components/brand-name";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -118,7 +119,7 @@ export default function TermsPage() {
 
       <p>
         TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT WILL{" "}
-        {SITE.legalName.toUpperCase()}, ITS PRINCIPALS, EMPLOYEES, OR AGENTS
+        <BrandName legal caps />, ITS PRINCIPALS, EMPLOYEES, OR AGENTS
         BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
         PUNITIVE DAMAGES — INCLUDING LOSS OF PROFITS, REVENUE, DATA, OR USE
         — ARISING OUT OF OR RELATED TO YOUR USE OF THE SITE, EVEN IF WE HAVE

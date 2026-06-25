@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Container } from "./container";
 import { Wordmark } from "./wordmark";
+import { BrandName } from "./brand-name";
 import { NAV, SITE } from "@/lib/site";
 
 export function SiteFooter() {
@@ -12,7 +13,7 @@ export function SiteFooter() {
           <div>
             <Wordmark variant="on-dark" className="h-16 w-auto" />
             <p className="mt-3 font-display text-sm uppercase tracking-[0.2em] text-brand-orange">
-              Be Resilient. e|Resilient.
+              Be Resilient. <BrandName />.
             </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-taupe/80">
               {SITE.description}

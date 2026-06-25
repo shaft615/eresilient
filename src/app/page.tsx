@@ -158,7 +158,7 @@ export default function HomePage() {
       </section>
 
       {/* 4. Services */}
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="wide">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
@@ -178,7 +178,7 @@ export default function HomePage() {
               <li key={s.slug}>
                 <Link
                   href={`/services/${s.slug}`}
-                  className="group block h-full rounded-xl border border-brand-taupe-mid bg-brand-paper p-7 transition-colors hover:border-brand-orange"
+                  className="surface-card group block h-full rounded-xl border border-brand-taupe-mid p-7 transition-colors hover:border-brand-orange"
                 >
                   <h3 className="font-display text-xl text-brand-maroon">
                     {s.title}
@@ -228,7 +228,7 @@ export default function HomePage() {
       </section>
 
       {/* 6. Social proof — industries + team */}
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start">
             <div>

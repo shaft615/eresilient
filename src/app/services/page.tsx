@@ -32,14 +32,14 @@ export default function ServicesIndexPage() {
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="wide">
           <ul className="grid gap-6 md:grid-cols-2">
             {services.map((s) => (
               <li key={s.slug}>
                 <Link
                   href={`/services/${s.slug}`}
-                  className="group flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-8 transition-colors hover:border-brand-orange"
+                  className="surface-card group flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-8 transition-colors hover:border-brand-orange"
                 >
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
                     {s.category}

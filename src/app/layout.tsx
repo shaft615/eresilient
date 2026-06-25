@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Outfit } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -32,6 +33,14 @@ const aptosDisplay = localFont({
     { path: "../fonts/AptosDisplay-Regular.ttf", weight: "400", style: "normal" },
     { path: "../fonts/AptosDisplay-Bold.ttf", weight: "700", style: "normal" },
   ],
+});
+
+// Outfit is the shared RISC-family wordmark font (orange "risc" + ink remainder),
+// matching the lockup on riscManager.com. Self-hosted by next/font at build time.
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -80,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${aptos.variable} ${aptosDisplay.variable} h-full antialiased`}
+      className={`${aptos.variable} ${aptosDisplay.variable} ${outfit.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-paper text-brand-ink">
         <JsonLd data={organizationSchema()} />

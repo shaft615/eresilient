@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { RiscText } from "@/components/risc-wordmark";
 import { packages } from "@/content/packages";
 import { SITE } from "@/lib/site";
 
@@ -31,16 +32,16 @@ export default function PackagesPage() {
         </Container>
       </section>
 
-      <section className="py-20">
+      <section className="section-warm py-20">
         <Container width="wide">
           <ul className="grid gap-6 lg:grid-cols-3">
             {packages.map((p) => (
               <li
                 key={p.slug}
-                className={`flex flex-col rounded-2xl border p-7 ${
+                className={`surface-card flex flex-col rounded-2xl border p-7 ${
                   p.highlight
-                    ? "border-brand-orange bg-brand-paper shadow-lg shadow-brand-orange/10 ring-1 ring-brand-orange"
-                    : "border-brand-taupe-mid bg-brand-paper"
+                    ? "border-brand-orange shadow-lg shadow-brand-orange/10 ring-1 ring-brand-orange"
+                    : "border-brand-taupe-mid"
                 }`}
               >
                 {p.highlight && (
@@ -93,7 +94,9 @@ export default function PackagesPage() {
                       <span aria-hidden className="mt-1 text-brand-orange">
                         ✓
                       </span>
-                      <span>{item}</span>
+                      <span>
+                        <RiscText>{item}</RiscText>
+                      </span>
                     </li>
                   ))}
                 </ul>

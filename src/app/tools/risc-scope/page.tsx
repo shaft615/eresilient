@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { RiscWordmark, RiscText } from "@/components/risc-wordmark";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -120,9 +121,8 @@ export default function RiscScopePage() {
             </span>
           </div>
 
-          <h1 className="mt-6 font-display text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-            <span className="text-brand-orange">risc</span>Scope
-            <sup className="ml-1 text-2xl text-brand-taupe/70">™</sup>
+          <h1 className="mt-6 text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
+            <RiscWordmark name="riscScope™" onDark />
           </h1>
 
           <p className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-brand-orange">
@@ -131,8 +131,9 @@ export default function RiscScopePage() {
           </p>
 
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-brand-taupe">
-            riscScope™ is the enterprise risk assessment workspace in the
-            RISC family from e|Resilient. Five weighted impact dimensions,
+            <RiscText onDark>riscScope™</RiscText> is the enterprise risk
+            assessment workspace in the RISC family from e|Resilient. Five
+            weighted impact dimensions,
             inherent-vs-residual modeling, control effectiveness as a
             measurable lever — and an output your board, your insurer, and
             your customers&apos; due-diligence teams will all recognize.
@@ -160,19 +161,26 @@ export default function RiscScopePage() {
             tools and originates with{" "}
             <Link
               href="/tools"
-              className="font-semibold text-brand-orange hover:underline"
+              className="font-semibold hover:underline"
             >
-              riscManager.com™
+              <RiscText>riscManager.com™</RiscText>
             </Link>
             , our Risk Intelligent Supply Chain platform. The family also
             includes{" "}
             <Link
               href="/tools/risc-analysis"
-              className="font-semibold text-brand-orange hover:underline"
+              className="font-semibold hover:underline"
             >
-              riscAnalysis™
+              <RiscText>riscAnalysis™</RiscText>
             </Link>{" "}
-            (Business Impact Analysis). riscScope™ extends the same
+            (Business Impact Analysis) and{" "}
+            <Link
+              href="/tools/risc-response"
+              className="font-semibold hover:underline"
+            >
+              <RiscText>riscResponse™</RiscText>
+            </Link>{" "}
+            (incident response and activation). <RiscText>riscScope™</RiscText> extends the same
             disciplined methodology beyond supply chain to enterprise-
             wide threat assessment — same standard, same rigor, same
             workspace family.
@@ -208,7 +216,7 @@ export default function RiscScopePage() {
               practical.
             </p>
             <p className="font-semibold text-brand-ink">
-              riscScope™ is that workspace. Score the threats the way the
+              <RiscText>riscScope™</RiscText> is that workspace. Score the threats the way the
               standard says to score them, document the controls already
               in place, and produce a register that holds up under
               scrutiny — without a six-month Big Four engagement to get
@@ -219,7 +227,7 @@ export default function RiscScopePage() {
       </section>
 
       {/* Three pillars */}
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="wide">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
@@ -229,8 +237,8 @@ export default function RiscScopePage() {
               The three things that make a risk score defensible.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
-              Most tools collapse risk into a single number on a heatmap.
-              riscScope™ separates the inputs the standard cares about so
+              Most tools collapse risk into a single number on a heatmap.{" "}
+              <RiscText>riscScope™</RiscText> separates the inputs the standard cares about so
               the output can be audited, challenged, and updated as the
               business changes.
             </p>
@@ -240,14 +248,14 @@ export default function RiscScopePage() {
             {pillars.map((p) => (
               <li
                 key={p.title}
-                className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-7"
+                className="surface-card flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-7"
               >
                 <div className="font-display text-4xl">{p.icon}</div>
                 <h3 className="mt-4 font-display text-xl text-brand-maroon">
                   {p.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-brand-ink-mid">
-                  {p.summary}
+                  <RiscText>{p.summary}</RiscText>
                 </p>
                 <ul className="mt-5 space-y-2">
                   {p.bullets.map((b) => (
@@ -278,8 +286,9 @@ export default function RiscScopePage() {
             22 enterprise threats, pre-loaded.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            You don&apos;t start from a blank threat list. riscScope™ ships
-            with the 22 enterprise threats e|Resilient practitioners have
+            You don&apos;t start from a blank threat list.{" "}
+            <RiscText>riscScope™</RiscText> ships with the 22 enterprise
+            threats e|Resilient practitioners have
             seen recur across two decades of Fortune 100 work — from
             cash-flow crunch to wildfire to communications failure. Each
             one is pre-described so you score, you don&apos;t brainstorm.
@@ -337,7 +346,7 @@ export default function RiscScopePage() {
       </section>
 
       {/* Outputs */}
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="narrow">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
             What You Get
@@ -346,7 +355,7 @@ export default function RiscScopePage() {
             Outputs that travel.
           </h2>
           <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
-            Everything riscScope™ produces is portable and human-readable.
+            Everything <RiscText>riscScope™</RiscText> produces is portable and human-readable.
             Hand the CSV to a data team, the PDF to a board, and the
             register to your insurer — same source of truth, no
             reformat-and-reconcile.
@@ -384,7 +393,7 @@ export default function RiscScopePage() {
               Two paths in.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
-              riscScope™ lives inside the e|Resilient client workspace.
+              <RiscText>riscScope™</RiscText> lives inside the e|Resilient client workspace.
               Most clients reach it through a paid engagement; companies
               that just want to gauge their own preparedness can license
               it stand-alone.
@@ -392,7 +401,7 @@ export default function RiscScopePage() {
           </div>
 
           <div className="mt-14 grid gap-6 md:grid-cols-2">
-            <div className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-8">
+            <div className="surface-card flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
                 Path 1 · Bundled
               </p>
@@ -400,8 +409,9 @@ export default function RiscScopePage() {
                 Included in every paid engagement
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
-                Every e|Resilient client engagement includes access to
-                riscScope™ as part of the client workspace. Your consultant
+                Every e|Resilient client engagement includes access to{" "}
+                <RiscText>riscScope™</RiscText> as part of the client
+                workspace. Your consultant
                 runs the assessment alongside your BIA, supply chain
                 mapping, and continuity planning — no separate purchase,
                 no separate platform.
@@ -413,7 +423,7 @@ export default function RiscScopePage() {
               </div>
             </div>
 
-            <div className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-8">
+            <div className="surface-card flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
                 Path 2 · Stand-alone
               </p>
@@ -422,8 +432,9 @@ export default function RiscScopePage() {
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
                 If you&apos;re not ready for a full engagement but want to
-                produce a defensible threat register, riscScope™ is
-                available as a stand-alone subscription. You run the
+                produce a defensible threat register,{" "}
+                <RiscText>riscScope™</RiscText> is available as a stand-alone
+                subscription. You run the
                 assessment yourself; we&apos;re available for methodology
                 questions and an optional practitioner review.
               </p>

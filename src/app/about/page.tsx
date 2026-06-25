@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { BrandName } from "@/components/brand-name";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -43,7 +44,7 @@ export default function AboutPage() {
       <section className="bg-brand-maroon py-20 text-brand-paper sm:py-28">
         <Container width="wide">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
-            About {SITE.name}
+            About <BrandName />
           </p>
           <h1 className="mt-3 max-w-3xl font-display text-4xl leading-tight sm:text-5xl">
             {SITE.slogan}
@@ -58,7 +59,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="narrow">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
             What We Believe
@@ -77,7 +78,7 @@ export default function AboutPage() {
             {principles.map((p) => (
               <li
                 key={p.title}
-                className="rounded-xl border border-brand-taupe-mid bg-brand-paper p-6"
+                className="surface-card rounded-xl border border-brand-taupe-mid p-6"
               >
                 <h3 className="font-display text-lg text-brand-maroon">
                   {p.title}
@@ -172,7 +173,7 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="wide">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-start">
             <div>

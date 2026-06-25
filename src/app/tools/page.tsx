@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { RiscWordmark, RiscText } from "@/components/risc-wordmark";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -41,6 +42,21 @@ const tools = [
     href: "/tools/risc-scope",
     cta: "Explore riscScope™",
     status: "available",
+  },
+  {
+    name: "riscResponse™",
+    badge: "ISO 22301 §8.4 · ISO 22320",
+    summary:
+      "The incident response and activation workspace in the RISC family. When a disruption hits, declare the incident, activate the right response and continuity plans, coordinate the team from one source of truth, and capture every decision in a time-stamped log the after-action review and the auditor will both recognize.",
+    bullets: [
+      "Incident declaration with severity classification and activation authority",
+      "One-click plan activation with role-based action checklists and a live status board",
+      "Time-stamped decision and event log captured automatically through the response",
+      "After-action report with corrective actions, ready for the next exercise cycle",
+    ],
+    href: "/tools/risc-response",
+    cta: "Explore riscResponse™",
+    status: "in-development",
   },
   {
     name: "riscManager.com™",
@@ -97,13 +113,13 @@ export default function ToolsIndexPage() {
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="wide">
           <ul className="grid gap-6 md:grid-cols-2">
             {tools.map((t) => (
               <li
                 key={t.name}
-                className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-8"
+                className="surface-card flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-8"
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <span
@@ -123,7 +139,7 @@ export default function ToolsIndexPage() {
                 </div>
 
                 <h2 className="mt-5 font-display text-2xl text-brand-maroon">
-                  {t.name}
+                  <RiscWordmark name={t.name} />
                 </h2>
 
                 <p className="mt-4 text-sm leading-relaxed text-brand-ink-mid">
@@ -153,7 +169,7 @@ export default function ToolsIndexPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 self-start text-sm font-semibold text-brand-orange hover:underline"
                   >
-                    {t.cta} <span aria-hidden>→</span>
+                    <RiscText>{t.cta}</RiscText> <span aria-hidden>→</span>
                   </a>
                 ) : t.featured ? (
                   <CtaButton href={t.href} className="self-start">
@@ -164,7 +180,7 @@ export default function ToolsIndexPage() {
                     href={t.href}
                     className="inline-flex items-center gap-1 self-start text-sm font-semibold text-brand-orange hover:underline"
                   >
-                    {t.cta} <span aria-hidden>→</span>
+                    <RiscText>{t.cta}</RiscText> <span aria-hidden>→</span>
                   </Link>
                 )}
               </li>

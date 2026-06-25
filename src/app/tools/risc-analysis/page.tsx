@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { RiscWordmark, RiscText } from "@/components/risc-wordmark";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -111,9 +112,8 @@ export default function RiscAnalysisPage() {
             </span>
           </div>
 
-          <h1 className="mt-6 font-display text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-            <span className="text-brand-orange">risc</span>Analysis
-            <sup className="ml-1 text-2xl text-brand-taupe/70">™</sup>
+          <h1 className="mt-6 text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
+            <RiscWordmark name="riscAnalysis™" onDark />
           </h1>
 
           <p className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-brand-orange">
@@ -122,8 +122,9 @@ export default function RiscAnalysisPage() {
           </p>
 
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-brand-taupe">
-            riscAnalysis™ is the Business Impact Analysis workspace in the
-            RISC family from e|Resilient. Inventory critical activities,
+            <RiscText onDark>riscAnalysis™</RiscText> is the Business Impact
+            Analysis workspace in the RISC family from e|Resilient. Inventory
+            critical activities,
             quantify recovery objectives (RTO, RPO, MBCO, MTPD), map the
             dependency chain — and produce the BIA report that becomes
             the foundation every other continuity decision rests on.
@@ -151,21 +152,30 @@ export default function RiscAnalysisPage() {
             tools and originates with{" "}
             <Link
               href="/tools"
-              className="font-semibold text-brand-orange hover:underline"
+              className="font-semibold hover:underline"
             >
-              riscManager.com™
+              <RiscText>riscManager.com™</RiscText>
             </Link>
-            , our Risk Intelligent Supply Chain platform. riscAnalysis™
-            sits at the foundation of the family — the BIA whose
-            recovery objectives drive every other workspace, including{" "}
+            , our Risk Intelligent Supply Chain platform.{" "}
+            <RiscText>riscAnalysis™</RiscText> sits at the foundation of the
+            family — the BIA whose recovery objectives drive every other
+            workspace, including{" "}
             <Link
               href="/tools/risc-scope"
-              className="font-semibold text-brand-orange hover:underline"
+              className="font-semibold hover:underline"
             >
-              riscScope™
+              <RiscText>riscScope™</RiscText>
             </Link>
-            &apos;s threat-level controls and riscManager.com™&apos;s
-            supply chain recovery posture.
+            &apos;s threat-level controls,{" "}
+            <RiscText>riscManager.com™</RiscText>&apos;s supply chain recovery
+            posture, and the plans{" "}
+            <Link
+              href="/tools/risc-response"
+              className="font-semibold hover:underline"
+            >
+              <RiscText>riscResponse™</RiscText>
+            </Link>{" "}
+            activates when an incident is declared.
           </p>
         </Container>
       </section>
@@ -199,7 +209,7 @@ export default function RiscAnalysisPage() {
               months of the consultant leaving.
             </p>
             <p className="font-semibold text-brand-ink">
-              riscAnalysis™ is the workspace that makes the BIA
+              <RiscText>riscAnalysis™</RiscText> is the workspace that makes the BIA
               continuously maintainable. Capture the analysis the way
               ISO 22301 §8.2.2 expects to see it, surface the gaps as
               the business changes, and produce the report that holds
@@ -211,7 +221,7 @@ export default function RiscAnalysisPage() {
       </section>
 
       {/* Three pillars */}
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="wide">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
@@ -222,7 +232,8 @@ export default function RiscAnalysisPage() {
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
               ISO 22301 §8.2.2 reads as three sentences, but each one
-              hides weeks of analysis. riscAnalysis™ structures the
+              hides weeks of analysis.{" "}
+              <RiscText>riscAnalysis™</RiscText> structures the
               capture so the output meets the standard without the
               months-long binder build that usually accompanies it.
             </p>
@@ -232,14 +243,14 @@ export default function RiscAnalysisPage() {
             {pillars.map((p) => (
               <li
                 key={p.title}
-                className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-7"
+                className="surface-card flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-7"
               >
                 <div className="font-display text-4xl">{p.icon}</div>
                 <h3 className="mt-4 font-display text-xl text-brand-maroon">
                   {p.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-brand-ink-mid">
-                  {p.summary}
+                  <RiscText>{p.summary}</RiscText>
                 </p>
                 <ul className="mt-5 space-y-2">
                   {p.bullets.map((b) => (
@@ -296,7 +307,7 @@ export default function RiscAnalysisPage() {
       </section>
 
       {/* Outputs */}
-      <section className="py-20 sm:py-24">
+      <section className="section-warm py-20 sm:py-24">
         <Container width="narrow">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
             What You Get
@@ -344,7 +355,7 @@ export default function RiscAnalysisPage() {
               Two paths in.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
-              riscAnalysis™ lives inside the e|Resilient client
+              <RiscText>riscAnalysis™</RiscText> lives inside the e|Resilient client
               workspace. Most clients reach it through a paid
               engagement; companies that want to run their own BIA can
               license it stand-alone.
@@ -352,7 +363,7 @@ export default function RiscAnalysisPage() {
           </div>
 
           <div className="mt-14 grid gap-6 md:grid-cols-2">
-            <div className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-8">
+            <div className="surface-card flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
                 Path 1 · Bundled
               </p>
@@ -360,9 +371,10 @@ export default function RiscAnalysisPage() {
                 Included in every paid engagement
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
-                Every e|Resilient client engagement includes access to
-                riscAnalysis™ as part of the client workspace. Your
-                consultant runs the BIA alongside riscScope™, supply
+                Every e|Resilient client engagement includes access to{" "}
+                <RiscText>riscAnalysis™</RiscText> as part of the client
+                workspace. Your consultant runs the BIA alongside{" "}
+                <RiscText>riscScope™</RiscText>, supply
                 chain mapping, and continuity planning — no separate
                 purchase, no separate platform.
               </p>
@@ -373,7 +385,7 @@ export default function RiscAnalysisPage() {
               </div>
             </div>
 
-            <div className="flex h-full flex-col rounded-2xl border border-brand-taupe-mid bg-brand-paper p-8">
+            <div className="surface-card flex h-full flex-col rounded-2xl border border-brand-taupe-mid p-8">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
                 Path 2 · Stand-alone
               </p>
@@ -382,8 +394,8 @@ export default function RiscAnalysisPage() {
               </h3>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink-mid">
                 If you have an in-house continuity function and want a
-                purpose-built BIA workspace rather than a spreadsheet,
-                riscAnalysis™ is available as a stand-alone
+                purpose-built BIA workspace rather than a spreadsheet,{" "}
+                <RiscText>riscAnalysis™</RiscText> is available as a stand-alone
                 subscription. You run the analysis yourself; we&apos;re
                 available for methodology questions and an optional
                 practitioner review.

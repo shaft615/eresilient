@@ -18,6 +18,7 @@
 
   --font-display: var(--font-aptos-display);
   --font-sans: var(--font-aptos);
+  --font-wordmark: var(--font-outfit);
 }
 
 @layer base {
@@ -35,5 +36,44 @@
   ::selection {
     background: var(--color-brand-orange);
     color: var(--color-brand-paper);
+  }
+}
+
+@layer components {
+  /*
+   * Warm wash for otherwise flat-white sections. Two low-opacity radial
+   * accents pulled from the secondary palette (amber + pink) sit over paper
+   * so large light sections carry a hint of brand color instead of empty
+   * white — without competing with the maroon/taupe sections around them.
+   */
+  .section-warm {
+    background-color: var(--color-brand-paper);
+    background-image:
+      radial-gradient(
+        58% 78% at 100% 0%,
+        color-mix(in oklab, var(--color-brand-amber) 9%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        52% 70% at 0% 100%,
+        color-mix(in oklab, var(--color-brand-pink) 8%, transparent),
+        transparent 70%
+      );
+  }
+
+  /*
+   * Card surface — a faint vertical taupe tint plus a soft shadow so white
+   * cards read as raised panels rather than dissolving into a white page.
+   * Drop-in replacement for `bg-brand-paper` on content cards.
+   */
+  .surface-card {
+    background-image: linear-gradient(
+      180deg,
+      var(--color-brand-paper) 0%,
+      color-mix(in oklab, var(--color-brand-taupe-light) 55%, var(--color-brand-paper)) 100%
+    );
+    box-shadow:
+      0 1px 2px rgba(26, 10, 5, 0.04),
+      0 10px 28px -14px rgba(26, 10, 5, 0.12);
   }
 }

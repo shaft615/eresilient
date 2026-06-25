@@ -14,12 +14,12 @@ export function SiteHeader() {
           </Link>
 
           <nav aria-label="Primary" className="hidden md:block">
-            <ul className="flex items-center gap-7">
+            <ul className="flex items-center gap-8">
               {NAV.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm font-medium text-brand-ink-mid transition-colors hover:text-brand-orange"
+                    className="text-base font-medium text-brand-ink-mid transition-colors hover:text-brand-orange"
                   >
                     {item.label}
                   </Link>

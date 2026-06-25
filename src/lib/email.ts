@@ -332,7 +332,7 @@ function scorecardWelcomeHtml({
   <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
       <tr><td>
-        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">e|Resilient</p>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;"><span style="text-transform:none;">e|Resilient</span></p>
         <h1 style="font-size:24px;line-height:1.2;color:#2D000F;margin:0 0 16px;">Your BCP Readiness Scorecard is ready, ${escapeHtml(firstName)}.</h1>
         <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
           Thanks for requesting the assessment. The scorecard takes about 20 minutes and walks through 42 questions across 8 ISO 22301-aligned domains. Results render instantly with a maturity band, radar view, and prioritized gap analysis.
@@ -389,7 +389,7 @@ function nurtureInsightHtml({
   <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
       <tr><td>
-        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">e|Resilient · Insight</p>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;"><span style="text-transform:none;">e|Resilient</span> · Insight</p>
         <h1 style="font-size:22px;line-height:1.25;color:#2D000F;margin:0 0 16px;">${escapeHtml(firstName)}, the highest-leverage BCM exercise you can run this quarter.</h1>
         <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
           A quick follow-up to the readiness scorecard.
@@ -449,7 +449,7 @@ function nurtureConsultationHtml({
   <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
       <tr><td>
-        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">e|Resilient</p>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;"><span style="text-transform:none;">e|Resilient</span></p>
         <h1 style="font-size:22px;line-height:1.25;color:#2D000F;margin:0 0 16px;">${escapeHtml(firstName)}, want to talk it through?</h1>
         <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
           You took the BCP Readiness Scorecard about a week ago. If you&rsquo;re still working through what the results mean for your specific situation — or you&rsquo;re looking at a gap that has a deadline attached to it — a 30-minute call with one of our practitioners will get you a clear next step.
@@ -535,7 +535,7 @@ function contactConfirmationHtml(input: ContactFormInput): string {
   <body style="margin:0;padding:0;background:#FDFCFB;font-family:Arial,Helvetica,sans-serif;color:#1A0A05;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;padding:32px 24px;">
       <tr><td>
-        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;">e|Resilient</p>
+        <p style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FB5C01;margin:0 0 8px;"><span style="text-transform:none;">e|Resilient</span></p>
         <h1 style="font-size:24px;line-height:1.2;color:#2D000F;margin:0 0 16px;">Thanks, ${escapeHtml(firstName)} — we&rsquo;ve got it.</h1>
         <p style="font-size:15px;line-height:1.6;color:#4A2E24;margin:0 0 16px;">
           Your message reached us at ${escapeHtml(SITE.contact.email)}. ${
