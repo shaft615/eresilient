@@ -20,25 +20,32 @@ local drafts without payment links. Nothing on the marketing site changes.
 
 ---
 
-## 1 — Run migrations 004 and 005
+## 1 — Run migrations 004, 005, and 006
 
 004: clients / client_users / engagements / invoices. 005: documents /
-milestones / scorecard linkage / tool entitlements. Run both, in order.
+milestones / scorecard linkage / tool entitlements. 006: discussions /
+tickets / audit log. Run all three, in order.
 
 1. Vercel dashboard → eresilient project → Storage → your Postgres DB → **Query**
-2. Paste the contents of `scripts/migrations/004_clients.sql` and run it,
-   then do the same with `scripts/migrations/005_portal_phase2.sql`.
-   (Or locally: `psql "$POSTGRES_URL_NON_POOLING" -f scripts/migrations/004_clients.sql`
-   and again with `005_portal_phase2.sql`)
-3. **Verify:** `SELECT COUNT(*) FROM clients;` and
-   `SELECT COUNT(*) FROM documents;` both return `0` (not an error).
+2. Paste and run, in order: `scripts/migrations/004_clients.sql`, then
+   `005_portal_phase2.sql`, then `006_collab_audit.sql`.
+   (Or locally: `psql "$POSTGRES_URL_NON_POOLING" -f scripts/migrations/<file>`)
+3. **Verify:** `SELECT COUNT(*) FROM clients;`,
+   `SELECT COUNT(*) FROM tickets;`, and `SELECT COUNT(*) FROM audit_log;`
+   all return `0` (not an error).
 
 ## 2 — Create the Clerk application (free tier)
 
 1. https://dashboard.clerk.com → **Create application**
    - Name: `eResilient`
-   - Sign-in options: **Email** (enable email verification code; Google SSO
-     optional — it's nice for clients)
+   - Sign-in options: **Email** — enable BOTH **Email verification code**
+     AND **Password** (Google SSO optional — it's nice for clients).
+     This drives the sign-in discipline: a new user's first sign-in happens
+     with an emailed code; the portal then forces them to set a password
+     before showing any content (SSO accounts are exempt), and code sign-in
+     stays available afterward as an alternative. In Clerk, set Password as
+     optional at sign-up (users may arrive passwordless via code) — the
+     portal's gate does the enforcing.
 2. On the new app's **API keys** page, copy:
    - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (starts `pk_`)
    - `CLERK_SECRET_KEY` (starts `sk_`)
@@ -158,6 +165,24 @@ required for the underlying storage/email.
   clients and portal users), and every scorecard submission with a
   link-to-client control. Linking a scorecard to a client also surfaces it
   in that client's portal "Assessment history".
+- **Admin preview ("view as client"):** every client's admin page has a
+  "View as client" button opening `/portal?as=<clientId>` — the same code
+  path the client sees, with forms disabled and a preview banner. The `as`
+  parameter is honored only for admins.
+- **Pre-boarding:** a `prospect`-status client is a full workspace — grant
+  their people portal access and they can submit documents and use the
+  discussion boards while the sale closes; the portal shows a pre-boarding
+  banner until you flip them to `active`, and everything carries over.
+- **Tickets:** clients open tickets from the portal's "Get help" card;
+  the queue lives at `/admin/tickets` with statuses open → in progress →
+  waiting on client → closed. Firm replies are emailed to the ticket's
+  creator; client replies reopen waiting/closed tickets and notify the firm
+  inbox.
+- **Audit log:** every application action (admin and client side, plus
+  Stripe webhook events and document downloads) writes one row to
+  `audit_log`, viewable at `/admin/audit` with per-client filtering.
+  Inserts are fire-and-forget and cost effectively nothing; prune old rows
+  per the note in migration 006. Sign-in events live in Clerk's own logs.
 - **Phase 4 candidates:** riscManager SSO, recurring retainers (Stripe
   subscriptions), proposal/SOW e-signature flow, per-engagement message
   threads.

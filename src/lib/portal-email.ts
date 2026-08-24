@@ -156,6 +156,98 @@ ${SITE.contact.phone} · ${SITE.contact.email}
 }
 
 /**
+ * Notify the firm inbox about client-side portal activity: a submitted
+ * document, a new/updated ticket, a discussion post.
+ */
+export async function sendPortalActivityNotice(opts: {
+  kind: string; // e.g. "New ticket", "Document submitted", "Discussion post"
+  clientName: string;
+  summary: string;
+  adminPath: string; // e.g. "/admin/tickets/<id>"
+}): Promise<{ ok: boolean; skipped?: "no-resend"; error?: string }> {
+  const resend = client();
+  if (!resend) return { ok: true, skipped: "no-resend" };
+  const link = `${SITE.url}${opts.adminPath}`;
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: SITE.contact.email,
+      subject: `${opts.kind} — ${opts.clientName}`,
+      text: `${opts.kind} from ${opts.clientName}:
+
+${opts.summary}
+
+Open in admin: ${link}
+`,
+    });
+    if (error) {
+      console.error("[portal-email] resend returned error", error);
+      return { ok: false, error: String(error.message ?? error) };
+    }
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-email] sendPortalActivityNotice failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+/**
+ * Notify a ticket's creator when the firm replies or changes status.
+ */
+export async function sendTicketUpdateEmail(opts: {
+  to: string;
+  clientName: string;
+  subject: string;
+  update: string;
+}): Promise<{ ok: boolean; skipped?: "no-resend"; error?: string }> {
+  const resend = client();
+  if (!resend) return { ok: true, skipped: "no-resend" };
+  const portalUrl = `${SITE.url}/portal`;
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: opts.to,
+      replyTo: SITE.contact.email,
+      subject: `Update on your ticket: ${opts.subject}`,
+      html: `
+        <p style="font-size:15px;line-height:1.7;color:#3B2A24;">Hello,</p>
+        <p style="font-size:15px;line-height:1.7;color:#3B2A24;">
+          There&rsquo;s an update on the ${opts.clientName} support ticket
+          &ldquo;${opts.subject}&rdquo;:
+        </p>
+        <blockquote style="border-left:3px solid #C4571E;margin:16px 0;padding:4px 16px;color:#3B2A24;font-size:14px;line-height:1.7;">
+          ${opts.update}
+        </blockquote>
+        <p style="margin:28px 0;">
+          <a href="${portalUrl}" style="background:#C4571E;color:#FDFBF7;padding:12px 22px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;">View in your portal</a>
+        </p>${signatureHtml()}`,
+      text: `Hello,
+
+There's an update on the ${opts.clientName} support ticket "${opts.subject}":
+
+${opts.update}
+
+View in your portal: ${portalUrl}
+
+The ${SITE.name} Team
+${SITE.legalName}
+${SITE.contact.phone} · ${SITE.contact.email}
+`,
+    });
+    if (error) {
+      console.error("[portal-email] resend returned error", error);
+      return { ok: false, error: String(error.message ?? error) };
+    }
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-email] sendTicketUpdateEmail failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+/**
  * Notify the firm inbox when Stripe reports an invoice event worth knowing
  * about (paid, payment failed).
  */

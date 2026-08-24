@@ -3,6 +3,7 @@ import type Stripe from "stripe";
 import { stripeClient } from "@/lib/stripe";
 import { getClient, syncInvoiceFromStripe, type InvoiceStatus } from "@/lib/portal-db";
 import { sendInvoiceEventNotice } from "@/lib/portal-email";
+import { logAudit } from "@/lib/audit";
 
 /**
  * Stripe webhook: keeps the local invoices table in sync with Stripe's
@@ -50,6 +51,12 @@ export async function POST(req: Request) {
     case "invoice.marked_uncollectible": {
       const invoice = event.data.object as Stripe.Invoice;
       if (!invoice.id) break;
+      void logAudit({
+        actorRole: "system",
+        clientId: invoice.metadata?.eresilient_client_id || null,
+        action: `stripe.${event.type}`,
+        detail: { stripeInvoiceId: invoice.id },
+      });
       await syncInvoiceFromStripe({
         stripeInvoiceId: invoice.id,
         status: statusByEvent[event.type],

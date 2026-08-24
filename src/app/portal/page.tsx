@@ -1,11 +1,8 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import { Container } from "@/components/container";
-import { PortalSetupNotice } from "@/components/portal-setup-notice";
-import { getPortalIdentity, hasClerk } from "@/lib/portal-auth";
+import { getPortalContext } from "@/lib/portal-access";
 import {
-  findClientForEmails,
   listClientScorecards,
   listDocuments,
   listEngagements,
@@ -13,18 +10,26 @@ import {
   listMilestonesForEngagements,
   type Milestone,
 } from "@/lib/portal-db";
+import { listDiscussions, listTickets } from "@/lib/collab-db";
+import { hasBlob } from "@/lib/blob";
 import { fmtUsd } from "@/lib/money";
 import { makeScorecardViewUrl } from "@/lib/scorecard-token";
 import { PORTAL_TOOLS } from "@/lib/portal-tools";
 import { SITE } from "@/lib/site";
-import { Card, StatusBadge, buttonCls, buttonGhostCls } from "../admin/ui";
-
-export const metadata: Metadata = {
-  title: "Client portal",
-  robots: { index: false, follow: false },
-};
-
-export const dynamic = "force-dynamic";
+import {
+  Card,
+  ErrorNotice,
+  Field,
+  StatusBadge,
+  buttonCls,
+  buttonGhostCls,
+  inputCls,
+} from "../admin/ui";
+import {
+  createDiscussionAction,
+  createTicketAction,
+  portalUploadDocumentAction,
+} from "./actions";
 
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
@@ -35,12 +40,15 @@ function fmtDate(iso: string | null): string {
   });
 }
 
-export default async function PortalPage() {
-  if (!hasClerk()) return <PortalSetupNotice area="Client portal" />;
+type Props = {
+  searchParams: Promise<{ error?: string; as?: string }>;
+};
 
-  const identity = await getPortalIdentity();
-  if (!identity) {
-    // The proxy normally redirects; defense in depth.
+export default async function PortalPage({ searchParams }: Props) {
+  const { error, as } = await searchParams;
+  const ctx = await getPortalContext(as);
+
+  if (!ctx) {
     return (
       <section className="section-warm py-24">
         <Container width="narrow">
@@ -56,7 +64,7 @@ export default async function PortalPage() {
     );
   }
 
-  const client = await findClientForEmails(identity.emails);
+  const { identity, client, isAdminPreview } = ctx;
 
   if (!client) {
     return (
@@ -94,12 +102,17 @@ export default async function PortalPage() {
     );
   }
 
-  const [engagements, invoices, documents, scorecards] = await Promise.all([
-    listEngagements(client.id),
-    listInvoices(client.id),
-    listDocuments(client.id),
-    listClientScorecards(client.id),
-  ]);
+  const canAct = !isAdminPreview;
+
+  const [engagements, invoices, documents, scorecards, discussions, tickets] =
+    await Promise.all([
+      listEngagements(client.id),
+      listInvoices(client.id),
+      listDocuments(client.id),
+      listClientScorecards(client.id),
+      listDiscussions(client.id),
+      listTickets(client.id),
+    ]);
   const openInvoices = invoices.filter((i) => i.status === "open");
   const milestones = await listMilestonesForEngagements(engagements.map((e) => e.id));
   const milestonesByEngagement = new Map<string, Milestone[]>();
@@ -111,10 +124,23 @@ export default async function PortalPage() {
   const entitledTools = PORTAL_TOOLS.filter((t) =>
     client.toolAccess.includes(t.slug),
   );
+  const firmDocs = documents.filter((d) => d.uploadedByRole !== "client");
+  const clientDocs = documents.filter((d) => d.uploadedByRole === "client");
 
   return (
     <div className="section-warm min-h-full py-10 sm:py-14">
       <Container width="wide">
+        {isAdminPreview && (
+          <div className="mb-6 rounded-md border border-sky-300 bg-sky-50 px-5 py-3 text-sm text-sky-900">
+            <strong>Admin preview:</strong> you are viewing {client.name}&rsquo;s
+            portal exactly as their users see it. Forms are disabled in
+            preview.{" "}
+            <Link className="underline" href={`/admin/clients/${client.id}`}>
+              Back to admin
+            </Link>
+          </div>
+        )}
+
         <div className="mb-8 flex items-center justify-between gap-4 border-b border-brand-taupe-mid/60 pb-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
@@ -124,6 +150,17 @@ export default async function PortalPage() {
           </div>
           <UserButton />
         </div>
+
+        <ErrorNotice message={error} />
+
+        {client.status === "prospect" && (
+          <div className="mb-8 rounded-md border border-brand-orange/40 bg-brand-paper px-5 py-4 text-sm leading-relaxed text-brand-ink">
+            <strong>Pre-boarding workspace.</strong> While we finalize your
+            engagement, use this space to submit documents and continue the
+            conversation with the {SITE.name} team — everything carries over
+            once the engagement kicks off.
+          </div>
+        )}
 
         {openInvoices.length > 0 && (
           <div className="mb-8 rounded-md border border-amber-300 bg-amber-50 px-5 py-4">
@@ -151,13 +188,8 @@ export default async function PortalPage() {
         )}
 
         <div className="space-y-8">
-          <Card title="Engagements">
-            {engagements.length === 0 ? (
-              <p className="text-sm text-brand-ink-mid">
-                No engagements yet. When work kicks off, status and milestones
-                appear here.
-              </p>
-            ) : (
+          {engagements.length > 0 && (
+            <Card title="Engagements">
               <ul className="divide-y divide-brand-taupe-mid/40">
                 {engagements.map((e) => {
                   const ms = milestonesByEngagement.get(e.id) ?? [];
@@ -192,13 +224,11 @@ export default async function PortalPage() {
                   );
                 })}
               </ul>
-            )}
-          </Card>
+            </Card>
+          )}
 
-          <Card title="Invoices">
-            {invoices.length === 0 ? (
-              <p className="text-sm text-brand-ink-mid">No invoices yet.</p>
-            ) : (
+          {invoices.length > 0 && (
+            <Card title="Invoices">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
@@ -249,26 +279,28 @@ export default async function PortalPage() {
                   </tbody>
                 </table>
               </div>
-            )}
-            <p className="mt-4 text-xs leading-relaxed text-brand-ink-mid">
-              Payments are processed securely by Stripe and accept bank
-              transfer (ACH) or card. Questions about an invoice? Email{" "}
-              <a className="underline" href={SITE.contact.emailHref}>
-                {SITE.contact.email}
-              </a>
-              .
-            </p>
-          </Card>
+              <p className="mt-4 text-xs leading-relaxed text-brand-ink-mid">
+                Payments are processed securely by Stripe and accept bank
+                transfer (ACH) or card. Questions about an invoice? Email{" "}
+                <a className="underline" href={SITE.contact.emailHref}>
+                  {SITE.contact.email}
+                </a>
+                .
+              </p>
+            </Card>
+          )}
 
-          <Card title="Documents & deliverables">
-            {documents.length === 0 ? (
-              <p className="text-sm text-brand-ink-mid">
-                No documents shared yet. Deliverables from your engagements
-                appear here.
+          <Card title="Documents">
+            <h3 className="mb-2 text-sm font-semibold text-brand-ink">
+              From {SITE.name}
+            </h3>
+            {firmDocs.length === 0 ? (
+              <p className="mb-4 text-sm text-brand-ink-mid">
+                No deliverables shared yet.
               </p>
             ) : (
-              <ul className="divide-y divide-brand-taupe-mid/40 text-sm">
-                {documents.map((d) => (
+              <ul className="mb-4 divide-y divide-brand-taupe-mid/40 text-sm">
+                {firmDocs.map((d) => (
                   <li key={d.id} className="flex items-center justify-between gap-3 py-2.5">
                     <div>
                       <p className="font-medium text-brand-ink">{d.title}</p>
@@ -286,6 +318,144 @@ export default async function PortalPage() {
                   </li>
                 ))}
               </ul>
+            )}
+
+            <h3 className="mb-2 mt-6 text-sm font-semibold text-brand-ink">
+              Submitted by your team
+            </h3>
+            {clientDocs.length === 0 ? (
+              <p className="mb-4 text-sm text-brand-ink-mid">
+                Nothing submitted yet. Use the form below to send us plans,
+                org charts, policies — anything the engagement needs.
+              </p>
+            ) : (
+              <ul className="mb-4 divide-y divide-brand-taupe-mid/40 text-sm">
+                {clientDocs.map((d) => (
+                  <li key={d.id} className="flex items-center justify-between gap-3 py-2.5">
+                    <div>
+                      <p className="font-medium text-brand-ink">{d.title}</p>
+                      <p className="text-xs text-brand-ink-mid">
+                        {d.filename} · {fmtDate(d.createdAt)}
+                        {d.uploadedBy ? ` · ${d.uploadedBy}` : ""}
+                      </p>
+                    </div>
+                    <a className={buttonGhostCls} href={`/api/documents/${d.id}`}>
+                      Download
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {canAct && hasBlob() && (
+              <form
+                action={portalUploadDocumentAction}
+                className="mt-2 flex flex-wrap items-end gap-3"
+              >
+                <Field label="File (max 20 MB)" className="min-w-56 flex-1">
+                  <input name="file" type="file" required className={inputCls} />
+                </Field>
+                <Field label="Title (optional)" className="min-w-40 flex-1">
+                  <input name="title" className={inputCls} />
+                </Field>
+                <button type="submit" className={buttonCls}>
+                  Submit document
+                </button>
+              </form>
+            )}
+          </Card>
+
+          <Card title="Discussions">
+            {discussions.length === 0 ? (
+              <p className="mb-4 text-sm text-brand-ink-mid">
+                No discussions yet — start one below and the {SITE.name} team
+                will be notified.
+              </p>
+            ) : (
+              <ul className="mb-4 divide-y divide-brand-taupe-mid/40 text-sm">
+                {discussions.map((d) => (
+                  <li key={d.id} className="flex items-center justify-between gap-3 py-2.5">
+                    <div>
+                      <Link
+                        className="font-medium text-brand-ink hover:text-brand-orange"
+                        href={`/portal/discussions/${d.id}`}
+                      >
+                        {d.title}
+                      </Link>
+                      <p className="text-xs text-brand-ink-mid">
+                        {d.postCount} {d.postCount === 1 ? "post" : "posts"} · last
+                        activity {fmtDate(d.lastPostAt ?? d.createdAt)}
+                      </p>
+                    </div>
+                    <Link className={buttonGhostCls} href={`/portal/discussions/${d.id}`}>
+                      Open
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {canAct && (
+              <form action={createDiscussionAction} className="mt-2 space-y-3">
+                <Field label="New topic">
+                  <input
+                    name="title"
+                    required
+                    placeholder="e.g. Questions on the draft SOW"
+                    className={inputCls}
+                  />
+                </Field>
+                <Field label="Message">
+                  <textarea name="body" rows={3} required className={inputCls} />
+                </Field>
+                <button type="submit" className={buttonCls}>
+                  Start discussion
+                </button>
+              </form>
+            )}
+          </Card>
+
+          <Card title="Support — get help">
+            {tickets.length === 0 ? (
+              <p className="mb-4 text-sm text-brand-ink-mid">
+                Something not working, or need a hand? Open a ticket and
+                we&rsquo;ll track it to resolution.
+              </p>
+            ) : (
+              <ul className="mb-4 divide-y divide-brand-taupe-mid/40 text-sm">
+                {tickets.map((t) => (
+                  <li key={t.id} className="flex items-center justify-between gap-3 py-2.5">
+                    <div>
+                      <Link
+                        className="font-medium text-brand-ink hover:text-brand-orange"
+                        href={`/portal/tickets/${t.id}`}
+                      >
+                        {t.subject}
+                      </Link>
+                      <p className="text-xs text-brand-ink-mid">
+                        opened {fmtDate(t.createdAt)} · updated {fmtDate(t.updatedAt)}
+                      </p>
+                    </div>
+                    <span className="flex items-center gap-2">
+                      <StatusBadge status={t.status} />
+                      <Link className={buttonGhostCls} href={`/portal/tickets/${t.id}`}>
+                        Open
+                      </Link>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {canAct && (
+              <form action={createTicketAction} className="mt-2 space-y-3">
+                <Field label="Subject">
+                  <input name="subject" required className={inputCls} />
+                </Field>
+                <Field label="What do you need help with?">
+                  <textarea name="body" rows={3} required className={inputCls} />
+                </Field>
+                <button type="submit" className={buttonCls}>
+                  Submit ticket
+                </button>
+              </form>
             )}
           </Card>
 
@@ -377,6 +547,15 @@ export default async function PortalPage() {
               </Link>{" "}
               are available to keep your program moving.
             </p>
+            {identity.isAdmin && !isAdminPreview && (
+              <p className="mt-3 text-xs text-brand-ink-mid">
+                You&rsquo;re an admin —{" "}
+                <Link className="underline" href="/admin">
+                  go to the admin console
+                </Link>
+                .
+              </p>
+            )}
           </Card>
         </div>
       </Container>

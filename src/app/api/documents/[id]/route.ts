@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getPortalIdentity } from "@/lib/portal-auth";
 import { findClientForEmails, getDocument } from "@/lib/portal-db";
 import { getDocumentBlob } from "@/lib/blob";
+import { logAudit } from "@/lib/audit";
 
 /**
  * Authorized deliverable download. Blobs are private in the store; this
@@ -30,6 +31,14 @@ export async function GET(
       return NextResponse.json({ error: "Not authorized." }, { status: 403 });
     }
   }
+
+  void logAudit({
+    actorEmail: identity.emails[0],
+    actorRole: identity.isAdmin ? "admin" : "client",
+    clientId: doc.clientId,
+    action: "document.download",
+    detail: { documentId: doc.id, title: doc.title },
+  });
 
   const blob = await getDocumentBlob(doc.blobUrl);
   if (!blob) {

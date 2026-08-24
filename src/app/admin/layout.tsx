@@ -75,6 +75,12 @@ export default async function AdminLayout({
               <Link className="hover:text-brand-orange" href="/admin/pipeline">
                 Pipeline
               </Link>
+              <Link className="hover:text-brand-orange" href="/admin/tickets">
+                Tickets
+              </Link>
+              <Link className="hover:text-brand-orange" href="/admin/audit">
+                Audit
+              </Link>
               <Link className="hover:text-brand-orange" href="/admin/clients/new">
                 New client
               </Link>

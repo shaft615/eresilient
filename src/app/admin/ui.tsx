@@ -64,6 +64,9 @@ const statusStyles: Record<string, string> = {
   // milestones
   pending: "bg-stone-200 text-stone-700",
   in_progress: "bg-amber-100 text-amber-900",
+  // tickets
+  waiting_on_client: "bg-sky-100 text-sky-900",
+  closed: "bg-stone-200 text-stone-700",
   // invoices
   draft: "bg-stone-200 text-stone-700",
   open: "bg-amber-100 text-amber-900",

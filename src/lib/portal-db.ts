@@ -497,6 +497,8 @@ export async function setClientToolAccess(
 // ---------------------------------------------------------------------------
 // Documents (deliverables; binary lives in Vercel Blob)
 
+export type UploaderRole = "firm" | "client";
+
 export type DocumentRecord = {
   id: string;
   clientId: string;
@@ -508,6 +510,7 @@ export type DocumentRecord = {
   sizeBytes: number | null;
   blobUrl: string;
   uploadedBy: string | null;
+  uploadedByRole: UploaderRole;
 };
 
 const DOCUMENT_COLUMNS = `
@@ -520,7 +523,8 @@ const DOCUMENT_COLUMNS = `
   content_type  AS "contentType",
   size_bytes    AS "sizeBytes",
   blob_url      AS "blobUrl",
-  uploaded_by   AS "uploadedBy"
+  uploaded_by   AS "uploadedBy",
+  uploaded_by_role AS "uploadedByRole"
 `;
 
 export async function listDocuments(clientId: string): Promise<DocumentRecord[]> {
@@ -561,6 +565,7 @@ export async function insertDocument(d: {
   sizeBytes?: number | null;
   blobUrl: string;
   uploadedBy?: string | null;
+  uploadedByRole?: UploaderRole;
 }): Promise<{ ok: boolean; id?: string; error?: string }> {
   if (!hasDb()) {
     console.warn("[portal-db] POSTGRES_URL not set; skipping document insert");
@@ -570,7 +575,7 @@ export async function insertDocument(d: {
     const { rows } = await sql<{ id: string }>`
       INSERT INTO documents (
         client_id, engagement_id, title, filename,
-        content_type, size_bytes, blob_url, uploaded_by
+        content_type, size_bytes, blob_url, uploaded_by, uploaded_by_role
       ) VALUES (
         ${d.clientId},
         ${d.engagementId ?? null},
@@ -579,7 +584,8 @@ export async function insertDocument(d: {
         ${d.contentType ?? null},
         ${d.sizeBytes ?? null},
         ${d.blobUrl},
-        ${d.uploadedBy ?? null}
+        ${d.uploadedBy ?? null},
+        ${d.uploadedByRole ?? "firm"}
       )
       RETURNING id
     `;

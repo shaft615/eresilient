@@ -14,9 +14,11 @@ import { hasBlob } from "@/lib/blob";
 import { fmtUsd } from "@/lib/money";
 import { packages } from "@/content/packages";
 import { PORTAL_TOOLS } from "@/lib/portal-tools";
+import { listDiscussions } from "@/lib/collab-db";
 import {
   addClientUserAction,
   addMilestoneAction,
+  adminCreateDiscussionAction,
   createEngagementAction,
   createInvoiceAction,
   deleteDocumentAction,
@@ -61,11 +63,12 @@ export default async function ClientDetailPage({ params, searchParams }: Props) 
   const client = await getClient(id);
   if (!client) notFound();
 
-  const [users, engagements, invoices, documents] = await Promise.all([
+  const [users, engagements, invoices, documents, discussions] = await Promise.all([
     listClientUsers(id),
     listEngagements(id),
     listInvoices(id),
     listDocuments(id),
+    listDiscussions(id),
   ]);
   const milestones = await listMilestonesForEngagements(engagements.map((e) => e.id));
   const milestonesByEngagement = new Map<string, Milestone[]>();
@@ -110,18 +113,23 @@ export default async function ClientDetailPage({ params, searchParams }: Props) 
             <p className="mt-2 max-w-2xl text-sm text-brand-ink-mid">{client.notes}</p>
           )}
         </div>
-        <form action={updateClientStatusAction} className="flex items-center gap-2">
-          <input type="hidden" name="clientId" value={client.id} />
-          <StatusBadge status={client.status} />
-          <select name="status" defaultValue={client.status} className={inputCls}>
-            <option value="prospect">prospect</option>
-            <option value="active">active</option>
-            <option value="archived">archived</option>
-          </select>
-          <button type="submit" className={buttonGhostCls}>
-            Set
-          </button>
-        </form>
+        <div className="flex flex-col items-end gap-2">
+          <form action={updateClientStatusAction} className="flex items-center gap-2">
+            <input type="hidden" name="clientId" value={client.id} />
+            <StatusBadge status={client.status} />
+            <select name="status" defaultValue={client.status} className={inputCls}>
+              <option value="prospect">prospect</option>
+              <option value="active">active</option>
+              <option value="archived">archived</option>
+            </select>
+            <button type="submit" className={buttonGhostCls}>
+              Set
+            </button>
+          </form>
+          <Link className={buttonGhostCls} href={`/portal?as=${client.id}`}>
+            View as client →
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
@@ -447,6 +455,11 @@ export default async function ClientDetailPage({ params, searchParams }: Props) 
                       {d.sizeBytes != null
                         ? ` · ${(d.sizeBytes / 1024 / 1024).toFixed(1)} MB`
                         : ""}
+                      {d.uploadedByRole === "client" && (
+                        <span className="ml-2 rounded-full bg-sky-100 px-2 py-0.5 text-xs font-semibold text-sky-900">
+                          from client
+                        </span>
+                      )}
                     </td>
                     <td className="py-2.5 pr-4 text-brand-ink-mid">
                       {fmtDate(d.createdAt)}
@@ -499,6 +512,54 @@ export default async function ClientDetailPage({ params, searchParams }: Props) 
             Files are stored privately; the client downloads them through their
             portal after signing in.
           </p>
+        </form>
+      </Card>
+
+      {/* Discussions */}
+      <Card title="Discussions">
+        {discussions.length === 0 ? (
+          <p className="mb-4 text-sm text-brand-ink-mid">
+            No discussions with {client.name} yet. Threads started by either
+            side (including during pre-boarding) appear here and in their
+            portal.
+          </p>
+        ) : (
+          <ul className="mb-4 divide-y divide-brand-taupe-mid/40 text-sm">
+            {discussions.map((d) => (
+              <li key={d.id} className="flex items-center justify-between gap-3 py-2.5">
+                <div>
+                  <Link
+                    className="font-medium text-brand-ink hover:text-brand-orange"
+                    href={`/admin/discussions/${d.id}`}
+                  >
+                    {d.title}
+                  </Link>
+                  <p className="text-xs text-brand-ink-mid">
+                    {d.postCount} {d.postCount === 1 ? "post" : "posts"} · last
+                    activity {fmtDate(d.lastPostAt ?? d.createdAt)} · started by{" "}
+                    {d.createdRole === "firm" ? "the firm" : d.createdBy}
+                  </p>
+                </div>
+                <Link className={buttonGhostCls} href={`/admin/discussions/${d.id}`}>
+                  Open
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+        <form action={adminCreateDiscussionAction} className="mt-2 space-y-3">
+          <input type="hidden" name="clientId" value={client.id} />
+          <div className="grid gap-3 sm:grid-cols-2">
+            <Field label="New topic">
+              <input name="title" required className={inputCls} />
+            </Field>
+            <Field label="First message">
+              <input name="body" required className={inputCls} />
+            </Field>
+          </div>
+          <button type="submit" className={buttonCls}>
+            Start discussion
+          </button>
         </form>
       </Card>
 
