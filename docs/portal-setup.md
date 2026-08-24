@@ -1,9 +1,9 @@
 # Client portal & payments — setup guide
 
 Runbook for provisioning the client onboarding / payment capability: Clerk
-(authentication), Stripe (invoicing + payments), and the client-management
-database tables. Written in the same spirit as `cutover.md` — every step ends
-with a **Verify** clause.
+(authentication), Stripe (invoicing + payments), Vercel Blob (deliverable
+sharing), and the client-management database tables. Written in the same
+spirit as `cutover.md` — every step ends with a **Verify** clause.
 
 Until these steps are done the site still builds and runs: `/admin`, `/portal`,
 and the sign-in pages render a "not configured" notice, and invoices save as
@@ -20,14 +20,18 @@ local drafts without payment links. Nothing on the marketing site changes.
 
 ---
 
-## 1 — Run migration 004
+## 1 — Run migrations 004 and 005
 
-The clients / client_users / engagements / invoices tables.
+004: clients / client_users / engagements / invoices. 005: documents /
+milestones / scorecard linkage / tool entitlements. Run both, in order.
 
 1. Vercel dashboard → eresilient project → Storage → your Postgres DB → **Query**
-2. Paste the contents of `scripts/migrations/004_clients.sql` and run it.
-   (Or locally: `psql "$POSTGRES_URL_NON_POOLING" -f scripts/migrations/004_clients.sql`)
-3. **Verify:** `SELECT COUNT(*) FROM clients;` returns `0` (not an error).
+2. Paste the contents of `scripts/migrations/004_clients.sql` and run it,
+   then do the same with `scripts/migrations/005_portal_phase2.sql`.
+   (Or locally: `psql "$POSTGRES_URL_NON_POOLING" -f scripts/migrations/004_clients.sql`
+   and again with `005_portal_phase2.sql`)
+3. **Verify:** `SELECT COUNT(*) FROM clients;` and
+   `SELECT COUNT(*) FROM documents;` both return `0` (not an error).
 
 ## 2 — Create the Clerk application (free tier)
 
@@ -82,7 +86,22 @@ lands.
    `invoice.paid` returns HTTP 200. (Status only syncs for invoices created
    through `/admin`, matched by Stripe invoice id.)
 
-## 5 — Book the first client (the actual workflow)
+## 5 — Provision Vercel Blob (deliverable sharing)
+
+Client deliverables uploaded in `/admin` are stored as **private** blobs;
+the only way to the bytes is the authenticated download route.
+
+1. Vercel dashboard → eresilient project → **Storage** → **Create Database**
+   → choose **Blob** → name it `eresilient-documents`.
+2. Connect it to the project (Production + Preview). This auto-injects
+   `BLOB_READ_WRITE_TOKEN` — nothing to copy manually.
+3. Redeploy.
+4. **Verify:** on a client page in `/admin`, the "Documents & deliverables"
+   upload form no longer shows the "Blob storage isn't configured" notice.
+   Upload a test PDF, then download it from the table — and confirm the
+   `/api/documents/<id>` URL returns 401 in an incognito window.
+
+## 6 — Book the first client (the actual workflow)
 
 1. `/admin` → the lead appears under **Recent leads** or **Recent scorecard
    submissions** → click **Convert** (or **New client** for a cold start).
@@ -107,6 +126,7 @@ lands.
 | `ADMIN_EMAILS` | Vercel (Prod+Preview) | Comma-separated admin allowlist for `/admin` |
 | `STRIPE_SECRET_KEY` | Vercel (Prod+Preview) | Stripe API key (test key on Preview) |
 | `STRIPE_WEBHOOK_SECRET` | Vercel (Production) | Webhook signature verification |
+| `BLOB_READ_WRITE_TOKEN` | auto-injected | Vercel Blob store for deliverables |
 
 Existing vars (`POSTGRES_URL`, `RESEND_API_KEY`, …) are unchanged and still
 required for the underlying storage/email.
@@ -121,9 +141,23 @@ required for the underlying storage/email.
   consulting economics — deposits, milestones, net-N terms — rather than a
   checkout cart. Recurring retainers can later use Stripe subscriptions on the
   same customer records.
-- **riscManager:** the `clients.riscmanager_workspace` column is reserved for
-  linking a client to their riscManager workspace once riscManager exposes a
-  linkable id/URL; eResilient stays the system of record for the client
-  relationship.
-- **Phase 2 candidates:** deliverable/document sharing in the portal,
-  milestone tracking per engagement, pipeline views, riscManager SSO.
+- **Documents are private-by-default:** blobs are stored with private access
+  and only served through `/api/documents/[id]`, which checks the signed-in
+  user's membership in the document's client (admins always pass). Uploads
+  are capped at 20 MB per file (server-action body limit is 25 MB).
+- **riscManager linking:** set a client's workspace URL on their admin page
+  ("Access & integrations") and their portal shows an "Open riscManager"
+  button. eResilient stays the system of record for the client relationship;
+  SSO into riscManager is a later phase once it can share the Clerk tenant.
+- **Tool entitlements** are slugs in `clients.tool_access`, edited via
+  checkboxes on the client's admin page; the portal renders only entitled
+  tools. The catalog lives in `src/lib/portal-tools.ts` — as riscAnalysis /
+  riscScope / riscResponse become real workspaces, update each `href` there.
+- **Pipeline** (`/admin/pipeline`): funnel counts, outstanding vs collected
+  revenue, every lead with converted/lead stage (matched by email against
+  clients and portal users), and every scorecard submission with a
+  link-to-client control. Linking a scorecard to a client also surfaces it
+  in that client's portal "Assessment history".
+- **Phase 4 candidates:** riscManager SSO, recurring retainers (Stripe
+  subscriptions), proposal/SOW e-signature flow, per-engagement message
+  threads.

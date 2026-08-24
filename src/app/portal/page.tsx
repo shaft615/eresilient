@@ -6,12 +6,18 @@ import { PortalSetupNotice } from "@/components/portal-setup-notice";
 import { getPortalIdentity, hasClerk } from "@/lib/portal-auth";
 import {
   findClientForEmails,
+  listClientScorecards,
+  listDocuments,
   listEngagements,
   listInvoices,
+  listMilestonesForEngagements,
+  type Milestone,
 } from "@/lib/portal-db";
 import { fmtUsd } from "@/lib/money";
+import { makeScorecardViewUrl } from "@/lib/scorecard-token";
+import { PORTAL_TOOLS } from "@/lib/portal-tools";
 import { SITE } from "@/lib/site";
-import { Card, StatusBadge, buttonCls } from "../admin/ui";
+import { Card, StatusBadge, buttonCls, buttonGhostCls } from "../admin/ui";
 
 export const metadata: Metadata = {
   title: "Client portal",
@@ -88,11 +94,23 @@ export default async function PortalPage() {
     );
   }
 
-  const [engagements, invoices] = await Promise.all([
+  const [engagements, invoices, documents, scorecards] = await Promise.all([
     listEngagements(client.id),
     listInvoices(client.id),
+    listDocuments(client.id),
+    listClientScorecards(client.id),
   ]);
   const openInvoices = invoices.filter((i) => i.status === "open");
+  const milestones = await listMilestonesForEngagements(engagements.map((e) => e.id));
+  const milestonesByEngagement = new Map<string, Milestone[]>();
+  for (const m of milestones) {
+    const list = milestonesByEngagement.get(m.engagementId) ?? [];
+    list.push(m);
+    milestonesByEngagement.set(m.engagementId, list);
+  }
+  const entitledTools = PORTAL_TOOLS.filter((t) =>
+    client.toolAccess.includes(t.slug),
+  );
 
   return (
     <div className="section-warm min-h-full py-10 sm:py-14">
@@ -141,17 +159,38 @@ export default async function PortalPage() {
               </p>
             ) : (
               <ul className="divide-y divide-brand-taupe-mid/40">
-                {engagements.map((e) => (
-                  <li key={e.id} className="py-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-medium text-brand-ink">{e.title}</span>
-                      <StatusBadge status={e.status} />
-                    </div>
-                    <p className="mt-1 text-xs text-brand-ink-mid">
-                      {fmtDate(e.startDate)} → {fmtDate(e.targetEndDate)}
-                    </p>
-                  </li>
-                ))}
+                {engagements.map((e) => {
+                  const ms = milestonesByEngagement.get(e.id) ?? [];
+                  const done = ms.filter((m) => m.status === "complete").length;
+                  return (
+                    <li key={e.id} className="py-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="font-medium text-brand-ink">{e.title}</span>
+                        <StatusBadge status={e.status} />
+                      </div>
+                      <p className="mt-1 text-xs text-brand-ink-mid">
+                        {fmtDate(e.startDate)} → {fmtDate(e.targetEndDate)}
+                        {ms.length > 0 ? ` · ${done}/${ms.length} milestones complete` : ""}
+                      </p>
+                      {ms.length > 0 && (
+                        <ul className="mt-2 space-y-1 border-l-2 border-brand-taupe-mid/50 pl-3">
+                          {ms.map((m) => (
+                            <li
+                              key={m.id}
+                              className="flex flex-wrap items-center justify-between gap-2 text-xs"
+                            >
+                              <span className="text-brand-ink">
+                                {m.title}
+                                {m.dueDate ? ` · due ${fmtDate(m.dueDate)}` : ""}
+                              </span>
+                              <StatusBadge status={m.status} />
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </Card>
@@ -220,6 +259,107 @@ export default async function PortalPage() {
               .
             </p>
           </Card>
+
+          <Card title="Documents & deliverables">
+            {documents.length === 0 ? (
+              <p className="text-sm text-brand-ink-mid">
+                No documents shared yet. Deliverables from your engagements
+                appear here.
+              </p>
+            ) : (
+              <ul className="divide-y divide-brand-taupe-mid/40 text-sm">
+                {documents.map((d) => (
+                  <li key={d.id} className="flex items-center justify-between gap-3 py-2.5">
+                    <div>
+                      <p className="font-medium text-brand-ink">{d.title}</p>
+                      <p className="text-xs text-brand-ink-mid">
+                        {d.filename}
+                        {d.sizeBytes != null
+                          ? ` · ${(d.sizeBytes / 1024 / 1024).toFixed(1)} MB`
+                          : ""}{" "}
+                        · {fmtDate(d.createdAt)}
+                      </p>
+                    </div>
+                    <a className={buttonGhostCls} href={`/api/documents/${d.id}`}>
+                      Download
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+
+          <Card title="Assessment history">
+            {scorecards.length === 0 ? (
+              <p className="text-sm text-brand-ink-mid">
+                No BCP Readiness Scorecard results linked yet.{" "}
+                <Link className="underline" href="/scorecard">
+                  Take the scorecard
+                </Link>{" "}
+                and opt in to share results, and they&rsquo;ll show up here.
+              </p>
+            ) : (
+              <ul className="divide-y divide-brand-taupe-mid/40 text-sm">
+                {scorecards.map((s) => (
+                  <li key={s.id} className="flex items-center justify-between gap-3 py-2.5">
+                    <div>
+                      <p className="font-medium text-brand-ink">
+                        {s.totalScore}/{s.totalMax}
+                        {s.maturityBand ? ` — ${s.maturityBand}` : ""}
+                      </p>
+                      <p className="text-xs text-brand-ink-mid">
+                        {s.assessorName ?? "Unknown assessor"} · {fmtDate(s.createdAt)}
+                      </p>
+                    </div>
+                    <a
+                      className={buttonGhostCls}
+                      href={makeScorecardViewUrl(s.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View results ↗
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+
+          {(entitledTools.length > 0 || client.riscmanagerWorkspace) && (
+            <Card title="Your workspaces">
+              <ul className="divide-y divide-brand-taupe-mid/40 text-sm">
+                {client.riscmanagerWorkspace && (
+                  <li className="flex items-center justify-between gap-3 py-2.5">
+                    <div>
+                      <p className="font-medium text-brand-ink">riscManager.com™</p>
+                      <p className="text-xs text-brand-ink-mid">
+                        Your Risk Intelligent Supply Chain workspace.
+                      </p>
+                    </div>
+                    <a
+                      className={buttonCls}
+                      href={client.riscmanagerWorkspace}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open riscManager ↗
+                    </a>
+                  </li>
+                )}
+                {entitledTools.map((t) => (
+                  <li key={t.slug} className="flex items-center justify-between gap-3 py-2.5">
+                    <div>
+                      <p className="font-medium text-brand-ink">{t.name}</p>
+                      <p className="text-xs text-brand-ink-mid">{t.description}</p>
+                    </div>
+                    <Link className={buttonGhostCls} href={t.href}>
+                      Open
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
 
           <Card title="Your team at e|Resilient">
             <p className="text-sm leading-relaxed text-brand-ink-mid">

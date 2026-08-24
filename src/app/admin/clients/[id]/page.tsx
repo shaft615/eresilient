@@ -3,19 +3,31 @@ import { notFound } from "next/navigation";
 import {
   getClient,
   listClientUsers,
+  listDocuments,
   listEngagements,
   listInvoices,
+  listMilestonesForEngagements,
+  type Milestone,
 } from "@/lib/portal-db";
 import { hasStripe } from "@/lib/stripe";
+import { hasBlob } from "@/lib/blob";
 import { fmtUsd } from "@/lib/money";
 import { packages } from "@/content/packages";
+import { PORTAL_TOOLS } from "@/lib/portal-tools";
 import {
   addClientUserAction,
+  addMilestoneAction,
   createEngagementAction,
   createInvoiceAction,
+  deleteDocumentAction,
+  deleteMilestoneAction,
   removeClientUserAction,
+  setRiscWorkspaceAction,
+  setToolAccessAction,
   updateClientStatusAction,
   updateEngagementStatusAction,
+  updateMilestoneStatusAction,
+  uploadDocumentAction,
 } from "../../actions";
 import {
   Card,
@@ -25,6 +37,7 @@ import {
   buttonCls,
   buttonGhostCls,
   inputCls,
+  labelCls,
 } from "../../ui";
 
 type Props = {
@@ -48,11 +61,19 @@ export default async function ClientDetailPage({ params, searchParams }: Props) 
   const client = await getClient(id);
   if (!client) notFound();
 
-  const [users, engagements, invoices] = await Promise.all([
+  const [users, engagements, invoices, documents] = await Promise.all([
     listClientUsers(id),
     listEngagements(id),
     listInvoices(id),
+    listDocuments(id),
   ]);
+  const milestones = await listMilestonesForEngagements(engagements.map((e) => e.id));
+  const milestonesByEngagement = new Map<string, Milestone[]>();
+  for (const m of milestones) {
+    const list = milestonesByEngagement.get(m.engagementId) ?? [];
+    list.push(m);
+    milestonesByEngagement.set(m.engagementId, list);
+  }
 
   return (
     <div className="space-y-8">
@@ -183,6 +204,74 @@ export default async function ClientDetailPage({ params, searchParams }: Props) 
                     {e.priceCents != null ? `${fmtUsd(e.priceCents)} · ` : ""}
                     {fmtDate(e.startDate)} → {fmtDate(e.targetEndDate)}
                   </p>
+
+                  {/* Milestones */}
+                  <ul className="mt-2 space-y-1 border-l-2 border-brand-taupe-mid/50 pl-3">
+                    {(milestonesByEngagement.get(e.id) ?? []).map((m) => (
+                      <li
+                        key={m.id}
+                        className="flex flex-wrap items-center justify-between gap-2 text-xs"
+                      >
+                        <span className="text-brand-ink">
+                          {m.title}
+                          {m.dueDate ? ` · due ${fmtDate(m.dueDate)}` : ""}
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <StatusBadge status={m.status} />
+                          <form action={updateMilestoneStatusAction} className="inline-flex gap-1.5">
+                            <input type="hidden" name="clientId" value={client.id} />
+                            <input type="hidden" name="id" value={m.id} />
+                            <select
+                              name="status"
+                              defaultValue={m.status}
+                              className="rounded border border-brand-ink/20 bg-white px-1 py-0.5 text-xs"
+                            >
+                              <option value="pending">pending</option>
+                              <option value="in_progress">in progress</option>
+                              <option value="complete">complete</option>
+                            </select>
+                            <button type="submit" className={buttonGhostCls}>
+                              Set
+                            </button>
+                          </form>
+                          <form action={deleteMilestoneAction} className="inline">
+                            <input type="hidden" name="clientId" value={client.id} />
+                            <input type="hidden" name="id" value={m.id} />
+                            <button
+                              type="submit"
+                              className={buttonGhostCls}
+                              aria-label={`Delete milestone ${m.title}`}
+                            >
+                              ✕
+                            </button>
+                          </form>
+                        </span>
+                      </li>
+                    ))}
+                    <li>
+                      <form
+                        action={addMilestoneAction}
+                        className="mt-1 flex flex-wrap items-center gap-1.5"
+                      >
+                        <input type="hidden" name="clientId" value={client.id} />
+                        <input type="hidden" name="engagementId" value={e.id} />
+                        <input
+                          name="title"
+                          placeholder="Add milestone…"
+                          required
+                          className="w-40 rounded border border-brand-ink/20 bg-white px-2 py-1 text-xs"
+                        />
+                        <input
+                          name="dueDate"
+                          type="date"
+                          className="rounded border border-brand-ink/20 bg-white px-2 py-1 text-xs"
+                        />
+                        <button type="submit" className={buttonGhostCls}>
+                          Add
+                        </button>
+                      </form>
+                    </li>
+                  </ul>
                 </li>
               ))}
             </ul>
@@ -326,6 +415,137 @@ export default async function ClientDetailPage({ params, searchParams }: Props) 
             Create invoice{hasStripe() ? " in Stripe" : " (local draft)"}
           </button>
         </form>
+      </Card>
+
+      {/* Documents */}
+      <Card title="Documents & deliverables">
+        {!hasBlob() && (
+          <p className="mb-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            Blob storage isn&rsquo;t configured (BLOB_READ_WRITE_TOKEN unset) —
+            uploads are disabled. See docs/portal-setup.md.
+          </p>
+        )}
+        {documents.length === 0 ? (
+          <p className="text-sm text-brand-ink-mid">No documents shared yet.</p>
+        ) : (
+          <div className="mb-6 overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-brand-taupe-mid/60 text-xs uppercase tracking-wide text-brand-ink-mid">
+                  <th className="py-2 pr-4">Title</th>
+                  <th className="py-2 pr-4">File</th>
+                  <th className="py-2 pr-4">Uploaded</th>
+                  <th className="py-2" />
+                </tr>
+              </thead>
+              <tbody>
+                {documents.map((d) => (
+                  <tr key={d.id} className="border-b border-brand-taupe-mid/40">
+                    <td className="py-2.5 pr-4 font-medium text-brand-ink">{d.title}</td>
+                    <td className="py-2.5 pr-4 text-brand-ink-mid">
+                      {d.filename}
+                      {d.sizeBytes != null
+                        ? ` · ${(d.sizeBytes / 1024 / 1024).toFixed(1)} MB`
+                        : ""}
+                    </td>
+                    <td className="py-2.5 pr-4 text-brand-ink-mid">
+                      {fmtDate(d.createdAt)}
+                      {d.uploadedBy ? ` · ${d.uploadedBy}` : ""}
+                    </td>
+                    <td className="py-2.5 text-right">
+                      <span className="inline-flex gap-2">
+                        <a className={buttonGhostCls} href={`/api/documents/${d.id}`}>
+                          Download
+                        </a>
+                        <form action={deleteDocumentAction} className="inline">
+                          <input type="hidden" name="clientId" value={client.id} />
+                          <input type="hidden" name="id" value={d.id} />
+                          <button type="submit" className={buttonGhostCls}>
+                            Delete
+                          </button>
+                        </form>
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <form action={uploadDocumentAction} className="space-y-3">
+          <input type="hidden" name="clientId" value={client.id} />
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Field label="File * (max 20 MB)">
+              <input name="file" type="file" required className={inputCls} />
+            </Field>
+            <Field label="Title (defaults to filename)">
+              <input name="title" className={inputCls} />
+            </Field>
+            <Field label="Engagement">
+              <select name="engagementId" className={inputCls} defaultValue="">
+                <option value="">Not tied to an engagement</option>
+                {engagements.map((e) => (
+                  <option key={e.id} value={e.id}>
+                    {e.title}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </div>
+          <button type="submit" className={buttonCls} disabled={!hasBlob()}>
+            Upload document
+          </button>
+          <p className="text-xs leading-relaxed text-brand-ink-mid">
+            Files are stored privately; the client downloads them through their
+            portal after signing in.
+          </p>
+        </form>
+      </Card>
+
+      {/* Access & integrations */}
+      <Card title="Access & integrations">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <form action={setToolAccessAction} className="space-y-3">
+            <input type="hidden" name="clientId" value={client.id} />
+            <p className={labelCls}>RISC tool entitlements (shown in their portal)</p>
+            {PORTAL_TOOLS.map((t) => (
+              <label key={t.slug} className="flex items-center gap-2 text-sm text-brand-ink">
+                <input
+                  type="checkbox"
+                  name="tools"
+                  value={t.slug}
+                  defaultChecked={client.toolAccess.includes(t.slug)}
+                  className="accent-brand-orange"
+                />
+                {t.name}
+                <span className="text-xs text-brand-ink-mid">— {t.description}</span>
+              </label>
+            ))}
+            <button type="submit" className={buttonCls}>
+              Save entitlements
+            </button>
+          </form>
+
+          <form action={setRiscWorkspaceAction} className="space-y-3">
+            <input type="hidden" name="clientId" value={client.id} />
+            <Field label="riscManager workspace URL">
+              <input
+                name="workspace"
+                placeholder="https://riscmanager.com/…"
+                defaultValue={client.riscmanagerWorkspace ?? ""}
+                className={inputCls}
+              />
+            </Field>
+            <button type="submit" className={buttonCls}>
+              Save workspace link
+            </button>
+            <p className="text-xs leading-relaxed text-brand-ink-mid">
+              When set, the client&rsquo;s portal shows an &ldquo;Open
+              riscManager&rdquo; button pointing here. Clear the field to
+              remove it.
+            </p>
+          </form>
+        </div>
       </Card>
     </div>
   );

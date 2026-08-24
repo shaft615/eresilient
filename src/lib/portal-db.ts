@@ -28,6 +28,7 @@ export type ClientRecord = {
   status: ClientStatus;
   stripeCustomerId: string | null;
   riscmanagerWorkspace: string | null;
+  toolAccess: string[];
 };
 
 export type ClientUser = {
@@ -81,7 +82,8 @@ const CLIENT_COLUMNS = `
   notes,
   status,
   stripe_customer_id    AS "stripeCustomerId",
-  riscmanager_workspace AS "riscmanagerWorkspace"
+  riscmanager_workspace AS "riscmanagerWorkspace",
+  COALESCE(tool_access, '{}') AS "toolAccess"
 `;
 
 // ---------------------------------------------------------------------------
@@ -454,6 +456,363 @@ export async function syncInvoiceFromStripe(u: {
   }
 }
 
+export async function setClientRiscWorkspace(
+  id: string,
+  workspace: string | null,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!hasDb()) return { ok: true };
+  try {
+    await sql`
+      UPDATE clients
+      SET riscmanager_workspace = ${workspace}, updated_at = NOW()
+      WHERE id = ${id}
+    `;
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] setClientRiscWorkspace failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+export async function setClientToolAccess(
+  id: string,
+  slugs: string[],
+): Promise<{ ok: boolean; error?: string }> {
+  if (!hasDb()) return { ok: true };
+  try {
+    await sql`
+      UPDATE clients
+      SET tool_access = ${slugs as unknown as string}::text[], updated_at = NOW()
+      WHERE id = ${id}
+    `;
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] setClientToolAccess failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Documents (deliverables; binary lives in Vercel Blob)
+
+export type DocumentRecord = {
+  id: string;
+  clientId: string;
+  engagementId: string | null;
+  createdAt: string;
+  title: string;
+  filename: string;
+  contentType: string | null;
+  sizeBytes: number | null;
+  blobUrl: string;
+  uploadedBy: string | null;
+};
+
+const DOCUMENT_COLUMNS = `
+  id,
+  client_id     AS "clientId",
+  engagement_id AS "engagementId",
+  created_at    AS "createdAt",
+  title,
+  filename,
+  content_type  AS "contentType",
+  size_bytes    AS "sizeBytes",
+  blob_url      AS "blobUrl",
+  uploaded_by   AS "uploadedBy"
+`;
+
+export async function listDocuments(clientId: string): Promise<DocumentRecord[]> {
+  if (!hasDb()) return [];
+  try {
+    const { rows } = await sql.query<DocumentRecord>(
+      `SELECT ${DOCUMENT_COLUMNS} FROM documents
+       WHERE client_id = $1 ORDER BY created_at DESC`,
+      [clientId],
+    );
+    return rows;
+  } catch (err) {
+    console.error("[portal-db] listDocuments failed", err);
+    return [];
+  }
+}
+
+export async function getDocument(id: string): Promise<DocumentRecord | null> {
+  if (!hasDb()) return null;
+  try {
+    const { rows } = await sql.query<DocumentRecord>(
+      `SELECT ${DOCUMENT_COLUMNS} FROM documents WHERE id = $1`,
+      [id],
+    );
+    return rows[0] ?? null;
+  } catch (err) {
+    console.error("[portal-db] getDocument failed", err);
+    return null;
+  }
+}
+
+export async function insertDocument(d: {
+  clientId: string;
+  engagementId?: string | null;
+  title: string;
+  filename: string;
+  contentType?: string | null;
+  sizeBytes?: number | null;
+  blobUrl: string;
+  uploadedBy?: string | null;
+}): Promise<{ ok: boolean; id?: string; error?: string }> {
+  if (!hasDb()) {
+    console.warn("[portal-db] POSTGRES_URL not set; skipping document insert");
+    return { ok: true };
+  }
+  try {
+    const { rows } = await sql<{ id: string }>`
+      INSERT INTO documents (
+        client_id, engagement_id, title, filename,
+        content_type, size_bytes, blob_url, uploaded_by
+      ) VALUES (
+        ${d.clientId},
+        ${d.engagementId ?? null},
+        ${d.title},
+        ${d.filename},
+        ${d.contentType ?? null},
+        ${d.sizeBytes ?? null},
+        ${d.blobUrl},
+        ${d.uploadedBy ?? null}
+      )
+      RETURNING id
+    `;
+    return { ok: true, id: rows[0]?.id };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] insertDocument failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+/** Delete the row and return the blob URL so the caller can delete the blob. */
+export async function deleteDocument(
+  id: string,
+): Promise<{ ok: boolean; blobUrl?: string; error?: string }> {
+  if (!hasDb()) return { ok: true };
+  try {
+    const { rows } = await sql<{ blob_url: string }>`
+      DELETE FROM documents WHERE id = ${id} RETURNING blob_url
+    `;
+    return { ok: true, blobUrl: rows[0]?.blob_url };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] deleteDocument failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Milestones
+
+export type MilestoneStatus = "pending" | "in_progress" | "complete";
+
+export type Milestone = {
+  id: string;
+  engagementId: string;
+  title: string;
+  dueDate: string | null;
+  status: MilestoneStatus;
+  sortOrder: number;
+  completedAt: string | null;
+};
+
+export async function listMilestonesForEngagements(
+  engagementIds: string[],
+): Promise<Milestone[]> {
+  if (!hasDb() || engagementIds.length === 0) return [];
+  try {
+    const { rows } = await sql.query<Milestone>(
+      `SELECT
+         id,
+         engagement_id AS "engagementId",
+         title,
+         due_date      AS "dueDate",
+         status,
+         sort_order    AS "sortOrder",
+         completed_at  AS "completedAt"
+       FROM milestones
+       WHERE engagement_id = ANY($1::uuid[])
+       ORDER BY sort_order ASC, created_at ASC`,
+      [engagementIds],
+    );
+    return rows;
+  } catch (err) {
+    console.error("[portal-db] listMilestonesForEngagements failed", err);
+    return [];
+  }
+}
+
+export async function insertMilestone(m: {
+  engagementId: string;
+  title: string;
+  dueDate?: string | null;
+  sortOrder?: number;
+}): Promise<{ ok: boolean; error?: string }> {
+  if (!hasDb()) return { ok: true };
+  try {
+    await sql`
+      INSERT INTO milestones (engagement_id, title, due_date, sort_order)
+      VALUES (${m.engagementId}, ${m.title}, ${m.dueDate ?? null}, ${m.sortOrder ?? 0})
+    `;
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] insertMilestone failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+export async function updateMilestoneStatus(
+  id: string,
+  status: MilestoneStatus,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!hasDb()) return { ok: true };
+  try {
+    await sql`
+      UPDATE milestones SET
+        status = ${status},
+        completed_at = ${status === "complete" ? new Date().toISOString() : null}
+      WHERE id = ${id}
+    `;
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] updateMilestoneStatus failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+export async function deleteMilestone(
+  id: string,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!hasDb()) return { ok: true };
+  try {
+    await sql`DELETE FROM milestones WHERE id = ${id}`;
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] deleteMilestone failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Scorecard ↔ client linkage
+
+export async function linkScorecardToClient(
+  submissionId: string,
+  clientId: string | null,
+): Promise<{ ok: boolean; error?: string }> {
+  if (!hasDb()) return { ok: true };
+  try {
+    await sql`
+      UPDATE scorecard_submissions SET client_id = ${clientId}
+      WHERE id = ${submissionId}
+    `;
+    return { ok: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[portal-db] linkScorecardToClient failed", message);
+    return { ok: false, error: message };
+  }
+}
+
+export async function listClientScorecards(
+  clientId: string,
+): Promise<ScorecardRow[]> {
+  if (!hasDb()) return [];
+  try {
+    const { rows } = await sql<ScorecardRow>`
+      SELECT
+        id,
+        org_name      AS "orgName",
+        assessor_name AS "assessorName",
+        lead_email    AS "leadEmail",
+        total_score   AS "totalScore",
+        total_max     AS "totalMax",
+        maturity_band AS "maturityBand",
+        created_at    AS "createdAt",
+        client_id     AS "clientId"
+      FROM scorecard_submissions
+      WHERE client_id = ${clientId}
+      ORDER BY created_at DESC
+    `;
+    return rows;
+  } catch (err) {
+    console.error("[portal-db] listClientScorecards failed", err);
+    return [];
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Pipeline / revenue rollups
+
+export type InvoiceTotals = {
+  openCents: number;
+  openCount: number;
+  paidCents: number;
+  paidCount: number;
+};
+
+export async function invoiceTotals(): Promise<InvoiceTotals> {
+  const empty = { openCents: 0, openCount: 0, paidCents: 0, paidCount: 0 };
+  if (!hasDb()) return empty;
+  try {
+    const { rows } = await sql<{
+      status: string;
+      cents: string;
+      count: string;
+    }>`
+      SELECT status, COALESCE(SUM(amount_cents), 0) AS cents, COUNT(*) AS count
+      FROM invoices
+      WHERE status IN ('open', 'paid')
+      GROUP BY status
+    `;
+    const totals = { ...empty };
+    for (const r of rows) {
+      if (r.status === "open") {
+        totals.openCents = Number(r.cents);
+        totals.openCount = Number(r.count);
+      } else if (r.status === "paid") {
+        totals.paidCents = Number(r.cents);
+        totals.paidCount = Number(r.count);
+      }
+    }
+    return totals;
+  } catch (err) {
+    console.error("[portal-db] invoiceTotals failed", err);
+    return empty;
+  }
+}
+
+/**
+ * All emails already associated with a client (portal users + primary
+ * contacts), lowercased — used by the pipeline view to mark leads that
+ * have been converted.
+ */
+export async function listKnownClientEmails(): Promise<Set<string>> {
+  if (!hasDb()) return new Set();
+  try {
+    const { rows } = await sql<{ email: string | null }>`
+      SELECT LOWER(email) AS email FROM client_users
+      UNION
+      SELECT LOWER(primary_contact_email) AS email FROM clients
+      WHERE primary_contact_email IS NOT NULL
+    `;
+    return new Set(rows.map((r) => r.email).filter((e): e is string => Boolean(e)));
+  } catch (err) {
+    console.error("[portal-db] listKnownClientEmails failed", err);
+    return new Set();
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Leads (read-only views over existing tables for the admin dashboard)
 
@@ -492,6 +851,7 @@ export type ScorecardRow = {
   totalMax: number;
   maturityBand: string | null;
   createdAt: string;
+  clientId: string | null;
 };
 
 export async function listRecentScorecards(limit = 25): Promise<ScorecardRow[]> {
@@ -506,7 +866,8 @@ export async function listRecentScorecards(limit = 25): Promise<ScorecardRow[]> 
         total_score   AS "totalScore",
         total_max     AS "totalMax",
         maturity_band AS "maturityBand",
-        created_at    AS "createdAt"
+        created_at    AS "createdAt",
+        client_id     AS "clientId"
       FROM scorecard_submissions
       ORDER BY created_at DESC
       LIMIT ${limit}
