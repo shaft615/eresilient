@@ -28,7 +28,13 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden items-center gap-5 md:flex">
+            <Link
+              href="/portal"
+              className="text-sm font-medium text-brand-ink-mid transition-colors hover:text-brand-orange"
+            >
+              Client Login
+            </Link>
             <CtaButton href={SITE.calendly} external>
               {SITE.primaryCta.short}
             </CtaButton>

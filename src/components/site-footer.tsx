@@ -52,6 +52,14 @@ export function SiteFooter() {
             </li>
             <li>
               <Link
+                href="/portal"
+                className="text-sm text-brand-taupe/80 transition-colors hover:text-brand-orange"
+              >
+                Client Portal
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/legal/privacy"
                 className="text-sm text-brand-taupe/80 transition-colors hover:text-brand-orange"
               >
