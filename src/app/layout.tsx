@@ -81,6 +81,10 @@ export const metadata: Metadata = {
     // mark sits on a 1920x1080 canvas, so in a square favicon slot the logo
     // shrank to ~9% of the space and read as an orange speck.
     icon: "/icon.svg",
+    // iOS home-screen bookmarks need a PNG; without one iOS substitutes a
+    // screenshot of the page. 180x180, mark on brand maroon, generated from
+    // icon.svg. iOS applies its own rounded corners.
+    apple: "/apple-touch-icon.png",
   },
   verification: GSC_VERIFICATION
     ? { google: GSC_VERIFICATION }
