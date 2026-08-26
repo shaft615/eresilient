@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { UserProfile } from "@clerk/nextjs";
 import { Container } from "@/components/container";
+import { PasswordGateWatch } from "@/components/password-gate-watch";
 import { PortalSetupNotice } from "@/components/portal-setup-notice";
 import { hasClerk } from "@/lib/portal-auth";
 import { needsPasswordSetup } from "@/lib/portal-access";
@@ -46,6 +47,7 @@ export default async function PortalLayout({
           <div className="mt-8 flex justify-center">
             <UserProfile routing="hash" />
           </div>
+          <PasswordGateWatch />
         </Container>
       </section>
     );
