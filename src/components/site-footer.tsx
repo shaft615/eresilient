@@ -52,6 +52,14 @@ export function SiteFooter() {
             </li>
             <li>
               <Link
+                href="/portal"
+                className="text-sm text-brand-taupe/80 transition-colors hover:text-brand-orange"
+              >
+                Client Portal
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/legal/privacy"
                 className="text-sm text-brand-taupe/80 transition-colors hover:text-brand-orange"
               >
@@ -95,7 +103,15 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-12 flex flex-col gap-2 border-t border-brand-taupe/15 pt-6 text-xs text-brand-taupe/60 md:flex-row md:items-center md:justify-between">
-          <p>© {year} {SITE.legalName}. All rights reserved.</p>
+          <p>
+            © {year} {SITE.legalName}. All rights reserved. ·{" "}
+            <Link
+              href="/admin"
+              className="transition-colors hover:text-brand-orange"
+            >
+              Admin
+            </Link>
+          </p>
           <p>SBA Recommended · ISO 22301 Aligned · MBCP · MBCI · CBCLA · CBCV · PMP</p>
         </div>
       </Container>

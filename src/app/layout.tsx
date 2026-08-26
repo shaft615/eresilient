@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Outfit } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -83,10 +84,18 @@ export const metadata: Metadata = {
     : undefined,
 };
 
+// Clerk powers the /admin and /portal sign-in. Without keys (local dev,
+// previews before provisioning) the provider is skipped and the portal
+// pages render a setup notice instead — same graceful-degradation pattern
+// as the DB and email layers.
+const HAS_CLERK = Boolean(
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY,
+);
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return (
+  const tree = (
     <html
       lang="en"
       className={`${aptos.variable} ${aptosDisplay.variable} ${outfit.variable} h-full antialiased`}
@@ -104,4 +113,5 @@ export default function RootLayout({
       </body>
     </html>
   );
+  return HAS_CLERK ? <ClerkProvider>{tree}</ClerkProvider> : tree;
 }

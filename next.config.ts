@@ -4,6 +4,13 @@ import createMDX from "@next/mdx";
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   poweredByHeader: false,
+  experimental: {
+    serverActions: {
+      // Deliverable uploads in /admin go through a server action; the
+      // default 1 MB body limit is too small for real documents.
+      bodySizeLimit: "25mb",
+    },
+  },
   async redirects() {
     return [
       { source: "/about-us", destination: "/about", permanent: true },
