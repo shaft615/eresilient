@@ -103,7 +103,13 @@ export async function createClientAction(formData: FormData): Promise<void> {
       email: contactEmail,
       name: str(formData, "primaryContactName") || null,
     });
-    void sendPortalWelcome({ to: contactEmail, name: str(formData, "primaryContactName") || null, clientName: name });
+    void sendPortalWelcome({
+      to: contactEmail,
+      name: str(formData, "primaryContactName") || null,
+      clientName: name,
+      // New clients start at the schema default, 'prospect'.
+      status: "prospect",
+    });
   }
 
   revalidatePath("/admin");
@@ -148,6 +154,7 @@ export async function addClientUserAction(formData: FormData): Promise<void> {
     to: email,
     name: str(formData, "name") || null,
     clientName: client.name,
+    status: client.status,
   });
   void logAudit({
     actorEmail: adminEmail(identity),

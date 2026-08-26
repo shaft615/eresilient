@@ -35,6 +35,12 @@ export async function sendPortalWelcome(opts: {
   to: string;
   name?: string | null;
   clientName: string;
+  /**
+   * Drives the copy: a prospect is still in the sales conversation, so the
+   * email frames the portal as a shared workspace for documents and
+   * discussion rather than promising engagement status and invoices.
+   */
+  status?: "prospect" | "active" | "archived";
 }): Promise<{ ok: boolean; skipped?: "no-resend"; error?: string }> {
   const resend = client();
   if (!resend) {
@@ -45,31 +51,50 @@ export async function sendPortalWelcome(opts: {
   }
   const portalUrl = `${SITE.url}/portal`;
   const greeting = opts.name ? `Hi ${opts.name},` : "Hello,";
+  const isProspect = opts.status === "prospect";
+
+  const subject = isProspect
+    ? `Your shared workspace with ${SITE.name} is ready`
+    : `Your ${SITE.name} client portal is ready`;
+
+  const introHtml = isProspect
+    ? `We&rsquo;ve set up a secure shared workspace for ${opts.clientName}. While we
+       finalize the engagement, you can use it to send us documents &mdash; existing
+       plans, org charts, policies &mdash; and keep our conversation in one place
+       instead of scattered across email.`
+    : `${opts.clientName} now has a client portal with ${SITE.name}. Sign in
+       with this email address to see engagement status, deliverables, and
+       invoices in one place.`;
+
+  const introText = isProspect
+    ? `We've set up a secure shared workspace for ${opts.clientName}. While we finalize the engagement, you can use it to send us documents — existing plans, org charts, policies — and keep our conversation in one place instead of scattered across email.`
+    : `${opts.clientName} now has a client portal with ${SITE.name}. Sign in with this email address to see engagement status, deliverables, and invoices in one place.`;
+
+  const ctaLabel = isProspect ? "Open the workspace" : "Open the client portal";
+
   try {
     const { error } = await resend.emails.send({
       from: FROM,
       to: opts.to,
       replyTo: SITE.contact.email,
-      subject: `Your ${SITE.name} client portal is ready`,
+      subject,
       html: `
         <p style="font-size:15px;line-height:1.7;color:#3B2A24;">${greeting}</p>
         <p style="font-size:15px;line-height:1.7;color:#3B2A24;">
-          ${opts.clientName} now has a client portal with ${SITE.name}. Sign in
-          with this email address to see engagement status, deliverables, and
-          invoices in one place.
+          ${introHtml}
         </p>
         <p style="margin:28px 0;">
-          <a href="${portalUrl}" style="background:#C4571E;color:#FDFBF7;padding:12px 22px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;">Open the client portal</a>
+          <a href="${portalUrl}" style="background:#C4571E;color:#FDFBF7;padding:12px 22px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;">${ctaLabel}</a>
         </p>
         <p style="font-size:13px;line-height:1.7;color:#7A5C52;">
           First visit? Choose &ldquo;Sign up&rdquo; and register with this same
-          email address (${opts.to}) — access is tied to it.
+          email address (${opts.to}) &mdash; access is tied to it.
         </p>${signatureHtml()}`,
       text: `${greeting}
 
-${opts.clientName} now has a client portal with ${SITE.name}. Sign in with this email address to see engagement status, deliverables, and invoices in one place.
+${introText}
 
-Open the client portal: ${portalUrl}
+${ctaLabel}: ${portalUrl}
 
 First visit? Choose "Sign up" and register with this same email address (${opts.to}) — access is tied to it.
 
