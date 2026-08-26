@@ -77,7 +77,10 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/mark.svg",
+    // icon.svg is mark.svg cropped to the artwork's true bounds. The master
+    // mark sits on a 1920x1080 canvas, so in a square favicon slot the logo
+    // shrank to ~9% of the space and read as an orange speck.
+    icon: "/icon.svg",
   },
   verification: GSC_VERIFICATION
     ? { google: GSC_VERIFICATION }
