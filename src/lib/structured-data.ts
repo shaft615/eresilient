@@ -26,6 +26,16 @@ export function organizationSchema(): WithContext<Organization> {
       postalCode: SITE.contact.address.postal,
       addressCountry: SITE.contact.address.country,
     },
+    // `brand`, not `subOrganization`. Erie Street Digital is this same LLC
+    // trading under another name, and subOrganization would assert a second
+    // entity that does not exist — a claim a search engine can check against
+    // the state register and find nothing behind.
+    brand: {
+      "@type": "Brand",
+      name: SITE.studio.name,
+      url: SITE.studio.url,
+      description: SITE.studio.description,
+    },
   };
 }
 

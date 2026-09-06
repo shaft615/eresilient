@@ -50,6 +50,22 @@ export const SITE = {
       country: "US",
     },
   },
+  /**
+   * The studio side of the same business.
+   *
+   * Erie Street Digital is a DBA of e|Resilient LLC — not a partner, not a
+   * subsidiary, not a referral arrangement. That is why every piece of copy
+   * that links to it says "our studio" and never "a firm we work with": the
+   * second phrasing would be untrue, and it would also throw away the only
+   * thing that makes the link worth anything, which is that the practitioners
+   * are the same people. It is named for the address above.
+   */
+  studio: {
+    name: "Erie Street Digital",
+    url: "https://www.eriestreetdigital.com",
+    description:
+      "Senior-led web and application development — the same practitioners, building the software instead of the plan.",
+  },
   calendly: "https://calendly.com/eresilient/30min",
   primaryCta: {
     label: "Schedule your free consultation",

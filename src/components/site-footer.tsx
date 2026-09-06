@@ -18,6 +18,21 @@ export function SiteFooter() {
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-taupe/80">
               {SITE.description}
             </p>
+            {/* Sitewide, and deliberately a sentence rather than a nav item.
+                The studio is the same LLC under another name — a link in the
+                Resources column would read as somewhere else to go, which is
+                the one thing it is not. */}
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-brand-taupe/80">
+              Web and application development is delivered under our studio
+              name,{" "}
+              <a
+                href={SITE.studio.url}
+                className="font-semibold text-brand-taupe underline decoration-brand-orange/60 underline-offset-4 transition-colors hover:text-brand-orange"
+              >
+                {SITE.studio.name}
+              </a>
+              .
+            </p>
           </div>
 
           <FooterCol heading="Site">
