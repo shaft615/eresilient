@@ -225,6 +225,46 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      {/* The studio. In the page body, not the footer, because this is a fact
+          about who we are rather than a link somewhere — and because the thing
+          worth saying (same practitioners, same LLC) needs a paragraph to be
+          said honestly. */}
+      <section className="bg-brand-paper py-20 sm:py-24">
+        <Container width="narrow">
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-orange">
+            The Studio
+          </p>
+          <h2 className="mt-3 font-display text-3xl text-brand-maroon sm:text-4xl">
+            We build the software, too.
+          </h2>
+          <p className="mt-5 text-base leading-relaxed text-brand-ink-mid">
+            Continuity work keeps running into the same wall: the plan is sound
+            and the systems underneath it are not. Over the years we ended up
+            building those systems — plan portals, supply-chain risk databases,
+            client-facing applications — often for the same clients we had
+            written the program for.
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-brand-ink-mid">
+            That side of the practice now trades under its own name,{" "}
+            <a
+              href={SITE.studio.url}
+              className="font-semibold text-brand-maroon underline decoration-brand-orange underline-offset-4 transition-colors hover:text-brand-orange"
+            >
+              {SITE.studio.name}
+            </a>
+            , named for the address on this page. It is the same LLC and the
+            same practitioners — a DBA, not a subsidiary or a partner firm — so
+            an engagement that starts as a continuity program and ends as an
+            application never changes hands.
+          </p>
+          <p className="mt-6">
+            <CtaButton href={SITE.studio.url} variant="ghost" external>
+              See the studio&apos;s work
+            </CtaButton>
+          </p>
+        </Container>
+      </section>
+
       <section className="bg-brand-maroon py-20 text-brand-paper sm:py-24">
         <Container width="narrow" className="text-center">
           <h2 className="font-display text-3xl sm:text-4xl">
