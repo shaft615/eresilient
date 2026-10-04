@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Container } from "@/components/container";
 import { createClient } from "@/lib/supabase/server";
 import { createBlankBiaAction, importBiaAction } from "./actions";
 
@@ -73,157 +72,121 @@ export default async function SitePage({
   const submitBlank = createBlankBiaAction.bind(null, clientSlug, siteSlug);
 
   return (
-    <section className="py-12 sm:py-16">
-      <Container width="wide">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-orange">
-          <Link href="/tools/bia" className="hover:text-brand-maroon">
-            Clients
-          </Link>{" "}
-          /{" "}
-          <Link
-            href={`/tools/bia/${clientSlug}`}
-            className="hover:text-brand-maroon"
-          >
-            {site.clients.name}
-          </Link>{" "}
-          / {site.name}
-        </p>
-        <h1 className="mt-2 font-display text-3xl text-brand-maroon">
-          {site.name}
-        </h1>
-        {site.city_state ? (
-          <p className="mt-2 text-sm text-brand-ink-mid">{site.city_state}</p>
-        ) : null}
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          {/* Import */}
-          <form
-            action={submitImport}
-            encType="multipart/form-data"
-            className="rounded-2xl border border-brand-taupe-mid bg-brand-paper p-5"
-          >
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-orange">
-              Import .docx
-            </p>
-            <p className="mt-2 text-sm text-brand-ink-mid">
-              Upload an existing BIA Word document. The engine extracts the
-              tables into structured data.
-            </p>
-            <div className="mt-4">
-              <label
-                htmlFor="file"
-                className="block text-xs font-semibold uppercase tracking-[0.12em] text-brand-ink-mid"
-              >
-                File
-              </label>
-              <input
-                id="file"
-                name="file"
-                type="file"
-                accept=".docx"
-                required
-                className="mt-2 block w-full text-sm text-brand-ink"
-              />
+    <>
+      <header className="bia-band">
+        <div className="bia-band-inner">
+          <div>
+            <div className="bia-eyebrow">
+              <Link href="/tools/bia">Clients</Link> ·{" "}
+              <Link href={`/tools/bia/${clientSlug}`}>{site.clients.name}</Link> ·{" "}
+              {site.name}
             </div>
-            <div className="mt-4">
-              <label
-                htmlFor="title"
-                className="block text-xs font-semibold uppercase tracking-[0.12em] text-brand-ink-mid"
-              >
-                Title (optional, falls back to filename)
-              </label>
-              <input
-                id="title"
-                name="title"
-                placeholder="Finance"
-                className="mt-2 w-full rounded-lg border border-brand-taupe-mid bg-brand-paper px-3 py-2 text-sm text-brand-ink shadow-sm focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange"
-              />
+            <h1>{site.name}</h1>
+            <div className="bia-eyebrow bia-band-sub">
+              {site.city_state ? `${site.city_state} · ` : ""}BIAs
             </div>
-            <button
-              type="submit"
-              className="mt-4 inline-flex items-center justify-center rounded-lg bg-brand-orange px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-paper transition hover:bg-brand-maroon"
-            >
-              Import
-            </button>
-          </form>
-
-          {/* Create blank */}
-          <form
-            action={submitBlank}
-            className="rounded-2xl border border-brand-taupe-mid bg-brand-paper p-5"
-          >
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-orange">
-              Start from blank
-            </p>
-            <p className="mt-2 text-sm text-brand-ink-mid">
-              Create an empty BIA you&apos;ll fill in via the editor (the editor
-              UI lands in the next push).
-            </p>
-            <div className="mt-4">
-              <label
-                htmlFor="blank-title"
-                className="block text-xs font-semibold uppercase tracking-[0.12em] text-brand-ink-mid"
-              >
-                Title
-              </label>
-              <input
-                id="blank-title"
-                name="title"
-                required
-                placeholder="Finance"
-                className="mt-2 w-full rounded-lg border border-brand-taupe-mid bg-brand-paper px-3 py-2 text-sm text-brand-ink shadow-sm focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange"
-              />
-            </div>
-            <button
-              type="submit"
-              className="mt-4 inline-flex items-center justify-center rounded-lg border border-brand-maroon bg-brand-paper px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-maroon transition hover:bg-brand-maroon hover:text-brand-paper"
-            >
-              Create blank BIA
-            </button>
-          </form>
+          </div>
+        </div>
+      </header>
+      <div className="bia-page bia-stack">
+        <div className="bia-instr">
+          <span className="bia-eyebrow">What to do on this page</span>
+          <span>
+            <b>Open a BIA to edit it, or start a new one.</b> There is one BIA
+            per department at this site. Start from an existing Word document,
+            or from a blank BIA.
+          </span>
         </div>
 
         {errorMessage ? (
-          <p className="mt-3 text-sm text-brand-maroon" role="alert">
+          <p className="bia-alert" role="alert">
             {errorMessage}
           </p>
         ) : null}
 
-        {/* BIA list */}
-        <h2 className="mt-12 font-display text-2xl text-brand-maroon">BIAs</h2>
         {!bias || bias.length === 0 ? (
-          <div className="mt-4 rounded-2xl border border-dashed border-brand-taupe-mid bg-brand-taupe-light/40 p-10 text-center">
-            <p className="text-sm text-brand-ink-mid">
-              No BIAs for this site yet. Import a .docx or start from blank
-              above.
-            </p>
+          <div className="bia-empty">
+            No BIAs for this site yet. Import a Word document or start from
+            blank below.
           </div>
         ) : (
-          <ul className="mt-4 divide-y divide-brand-taupe-mid rounded-2xl border border-brand-taupe-mid bg-brand-paper">
-            {bias.map((b) => (
+          <ul className="bia-cards">
+            {bias.map((b, i) => (
               <li key={b.id}>
                 <Link
                   href={`/tools/bia/${clientSlug}/${siteSlug}/${b.slug}`}
-                  className="flex items-center justify-between gap-4 px-5 py-3 transition hover:bg-brand-taupe-light/40"
+                  className="bia-frame bia-card"
                 >
-                  <div>
-                    <p className="font-display text-base text-brand-maroon">
-                      {b.title}
-                    </p>
-                    <p className="text-xs text-brand-ink-mid">
-                      /{b.slug} · updated{" "}
-                      {new Date(b.updated_at).toLocaleDateString()}
-                    </p>
+                  <div className="bia-ftag">
+                    <span>
+                      BIA {i + 1} of {bias.length}
+                    </span>
+                    <span className="bia-ftag-note">{b.status}</span>
                   </div>
-                  <span className="rounded-full border border-brand-taupe-mid px-2 py-1 text-xs uppercase tracking-[0.1em] text-brand-ink-mid">
-                    {b.status}
-                  </span>
+                  <div className="bia-fbody">
+                    <h3>{b.title}</h3>
+                    <span className="bia-hint">
+                      Updated {new Date(b.updated_at).toLocaleDateString()}
+                    </span>
+                  </div>
                 </Link>
               </li>
             ))}
           </ul>
         )}
-      </Container>
-    </section>
+
+        <div className="bia-grid2">
+          <form
+            action={submitImport}
+            encType="multipart/form-data"
+            className="bia-block"
+          >
+            <h3>Import a Word document</h3>
+            <p className="bia-block-instr">
+              <b>Upload an existing BIA (.docx).</b> Its tables are read into
+              the editor so you can review and complete them.
+            </p>
+            <div className="bia-field">
+              <label htmlFor="file">File</label>
+              <input id="file" name="file" type="file" accept=".docx" required />
+            </div>
+            <div className="bia-field">
+              <label htmlFor="title">Title (optional)</label>
+              <span className="bia-hint">Left blank, the file name is used.</span>
+              <input id="title" name="title" type="text" placeholder="e.g., Finance" />
+            </div>
+            <div className="bia-btn-row">
+              <button type="submit" className="bia-btn primary">
+                Import
+              </button>
+            </div>
+          </form>
+
+          <form action={submitBlank} className="bia-block">
+            <h3>Start from blank</h3>
+            <p className="bia-block-instr">
+              <b>Create an empty BIA</b> and fill it in section by section in
+              the editor.
+            </p>
+            <div className="bia-field">
+              <label htmlFor="blank-title">Title</label>
+              <span className="bia-hint">Usually the department name.</span>
+              <input
+                id="blank-title"
+                name="title"
+                type="text"
+                required
+                placeholder="e.g., Human Resources"
+              />
+            </div>
+            <div className="bia-btn-row">
+              <button type="submit" className="bia-btn">
+                Create blank BIA
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </>
   );
 }

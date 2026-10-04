@@ -8,6 +8,8 @@ import { NextResponse } from "next/server";
 import { requireUser } from "@/lib/bia/auth";
 import { createClient } from "@/lib/supabase/server";
 import { engineRender } from "@/lib/bia/engine";
+import { toEngineData } from "@/lib/bia/model";
+import type { BiaData } from "@/lib/bia/types";
 
 type Params = Promise<{
   clientSlug: string;
@@ -26,7 +28,7 @@ export async function GET(_request: Request, { params }: { params: Params }) {
     .eq("slug", biaSlug)
     .eq("sites.slug", siteSlug)
     .eq("sites.clients.slug", clientSlug)
-    .single<{ title: string; data: unknown }>();
+    .single<{ title: string; data: BiaData | null }>();
 
   if (error || !bia) {
     return NextResponse.json({ error: "not found" }, { status: 404 });
@@ -34,7 +36,7 @@ export async function GET(_request: Request, { params }: { params: Params }) {
 
   let docx: Buffer;
   try {
-    docx = await engineRender(bia.data);
+    docx = await engineRender(toEngineData(bia.data ?? {}));
   } catch (err) {
     console.error("[bia/export] engine render failed:", err);
     return NextResponse.json(

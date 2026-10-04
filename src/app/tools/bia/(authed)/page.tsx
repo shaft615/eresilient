@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Container } from "@/components/container";
 import { createClient } from "@/lib/supabase/server";
 import { createClientAction } from "./actions";
 
@@ -38,80 +37,76 @@ export default async function BiaDashboard({
     .returns<ClientRow[]>();
 
   return (
-    <section className="py-12 sm:py-16">
-      <Container width="wide">
-        <h1 className="font-display text-3xl text-brand-maroon">Clients</h1>
-        <p className="mt-2 max-w-2xl text-sm text-brand-ink-mid">
-          Each client groups one or more sites and the BIAs produced for their
-          departments.
-        </p>
-
-        {/* Create-client form */}
-        <form
-          action={createClientAction}
-          className="mt-8 flex max-w-xl flex-col gap-3 rounded-2xl border border-brand-taupe-mid bg-brand-paper p-5 sm:flex-row sm:items-end"
-        >
-          <div className="flex-1">
-            <label
-              htmlFor="name"
-              className="block text-xs font-semibold uppercase tracking-[0.12em] text-brand-ink-mid"
-            >
-              New client
-            </label>
-            <input
-              id="name"
-              name="name"
-              required
-              placeholder="e.g. Elanco Animal Health"
-              className="mt-2 w-full rounded-lg border border-brand-taupe-mid bg-brand-paper px-3 py-2 text-sm text-brand-ink shadow-sm focus:border-brand-orange focus:outline-none focus:ring-1 focus:ring-brand-orange"
-            />
+    <>
+      <header className="bia-band">
+        <div className="bia-band-inner">
+          <div>
+            <div className="bia-eyebrow">Business Impact Analysis (BIA)</div>
+            <h1>Clients</h1>
           </div>
-          <button
-            type="submit"
-            className="inline-flex items-center justify-center rounded-lg bg-brand-orange px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-brand-paper transition hover:bg-brand-maroon"
-          >
-            Create
-          </button>
-        </form>
+        </div>
+      </header>
+      <div className="bia-page bia-stack">
+        <div className="bia-instr">
+          <span className="bia-eyebrow">What to do on this page</span>
+          <span>
+            <b>Pick a client, or add a new one.</b> Each client groups one or
+            more sites and the BIAs produced for their departments.
+          </span>
+        </div>
 
-        {errorMessage ? (
-          <p className="mt-3 text-sm text-brand-maroon" role="alert">
-            {errorMessage}
-          </p>
-        ) : null}
-
-        {/* List */}
         {error ? (
-          <p className="mt-8 rounded-lg border border-brand-maroon bg-brand-maroon/5 p-4 text-sm text-brand-maroon">
-            Couldn&apos;t load clients: {error.message}
+          <p className="bia-alert" role="alert">
+            Could not load clients: {error.message}
           </p>
         ) : !clients || clients.length === 0 ? (
-          <div className="mt-10 rounded-2xl border border-dashed border-brand-taupe-mid bg-brand-taupe-light/40 p-10 text-center">
-            <p className="font-display text-lg text-brand-maroon">
-              No clients yet.
-            </p>
-            <p className="mt-2 text-sm text-brand-ink-mid">
-              Use the form above to add your first client.
-            </p>
+          <div className="bia-empty">
+            No clients yet. Use the box below to add your first client.
           </div>
         ) : (
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {clients.map((c) => (
+          <ul className="bia-cards">
+            {clients.map((c, i) => (
               <li key={c.id}>
-                <Link
-                  href={`/tools/bia/${c.slug}`}
-                  className="block h-full rounded-2xl border border-brand-taupe-mid bg-brand-paper p-5 transition hover:border-brand-orange"
-                >
-                  <p className="font-display text-lg text-brand-maroon">
-                    {c.name}
-                  </p>
-                  <p className="mt-1 text-xs text-brand-ink-mid">/{c.slug}</p>
+                <Link href={`/tools/bia/${c.slug}`} className="bia-frame bia-card">
+                  <div className="bia-ftag">
+                    <span>
+                      Client {i + 1} of {clients.length}
+                    </span>
+                  </div>
+                  <div className="bia-fbody">
+                    <h3>{c.name}</h3>
+                    <span className="bia-hint bia-mono">/{c.slug}</span>
+                  </div>
                 </Link>
               </li>
             ))}
           </ul>
         )}
-      </Container>
-    </section>
+
+        <form action={createClientAction} className="bia-block">
+          <h3>Add a client</h3>
+          <div className="bia-field">
+            <label htmlFor="name">Client name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              placeholder="e.g., Elanco Animal Health"
+            />
+          </div>
+          {errorMessage ? (
+            <p className="bia-alert" role="alert">
+              {errorMessage}
+            </p>
+          ) : null}
+          <div className="bia-btn-row">
+            <button type="submit" className="bia-btn primary">
+              Add client
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 }

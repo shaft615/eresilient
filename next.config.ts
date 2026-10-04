@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
+  // Pin the root to this folder. Without it, a lockfile in a parent directory
+  // makes Turbopack resolve modules (e.g. tailwindcss) from the wrong place.
+  turbopack: { root: __dirname },
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   poweredByHeader: false,
   async redirects() {

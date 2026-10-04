@@ -1,6 +1,10 @@
 /**
  * Mirror of bia-engine/src/bia_engine/schema.py.
  * Keep in sync when the engine schema changes.
+ *
+ * Two additions are editor-only and not part of the engine schema:
+ * `CriticalProcess.impact_over_time` and `BiaData.editor`. The engine ignores
+ * unknown fields, and the export route strips them before rendering.
  */
 
 export type DocumentInfo = {
@@ -21,6 +25,16 @@ export type CriticalProcess = {
   quantitative_impact?: string;
   qualitative_impact?: string;
   maximum_disruption?: string;
+  /** Editor-only, optional: severity ("0"–"4") by impact type, then time point. */
+  impact_over_time?: ImpactOverTime;
+};
+
+export type ImpactOverTime = Record<string, Record<string, string>>;
+
+/** Editor-only state that has no place in the Word template. */
+export type EditorMeta = {
+  /** List sections explicitly recorded as "None". */
+  none?: Record<string, boolean>;
 };
 
 export type InternalDependency = {
@@ -104,6 +118,10 @@ export type BiaData = {
   third_parties?: ThirdPartyRelationship[];
   vital_records?: VitalRecord[];
   process_recovery?: ProcessRecovery;
+  editor?: EditorMeta;
 };
 
 export const EMPTY_BIA: BiaData = {};
+
+/** Result of an editor autosave. */
+export type SaveResult = { ok: true; savedAt: string } | { ok: false };
