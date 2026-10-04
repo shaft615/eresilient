@@ -786,7 +786,7 @@ function ProcSection({ data, update, checks }: SectionProps) {
     <div className="bia-stack">
       <Instr>
         <span>
-          <b>Complete one box for each critical process.</b> Each box is framed in dark blue and named at the
+          <b>Complete one box for each critical process.</b> Each box is framed with a dark header and named at the
           top; every question inside it is about that process only.
         </span>
         <span>

@@ -1,40 +1,41 @@
 /*
- * BIA tool styles. Ported from the BIA pre-interview questionnaire: navy
+ * BIA tool styles. Ported from the BIA pre-interview questionnaire: dark
  * header band, step navigation, one framed box per item, and a highlighted
  * "what to do on this page" strip at the top of every section.
  *
  * Everything is scoped under `.bia` and prefixed `bia-` so nothing collides
- * with Tailwind utilities or the marketing site. Swap the palette by editing
- * the tokens on `.bia` only.
+ * with Tailwind utilities or the marketing site. Colors follow the e|Resilient
+ * palette (plum, burgundy, orange, amber, taupe); change them on `.bia` only.
  */
 .bia {
-  --bg: #f2f5f8;
+  --bg: #faf3e9;
   --surface: #ffffff;
-  --surface-2: #eaf0f4;
-  --ink: #0e2240;
-  --ink-2: #3f5268;
-  --ink-3: #66788d;
-  --line: #d3dce5;
-  --line-2: #bcc8d4;
-  --accent: #0b6e75;
+  --surface-2: #f0ede8;
+  --ink: #2d000f;
+  --ink-2: #4a2e24;
+  --ink-3: #7a5c52;
+  --line: #e5e0d8;
+  --line-2: #c4bcae;
+  --accent: #9d3057;
   --accent-ink: #ffffff;
-  --accent-soft: #dcefee;
-  --band: #0e2240;
+  --accent-soft: #f7ebf0;
+  --band: #2d000f;
   --band-ink: #ffffff;
-  --band-ink-2: #a9bcd2;
-  --warn: #8a5300;
-  --warn-soft: #fff2d9;
+  --band-ink-2: #c4bcae;
+  --warn: #a83c00;
+  --warn-soft: #fdefe4;
   --bad: #b42318;
   --bad-soft: #fde9e7;
   --ok: #276b44;
   --ok-soft: #e1f2e8;
-  --s0: #eef2f5;
-  --s1: #ddefe6;
-  --s2: #faecc2;
-  --s3: #f7cda6;
-  --s4: #eda39b;
-  --s-ink: #18222e;
-  --focus: #1f8a92;
+  --s0: #f0ede8;
+  --s1: #fdebd0;
+  --s2: #ffd08a;
+  --s3: #fba56b;
+  --s4: #c9668a;
+  --s-ink: #2d000f;
+  --highlight: #ff980b; /* amber */
+  --focus: #9d3057;
   --radius: 6px;
   /* Height of the sticky marketing-site header (h-20 + border). */
   --site-top: 81px;
@@ -192,7 +193,7 @@
 .bia-progress-bar span {
   display: block;
   height: 100%;
-  background: #52c3c0;
+  background: var(--highlight);
   transition: width 0.3s;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -206,8 +207,8 @@
   color: var(--band-ink);
 }
 .bia .bia-band .bia-btn:hover {
-  border-color: #52c3c0;
-  color: #52c3c0;
+  border-color: var(--highlight);
+  color: var(--highlight);
 }
 
 /* ---------- Shell + step navigation ---------- */
@@ -541,7 +542,7 @@
   border-radius: 8px;
   background: var(--surface);
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(14, 34, 64, 0.08);
+  box-shadow: 0 2px 10px rgba(45, 0, 15, 0.08);
 }
 .bia-ftag {
   background: var(--band);
