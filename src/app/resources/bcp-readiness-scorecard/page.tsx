@@ -99,7 +99,7 @@ export default function ScorecardLandingPage() {
                 </span>{" "}
                 ·{" "}
                 <span className="text-sm text-brand-ink-light">
-                  MBCP · MBCI · CBCLA · CBCV · PMP
+                  MBCP · MBCI · CBCLA · CBCV · CSCRP · PMP
                 </span>
               </p>
             </div>

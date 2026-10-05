@@ -127,8 +127,19 @@ export function SiteFooter() {
               Admin
             </Link>
           </p>
-          <p>SBA Recommended · ISO 22301 Aligned · MBCP · MBCI · CBCLA · CBCV · PMP</p>
+          <p>SBA Recommended · ISO 22301 Aligned · MBCP · MBCI · CBCLA · CBCV · CSCRP · PMP</p>
         </div>
+        <p className="mt-4 text-xs text-brand-taupe/40">
+          Site by{" "}
+          <a
+            href={SITE.studio.url}
+            target="_blank"
+            rel="noopener"
+            className="transition-colors hover:text-brand-orange"
+          >
+            {SITE.studio.name}
+          </a>
+        </p>
       </Container>
     </footer>
   );

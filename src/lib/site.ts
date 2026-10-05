@@ -24,7 +24,7 @@ export const SITE = {
       "Over 30 years of practical and consulting experience in Business Continuity and Supply Chain Risk Management",
     credentials: [
       "30+ years Fortune 100 BCM",
-      "MBCP · MBCI · CBCLA · CBCV · PMP",
+      "MBCP · MBCI · CBCLA · CBCV · CSCRP · PMP",
       "ISO 22301 Aligned",
       "SBA Recommended",
     ],
@@ -33,6 +33,7 @@ export const SITE = {
       { abbr: "MBCI", name: "Member of the Business Continuity Institute" },
       { abbr: "CBCLA", name: "Certified Business Continuity Lead Auditor" },
       { abbr: "CBCV", name: "Certified Business Continuity Vendor" },
+      { abbr: "CSCRP", name: "Certified Supply Chain Resilience Professional" },
       { abbr: "PMP", name: "Project Management Professional" },
     ],
   },
