@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { CertBadges } from "@/components/cert-badges";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -270,6 +271,7 @@ export default function HomePage() {
                 functions. We bring that depth to SMBs that need
                 enterprise-grade rigor without enterprise-scale overhead.
               </p>
+              <CertBadges className="mt-5" />
               <ul className="mt-5 space-y-2 text-sm text-brand-ink-mid">
                 {SITE.team.certifications.map((c) => (
                   <li key={c.abbr}>

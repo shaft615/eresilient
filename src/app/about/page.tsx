@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { CertBadges } from "@/components/cert-badges";
 import { BrandName } from "@/components/brand-name";
 import { SITE } from "@/lib/site";
 
@@ -128,6 +129,7 @@ export default function AboutPage() {
                 <h3 className="font-display text-lg text-brand-maroon">
                   Certifications held by the team
                 </h3>
+                <CertBadges className="mt-4" />
                 <ul className="mt-4 space-y-3 text-sm text-brand-ink-mid">
                   {SITE.team.certifications.map((c) => (
                     <li key={c.abbr}>

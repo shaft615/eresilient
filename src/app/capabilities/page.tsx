@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
 import { CtaButton } from "@/components/cta-button";
+import { CertBadges } from "@/components/cert-badges";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -127,6 +128,7 @@ export default function CapabilitiesPage() {
                 <h3 className="mt-2 font-display text-lg text-brand-maroon">
                   Certifications held by the team
                 </h3>
+                <CertBadges className="mt-4" />
                 <ul className="mt-4 space-y-3 text-sm text-brand-ink-mid">
                   {SITE.team.certifications.map((c) => (
                     <li key={c.abbr}>
